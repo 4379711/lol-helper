@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
  */
 public class ProcessUtil {
     public static Pattern appPortPattern = Pattern.compile("--app-port=(\\d+)");
-    public static Pattern tokenPattern = Pattern.compile("--remoting-auth-token=(\\w+)");
+    public static Pattern tokenPattern = Pattern.compile("--remoting-auth-token=([\\w-]+)");
 
     /**
      * 通过进程名查询出进程的启动命令,解析出需要的客户端token和端口

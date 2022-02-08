@@ -19,13 +19,13 @@ import java.util.concurrent.TimeUnit;
  */
 @Data
 public class RequestUtil {
-    private final String dataUrl = "https://127.0.0.1:2999/liveclientdata/allgamedata";
-    private String baseUrl;
+    private String defaultHost;
     private OkHttpClient client = myHttpClient();
     private Headers defaultHeaders;
+    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     public RequestUtil(LeagueClientBO bo) {
-        baseUrl = "https://127.0.0.1:" + bo.getPort();
+        defaultHost = "https://127.0.0.1:" + bo.getPort();
         String basic = Credentials.basic("riot", bo.getToken());
         defaultHeaders = new Headers.Builder()
                 .add("Content-Type", "'application/json")
@@ -34,10 +34,44 @@ public class RequestUtil {
                 .build();
     }
 
-    public String doGet(String endpoint) throws IOException {
+    public String doGet(String host, String endpoint) throws IOException {
         Request request = new Request.Builder()
-                .url(baseUrl + endpoint)
+                .url(host + endpoint)
                 .get()
+                .headers(defaultHeaders)
+                .build();
+        Response response = client.newCall(request).execute();
+        return response.body().string();
+    }
+
+    public String doGet(String endpoint) throws IOException {
+        return this.doGet(defaultHost, endpoint);
+    }
+
+    public String doPost(String endpoint, String bodyStr) throws IOException {
+        return this.doPost(defaultHost, endpoint, bodyStr);
+    }
+
+    public String doPut(String endpoint, String bodyStr) throws IOException {
+        return this.doPut(defaultHost, endpoint, bodyStr);
+    }
+
+    public String doPut(String host, String endpoint, String bodyStr) throws IOException {
+        RequestBody body = RequestBody.create(bodyStr, JSON);
+        Request request = new Request.Builder()
+                .url(host + endpoint)
+                .put(body)
+                .headers(defaultHeaders)
+                .build();
+        Response response = client.newCall(request).execute();
+        return response.body().string();
+    }
+
+    public String doPost(String host, String endpoint, String bodyStr) throws IOException {
+        RequestBody body = RequestBody.create(bodyStr, JSON);
+        Request request = new Request.Builder()
+                .url(host + endpoint)
+                .post(body)
                 .headers(defaultHeaders)
                 .build();
         Response response = client.newCall(request).execute();
