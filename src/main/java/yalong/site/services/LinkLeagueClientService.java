@@ -1,6 +1,7 @@
 package yalong.site.services;
 
 import com.alibaba.fastjson.JSON;
+import yalong.site.bo.SummonerInfoBO;
 import yalong.site.utils.RequestUtil;
 
 import java.io.IOException;
@@ -35,8 +36,10 @@ public class LinkLeagueClientService {
     /**
      * 获取登录用户信息
      */
-    public String getCurrentSummoner() throws IOException {
-        return requestUtil.doGet("/lol-summoner/v1/current-summoner");
+    public SummonerInfoBO getCurrentSummoner() throws IOException {
+        String resp = requestUtil.doGet("/lol-summoner/v1/current-summoner");
+        return JSON.parseObject(resp, SummonerInfoBO.class);
+
     }
 
     /**
@@ -103,36 +106,56 @@ public class LinkLeagueClientService {
      *
      * @param name 玩家游戏名
      */
-    public String getInfoByName(String name) throws IOException {
-        return requestUtil.doGet("/lol-summoner/v1/summoners?name=" + name);
+    public SummonerInfoBO getInfoByName(String name) throws IOException {
+        String resp = requestUtil.doGet("/lol-summoner/v1/summoners?name=" + name);
+        return JSON.parseObject(resp, SummonerInfoBO.class);
     }
 
     /**
      * 通用玩家puuid查询近几把战绩
      *
      * @param id       玩家信息中的puuid
-     * @param begIndex 起止
-     * @param endIndex 截止
+     * @param endIndex 局数
      */
-    public String getScoreById(String id, String begIndex, String endIndex) throws IOException {
-        String endpoint = "/lol-match-history/v1/products/lol/" + id + "/matches?begIndex=" + begIndex + "&endIndex=" + endIndex;
+    public String getScoreById(String id, int endIndex) throws IOException {
+        String endpoint = "/lol-match-history/v1/products/lol/" + id + "/matches?begIndex=0&endIndex=" + endIndex;
         return requestUtil.doGet(endpoint);
     }
 
     /**
-     * 查询游戏匹配状态
+     * 查看游戏当前状态
+     * 游戏大厅:None
+     * 房间内:Lobby
+     * 开始匹配:Matchmaking
+     * 等待点击对局按钮:ReadyCheck
+     * 选英雄中:ChampSelect
+     * 游戏中:InProgress
+     * 游戏即将结束:PreEndOfGame
+     * 游戏结束:EndOfGame
      */
-    public String getMatchStatus() throws IOException {
-        return requestUtil.doGet("/lol-matchmaking/v1/ready-check");
+    public String getGameStatus() throws IOException {
+        return requestUtil.doGet("/lol-gameflow/v1/gameflow-phase");
     }
 
     /**
      * 接受对局
      */
-    public String accept() throws IOException {
-        HashMap<String, String> map = new HashMap<>(0);
-        String body = JSON.toJSONString(map);
-        return requestUtil.doPost("/lol-matchmaking/v1/ready-check/accept", body);
+    public void accept() throws IOException {
+        requestUtil.doPost("/lol-matchmaking/v1/ready-check/accept", "");
     }
 
+    /**
+     * 自动接受对局
+     */
+    public void autoAcceptGame() throws IOException {
+        String gameStatus = this.getGameStatus();
+        if ("ReadyCheck".equals(gameStatus)) {
+            this.accept();
+        }
+    }
+
+    public String getCurrentGameInfo() throws IOException {
+        String resp = requestUtil.doGet("/lol-gameflow/v1/session");
+        return resp;
+    }
 }
