@@ -9,7 +9,6 @@ import yalong.site.utils.ProcessUtil;
 import yalong.site.utils.RequestUtil;
 
 import java.io.IOException;
-import java.net.ConnectException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -20,7 +19,7 @@ public class LeagueClientService {
     public final LinkLeagueClientApi api;
     private boolean roomMessageSend;
     private boolean gameMessageSend;
-    private SummonerInfoBO owner;
+    private final SummonerInfoBO owner;
 
     public LeagueClientService() throws IOException {
         this.clearFlag();
@@ -52,30 +51,11 @@ public class LeagueClientService {
         }
         //根据puuid查最近几次的战绩
         for (String id : puuidList) {
-            //查看玩家名称
-            SummonerInfoBO infoByPuuId = api.getInfoByPuuId(id);
-            String displayName = infoByPuuId.getDisplayName();
             //查询战绩
             List<ScoreBO> scoreBOList = api.getScoreById(id, 3);
-            System.out.println("玩家名称:" + displayName);
             //战绩
             StringBuilder scoreBuilder = new StringBuilder();
-
-            Integer totalDamageDealtToChampions = 0;
-            Integer totalDamageTaken = 0;
-            Integer totalTimeCrowdControlDealt = 0;
-            scoreBuilder.append("近几局战绩:");
             for (ScoreBO scoreBO : scoreBOList) {
-                if (scoreBO.getTotalDamageTaken() > totalDamageTaken) {
-                    totalDamageTaken = scoreBO.getTotalDamageTaken();
-                }
-                if (scoreBO.getTotalDamageDealtToChampions() > totalDamageDealtToChampions) {
-                    totalDamageDealtToChampions = scoreBO.getTotalDamageDealtToChampions();
-                }
-                if (scoreBO.getTotalTimeCrowdControlDealt() > totalTimeCrowdControlDealt) {
-                    totalTimeCrowdControlDealt = scoreBO.getTotalTimeCrowdControlDealt();
-                }
-
                 if (scoreBO.getWin()) {
                     scoreBuilder.append("胜");
                 } else {
@@ -84,15 +64,22 @@ public class LeagueClientService {
                 scoreBuilder.append("(");
                 scoreBuilder.append(scoreBO.getKills());
                 scoreBuilder.append("/");
-                scoreBuilder.append(scoreBO.getAssists());
-                scoreBuilder.append("/");
                 scoreBuilder.append(scoreBO.getDeaths());
+                scoreBuilder.append("/");
+                scoreBuilder.append(scoreBO.getAssists());
                 scoreBuilder.append(") ");
             }
-            String score = scoreBuilder.toString();
-            //对局表现
-            String show = "造成伤害:" + totalDamageDealtToChampions + " 承受伤害:" + totalDamageTaken + " 补刀:" + totalTimeCrowdControlDealt;
-            System.out.println(score + show);
+            //查看玩家名称
+            SummonerInfoBO infoByPuuId = api.getInfoByPuuId(id);
+            String displayName = infoByPuuId.getDisplayName();
+
+            //整理输出信息
+            if (scoreBuilder.length() != 0) {
+                String score = scoreBuilder.toString();
+                System.out.println("玩家名称:<" + displayName + ">近几局战绩:");
+                System.out.println(score);
+                System.out.println("-------------------");
+            }
         }
 
     }
@@ -102,7 +89,6 @@ public class LeagueClientService {
             TimeUnit.SECONDS.sleep(3);
             //监听游戏状态
             GameStatusEnum gameStatus = api.getGameStatus();
-            System.out.println("gameStatus:" + gameStatus);
             switch (gameStatus) {
                 case ReadyCheck: {
                     // 自动接受对局
@@ -145,13 +131,13 @@ public class LeagueClientService {
                         Float gameTime;
                         try {
                             gameTime = api.getOnlineData();
-                        } catch (ConnectException ignored) {
+                        } catch (Throwable ignored) {
                             TimeUnit.SECONDS.sleep(3);
                             break;
                         }
 
-                        //游戏进去的10秒内,发送这些消息
-                        if (gameTime < 10) {
+                        //游戏进去的30秒内,发送这些消息
+                        if (gameTime < 30) {
                             dealScore();
                         }
                         gameMessageSend = true;
