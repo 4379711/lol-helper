@@ -139,7 +139,7 @@ public class LinkLeagueClientApi {
      */
     public void msg2Room(String roomId, String msg) throws IOException {
         JSONObject body = new JSONObject(2);
-        body.put("body", msg + "    ---来自lol helper");
+        body.put("body", msg + "    - - - 来自LoL Helper");
         body.put("type", "chat");
         String endpoint = "/lol-chat/v1/conversations/" + roomId + "/messages";
         requestUtil.doPost(endpoint, body.toJSONString());
@@ -232,9 +232,7 @@ public class LinkLeagueClientApi {
     public List<ScoreBO> getScoreById(String id, int endIndex) throws IOException {
         String endpoint = "/lol-match-history/v1/products/lol/" + id + "/matches?begIndex=0&endIndex=" + endIndex;
         String resp = requestUtil.doGet(endpoint);
-        System.out.println(resp);
         JSONObject jsonObject = JSON.parseObject(resp);
-
         return jsonObject.getJSONObject("games").getJSONArray("games")
                 .toJavaList(JSONObject.class)
                 .stream().map(i -> {
@@ -299,7 +297,6 @@ public class LinkLeagueClientApi {
     public TeamPuuidBO getTeamPuuid() throws IOException {
         TeamPuuidBO result = new TeamPuuidBO();
         String resp = requestUtil.doGet("/lol-gameflow/v1/session");
-        System.out.println(resp);
         try {
             JSONObject jsonObject = JSON.parseObject(resp).getJSONObject("gameData");
             List<String> teamOne = jsonObject.getJSONArray("teamOne")
