@@ -168,7 +168,7 @@ public class LinkLeagueClientApi {
      * 获取房间id
      */
     public String getRoomId() throws IOException {
-        String roomId = null;
+        String roomId;
         String resp = requestUtil.doGet("/lol-chat/v1/conversations");
         JSONArray array = JSON.parseArray(resp);
         if (array.size() == 0) {
@@ -265,7 +265,13 @@ public class LinkLeagueClientApi {
      * 接受对局
      */
     public void accept() throws IOException {
-        requestUtil.doPost("/lol-matchmaking/v1/ready-check/accept", "");
+        String s = requestUtil.doPost("/lol-matchmaking/v1/ready-check/accept", "");
+        if ("".equals(s)) {
+            System.out.println("自动接受对局成功");
+        } else {
+            System.out.println("自动接受对局失败:" + s);
+        }
+
     }
 
     /**
