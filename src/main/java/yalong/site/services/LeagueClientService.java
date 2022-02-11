@@ -13,7 +13,6 @@ import yalong.site.utils.RequestUtil;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author yaLong
@@ -28,6 +27,10 @@ public class LeagueClientService {
     public LeagueClientService(DmUtil dmUtil) throws IOException {
         this.clearFlag();
         LeagueClientBO leagueClientBO = ProcessUtil.getClientProcess();
+        if (leagueClientBO.equals(new LeagueClientBO())) {
+            System.out.println("未检测到游戏启动");
+            System.exit(0);
+        }
         RequestUtil requestUtil = new RequestUtil(leagueClientBO);
         api = new LinkLeagueClientApi(requestUtil);
         // 设置段位
