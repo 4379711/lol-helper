@@ -1,4 +1,4 @@
-package yalong.site.frame.combox;
+package yalong.site.frame.panel.base;
 
 import org.jb2011.lnf.beautyeye.ch14_combox.BEComboBoxUI;
 

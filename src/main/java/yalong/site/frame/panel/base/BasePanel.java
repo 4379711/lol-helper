@@ -1,7 +1,6 @@
-package yalong.site.frame.panel;
+package yalong.site.frame.panel.base;
 
 import javax.swing.*;
-import java.awt.*;
 
 /**
  * @author yaLong

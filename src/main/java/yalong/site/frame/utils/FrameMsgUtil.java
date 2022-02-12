@@ -1,0 +1,41 @@
+package yalong.site.frame.utils;
+
+import yalong.site.frame.bo.GlobalDataBO;
+import yalong.site.frame.panel.result.ResultTextPane;
+
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import java.util.Date;
+
+import static yalong.site.frame.bo.GlobalDataBO.SIMPLE_DATE_FORMAT;
+
+/**
+ * @author yaLong
+ * @date 2022/2/12
+ */
+public class FrameMsgUtil {
+    public static ResultTextPane resultPane = null;
+
+    public static void clear() {
+        if (resultPane != null) {
+            resultPane.setText(null);
+        }
+    }
+
+    public static void sendLine(String msg) {
+        if (resultPane != null) {
+            Document document = resultPane.getDocument();
+            String time = SIMPLE_DATE_FORMAT.format(new Date());
+            try {
+                document.insertString(document.getLength(), time, GlobalDataBO.GREEN_ATTR);
+                document.insertString(document.getLength(), msg + System.lineSeparator(), GlobalDataBO.BLACK_ATTR);
+            } catch (BadLocationException e) {
+                e.printStackTrace();
+            }
+            //设置光标到最后一行
+            resultPane.setCaretPosition(document.getLength());
+        }
+    }
+
+
+}
