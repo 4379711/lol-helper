@@ -1,4 +1,6 @@
-package yalong.site.frame.button;
+package yalong.site.frame.panel.client;
+
+import yalong.site.frame.panel.base.BaseButton;
 
 /**
  * @author yaLong

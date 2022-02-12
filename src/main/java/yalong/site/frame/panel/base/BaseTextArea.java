@@ -1,4 +1,4 @@
-package yalong.site.frame.panel;
+package yalong.site.frame.panel.base;
 
 import yalong.site.frame.ui.MyTabbedPaneUI;
 
@@ -7,10 +7,9 @@ import javax.swing.*;
 /**
  * @author yaLong
  */
-public class TextArea extends JTextArea {
-    public TextArea() {
+public class BaseTextArea extends JTextArea {
+    public BaseTextArea() {
         this.setBackground(MyTabbedPaneUI.END_COLOR_SELECT);
-        this.setLineWrap(false);
         this.setBorder(null);
     }
 }

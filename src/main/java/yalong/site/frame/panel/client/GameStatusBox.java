@@ -1,6 +1,7 @@
-package yalong.site.frame.combox;
+package yalong.site.frame.panel.client;
 
 import yalong.site.frame.bo.ItemBO;
+import yalong.site.frame.panel.base.BaseComboBox;
 import yalong.site.services.LeagueClientService;
 
 import java.awt.event.ItemListener;
