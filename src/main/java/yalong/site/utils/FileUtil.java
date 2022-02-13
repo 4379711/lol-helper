@@ -2,6 +2,7 @@ package yalong.site.utils;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 读写文件
@@ -25,7 +26,7 @@ public class FileUtil {
         return list;
     }
 
-    public static void writeFile(String path, String... lines) {
+    public static void writeFile(String path, List<String> lines) {
         try (BufferedWriter out = new BufferedWriter(new FileWriter(path))) {
             for (String line : lines) {
                 out.write(line);

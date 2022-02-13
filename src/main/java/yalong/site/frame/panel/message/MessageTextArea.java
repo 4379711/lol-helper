@@ -1,5 +1,6 @@
 package yalong.site.frame.panel.message;
 
+import yalong.site.frame.bo.GlobalDataBO;
 import yalong.site.frame.panel.base.BaseTextArea;
 import yalong.site.utils.FileUtil;
 
@@ -8,6 +9,7 @@ import javax.swing.event.DocumentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * 输入框
@@ -21,9 +23,9 @@ public class MessageTextArea extends BaseTextArea {
 
     public MessageTextArea() {
         // 加载保存的数据
-        ArrayList<String> data = FileUtil.readFile(filePath);
+        GlobalDataBO.data = FileUtil.readFile(filePath);
         StringBuilder stringBuilder = new StringBuilder();
-        data.forEach(i -> stringBuilder.append(i).append(System.lineSeparator()));
+        GlobalDataBO.data.forEach(i -> stringBuilder.append(i).append(System.lineSeparator()));
         this.setText(stringBuilder.toString());
         // 鼠标移出时保存
         this.addMouseListener(saveFile());
@@ -72,10 +74,14 @@ public class MessageTextArea extends BaseTextArea {
                 if (change) {
                     MessageTextArea textArea = (MessageTextArea) e.getComponent();
                     String text = textArea.getText();
-                    FileUtil.writeFile(filePath, text);
+                    String[] split = text.split(System.lineSeparator());
+                    ArrayList<String> stringList = new ArrayList<>(Arrays.asList(split));
+                    //写到文件中保存
+                    FileUtil.writeFile(filePath, stringList);
+                    //更新数据到全局变量中
+                    GlobalDataBO.data = stringList;
                     change = false;
                 }
-
             }
         };
     }

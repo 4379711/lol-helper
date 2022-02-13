@@ -23,12 +23,15 @@ public class FrameMsgUtil {
     }
 
     public static void sendLine(String msg) {
+        if ("".equals(msg) || msg == null) {
+            return;
+        }
         if (resultPane != null) {
             Document document = resultPane.getDocument();
             String time = SIMPLE_DATE_FORMAT.format(new Date());
             try {
                 document.insertString(document.getLength(), time, GlobalDataBO.GREEN_ATTR);
-                document.insertString(document.getLength(), msg + System.lineSeparator(), GlobalDataBO.BLACK_ATTR);
+                document.insertString(document.getLength(), msg, GlobalDataBO.BLACK_ATTR);
             } catch (BadLocationException e) {
                 e.printStackTrace();
             }

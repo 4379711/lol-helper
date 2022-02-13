@@ -18,6 +18,7 @@ public class ResultTextPane extends JTextPane {
         this.setOpaque(false);
         this.setBackground(MyTabbedPaneUI.END_COLOR_SELECT);
         this.setBorder(null);
+        this.setText("双击可以清空屏幕内容");
         //设置全局结果展示面板
         FrameMsgUtil.resultPane = this;
         // 双击清屏
