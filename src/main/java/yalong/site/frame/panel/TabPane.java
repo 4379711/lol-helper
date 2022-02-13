@@ -1,7 +1,7 @@
 package yalong.site.frame.panel;
 
 import yalong.site.frame.panel.client.ClientPanel;
-import yalong.site.frame.panel.game.GamePanel;
+import yalong.site.frame.panel.about.AboutPanel;
 import yalong.site.frame.panel.message.EditMsgPanel;
 import yalong.site.frame.panel.result.ResultPanel;
 import yalong.site.frame.ui.MyTabbedPaneUI;
@@ -30,9 +30,9 @@ public class TabPane extends JTabbedPane {
     public static TabPane builder() {
         TabPane tabPane = new TabPane();
         tabPane.add(ClientPanel.builder());
-        tabPane.add(GamePanel.builder());
         tabPane.add(EditMsgPanel.builder());
         tabPane.add(ResultPanel.builder());
+        tabPane.add(AboutPanel.builder());
         return tabPane;
     }
 

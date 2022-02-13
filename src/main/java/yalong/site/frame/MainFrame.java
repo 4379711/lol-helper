@@ -37,7 +37,7 @@ public class MainFrame extends JFrame {
         //退出直接关闭程序
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //固定大小
-//        this.setResizable(false);
+        this.setResizable(false);
         this.setSize(GlobalDataBO.WIDTH, GlobalDataBO.HEIGHT);
         //窗口置顶
         this.setAlwaysOnTop(true);
