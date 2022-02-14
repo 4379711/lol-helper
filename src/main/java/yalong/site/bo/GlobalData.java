@@ -39,13 +39,15 @@ public class GlobalData {
      */
     public static ArrayList<String> data = new ArrayList<>();
 
-    public static boolean autoAccept = false;
+    public static boolean autoAccept = true;
 
-    public static boolean autoReconnect = false;
+    public static boolean autoReconnect = true;
 
-    public static boolean autoSend = false;
+    public static boolean autoSend = true;
 
-    public static RankBO currentRankBO = new RankBO();
+    public static boolean rival = true;
+
+    public static RankBO currentRankBO = new RankBO("RANKED_SOLO_5x5","CHALLENGER","IV");
 
     public static LeagueClientService service;
 }

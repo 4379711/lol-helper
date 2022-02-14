@@ -1,6 +1,8 @@
 package yalong.site.bo;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 当前段位选择
@@ -9,6 +11,7 @@ import lombok.Data;
  * @date 2022/2/14
  */
 @Data
+@AllArgsConstructor
 public class RankBO {
     private String firstRank;
     private String secondRank;

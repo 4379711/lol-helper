@@ -138,12 +138,12 @@ public class LinkLeagueClientApi {
      * @param roomId 房间id
      * @param msg    消息
      */
-    public void msg2Room(String roomId, String msg) throws IOException {
+    public String msg2Room(String roomId, String msg) throws IOException {
         JSONObject body = new JSONObject(2);
         body.put("body", msg);
         body.put("type", "chat");
         String endpoint = "/lol-chat/v1/conversations/" + roomId + "/messages";
-        requestUtil.doPost(endpoint, body.toJSONString());
+        return requestUtil.doPost(endpoint, body.toJSONString());
     }
 
     /**
@@ -225,7 +225,7 @@ public class LinkLeagueClientApi {
     }
 
     /**
-     * 通用玩家puuid查询近几把战绩
+     * 通过玩家puuid查询近几把战绩
      *
      * @param id       玩家信息中的puuid
      * @param endIndex 局数
@@ -265,15 +265,15 @@ public class LinkLeagueClientApi {
     /**
      * 接受对局
      */
-    public void accept() throws IOException {
-        requestUtil.doPost("/lol-matchmaking/v1/ready-check/accept", "");
+    public String accept() throws IOException {
+        return requestUtil.doPost("/lol-matchmaking/v1/ready-check/accept", "");
     }
 
     /**
      * 重连游戏
      */
-    public void reconnect() throws IOException {
-        requestUtil.doPost("/lol-gameflow/v1/reconnect", "");
+    public String reconnect() throws IOException {
+        return requestUtil.doPost("/lol-gameflow/v1/reconnect", "");
     }
 
     /**
@@ -290,6 +290,14 @@ public class LinkLeagueClientApi {
         String resp = requestUtil.doGet("/lol-champ-select/v1/pin-drop-notification");
         JSONObject jsonObject = JSON.parseObject(resp);
         return jsonObject.getString("mapSide");
+    }
+
+    public String getSelectChampSession() throws IOException{
+       return requestUtil.doGet("/lol-champ-select/v1/session");
+    }
+
+    public String getSearchState() throws IOException{
+       return requestUtil.doGet("/lol-lobby/v2/lobby/matchmaking/search-state");
     }
 
     /**

@@ -1,12 +1,11 @@
 package yalong.site.utils;
 
-import com.qiyou.javaelf.elf.GlobalSetting;
 import com.qiyou.javaelf.operation.Keyboard;
 import com.qiyou.javaelf.operation.Window;
 import com.qiyou.javaelf.system.Elf;
 import org.jawin.COMException;
 
-import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 驱动级别模拟发送消息
@@ -17,8 +16,8 @@ public class DmUtil {
     private final Window window;
     private final Keyboard keyboard;
 
-    public DmUtil() throws COMException, IOException {
-        GlobalSetting.copy_dlls();
+    public DmUtil() throws COMException {
+//        GlobalSetting.copy_dlls();
         Elf.init();
         Elf elf = new Elf();
         window = new Window(elf);
@@ -45,17 +44,24 @@ public class DmUtil {
      * @return 0 超时,1 按键按下
      */
     public int waitKey(int keyCode, int waitSecond) throws COMException {
-        //等待F11按键指令
+        //等待按键指令
         return keyboard.WaitKey(new Object[]{keyCode, waitSecond * 1000});
     }
 
     public void sendMessage(int hwnd, String message) throws COMException {
-
-        //发送回车
-        keyboard.KeyPress(new Object[]{13});
-        //发送消息
-        window.SendString(new Object[]{hwnd, message});
-        //发送回车
-        keyboard.KeyPress(new Object[]{13});
+        if (message != null && !"".equals(message.trim())) {
+            try {
+                //发送回车
+                keyboard.KeyPress(new Object[]{13});
+                TimeUnit.MILLISECONDS.sleep(500);
+                //发送消息
+                window.SendString(new Object[]{hwnd, message+"\n"});
+                TimeUnit.MILLISECONDS.sleep(500);
+                //发送回车
+                keyboard.KeyPress(new Object[]{13});
+                TimeUnit.MILLISECONDS.sleep(500);
+            } catch (InterruptedException ignored) {
+            }
+        }
     }
 }

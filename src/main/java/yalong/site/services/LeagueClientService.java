@@ -127,7 +127,7 @@ public class LeagueClientService {
             case ReadyCheck: {
                 if (GlobalData.autoAccept) {
                     // 自动接受对局
-                    api.accept();
+                    String accept = api.accept();
                 }
                 this.clearFlag();
                 break;
@@ -135,38 +135,40 @@ public class LeagueClientService {
             case Reconnect: {
                 if (GlobalData.autoReconnect) {
                     //重连
-                    api.reconnect();
+                    String reconnect = api.reconnect();
                 }
-                break;
-            }
-            case PreEndOfGame:
-            case WaitingForStats:
-            case EndOfGame: {
-                this.clearFlag();
                 break;
             }
             case ChampSelect: {
                 if (!roomMessageSend && GlobalData.autoSend) {
-                    roomMessageSend = true;
                     // 获取红蓝方
                     String mapSide = api.getBlueRed();
                     String message = null;
                     if ("blue".equals(mapSide)) {
-                        message = "这把是蓝色方,泉水在左下角.    - - - 来自LoL Helper";
+                        message = "这把是蓝色方,泉水在左下角.\n - - - 来自 LoL Helper";
                     } else if ("red".equals(mapSide)) {
-                        message = "这把是红色方,泉水在右上角.    - - - 来自LoL Helper";
+                        message = "这把是红色方,泉水在右上角.\n - - - 来自 LoL Helper";
                     }
                     if (message != null) {
                         //获取房间号
                         String roomId = api.getRoomId();
                         if (roomId != null) {
-                            api.msg2Room(roomId, message);
+                            String s = api.msg2Room(roomId, message);
+                            roomMessageSend = true;
                         }
                     }
                 }
                 break;
             }
             case InProgress: {
+                if (GlobalData.rival){
+                    //游戏内F11按下时,发送消息
+                    int key = dmUtil.waitKey(122, 2);
+                    if (key == 1 ) {
+                        this.sendMsg2game(GlobalData.data);
+                    }
+                }
+
                 if (!gameMessageSend && GlobalData.autoSend) {
                     Float gameTime;
                     try {
@@ -175,18 +177,27 @@ public class LeagueClientService {
                         //可能对局信息还没建立,比如在加载页面
                         break;
                     }
-                    //游戏进去的30秒内,发送这些消息
-                    if (gameTime < 30) {
-                        ArrayList<String> strings = dealScore2Msg();
+                    //游戏进去的60秒内,发送这些消息
+                    if (gameTime < 60) {
+                        ArrayList<String> strings;
+                        try {
+                            strings = dealScore2Msg();
+                        } catch (IOException ignored) {
+                            break;
+                        }
                         if (strings != null && strings.size() > 0) {
                             this.sendMsg2game(strings);
+                            gameMessageSend = true;
                         }
+                    } else {
+                        gameMessageSend = true;
                     }
-                    gameMessageSend = true;
+
+                    break;
                 }
-                break;
             }
             default: {
+                this.clearFlag();
                 break;
             }
         }
@@ -196,7 +207,9 @@ public class LeagueClientService {
         int hwnd = dmUtil.getHwnd();
         if (hwnd != 0) {
             for (String msg : strings) {
-                dmUtil.sendMessage(hwnd, msg);
+                if (msg != null && !"".equals(msg.trim())) {
+                    dmUtil.sendMessage(hwnd, msg);
+                }
             }
         } else {
             throw new IOException("游戏不在进行中");

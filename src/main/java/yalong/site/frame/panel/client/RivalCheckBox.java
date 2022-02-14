@@ -2,41 +2,33 @@ package yalong.site.frame.panel.client;
 
 import yalong.site.bo.GlobalData;
 import yalong.site.frame.bo.ComponentBO;
-import yalong.site.frame.panel.base.BaseButton;
-import yalong.site.frame.utils.FrameMsgUtil;
+import yalong.site.frame.panel.base.BaseCheckBox;
 
 import java.awt.*;
-import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 /**
  * @author yaLong
  * @date 2022/2/11
  */
-public class RivalButton extends BaseButton {
+public class RivalCheckBox extends BaseCheckBox {
 
-    public RivalButton() {
-        super("对喷模式");
-        this.addActionListener(listener());
+    public RivalCheckBox() {
+        this.setText("对喷模式");
+        this.setSelected(GlobalData.rival);
+        this.addItemListener(listener());
     }
 
-    private ActionListener listener() {
-        return e -> {
-            if (GlobalData.data != null && GlobalData.data.size() > 0) {
-                try {
-                    GlobalData.service.sendMsg2game(GlobalData.data);
-                } catch (Exception ex) {
-                    FrameMsgUtil.sendLine(ex.getMessage());
-                }
-            }
-        };
-
+    private ItemListener listener() {
+        return e -> GlobalData.rival = e.getStateChange() == ItemEvent.SELECTED;
     }
 
     /**
      * @return 带布局的盒子
      */
     public static ComponentBO builder() {
-        RivalButton box = new RivalButton();
+        RivalCheckBox box = new RivalCheckBox();
         GridBagConstraints grid = new GridBagConstraints(
                 // 第(1,2)个格子
                 1, 2,
@@ -49,8 +41,7 @@ public class RivalButton extends BaseButton {
                 // 窗格之间的距离
                 new Insets(0, 0, 0, 0),
                 // 增加组件的首选宽度和高度
-                0, 0
-        );
+                0, 0);
         return new ComponentBO(box, grid);
     }
 

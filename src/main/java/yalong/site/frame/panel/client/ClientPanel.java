@@ -39,9 +39,9 @@ public class ClientPanel extends BasePanel {
         //第三行3个
         ComponentBO gameStatusBox = GameStatusBox.builder();
         clientPanel.add(gameStatusBox.getComp(), gameStatusBox.getConstraints());
-        ComponentBO rivalButton = RivalButton.builder();
+        ComponentBO rivalButton = RivalCheckBox.builder();
         clientPanel.add(rivalButton.getComp(), rivalButton.getConstraints());
-        ComponentBO scoreButton = ScoreButton.builder();
+        ComponentBO scoreButton = HelpButton.builder();
         clientPanel.add(scoreButton.getComp(), scoreButton.getConstraints());
 
         return clientPanel;

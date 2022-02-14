@@ -14,6 +14,7 @@ import java.awt.*;
  * @date 2022/2/11
  */
 public class MainFrame extends JFrame {
+    private static MainFrame frame;
 
     static {
         //设置窗口边框样式为弱立体感半透明
@@ -41,20 +42,26 @@ public class MainFrame extends JFrame {
         this.setResizable(false);
         this.setSize(GlobalData.WIDTH, GlobalData.HEIGHT);
         //窗口置顶
-        this.setAlwaysOnTop(true);
+//        this.setAlwaysOnTop(true);
         //窗口居中
         this.setLocationRelativeTo(null);
     }
 
     public static void start() {
-        MainFrame frame = new MainFrame();
+        frame = new MainFrame();
         TabPane tabPane = TabPane.builder();
         frame.add(tabPane);
         frame.setVisible(true);
     }
 
+    public static void hiddenFrame() {
+        if (frame != null) {
+            frame.dispose();
+        }
+    }
+
     public static int isRunning() {
-        Object[] options = {" 确定 ", " 取消 "};
+        Object[] options = {" 确定 ", " 退出 "};
         return JOptionPane.showOptionDialog(null, "请启动游戏后再点击确定按钮", "无法启动", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);
     }
 

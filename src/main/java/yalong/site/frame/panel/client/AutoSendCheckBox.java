@@ -20,7 +20,7 @@ public class AutoSendCheckBox extends BaseCheckBox {
     }
 
     private ItemListener listener() {
-        return e -> GlobalData.autoAccept = e.getStateChange() == ItemEvent.SELECTED;
+        return e -> GlobalData.autoSend = e.getStateChange() == ItemEvent.SELECTED;
     }
 
     /**
