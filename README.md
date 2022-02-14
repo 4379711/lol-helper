@@ -9,9 +9,9 @@
 - 另外Release中提供了依赖的jar包,请自行替换maven依赖
 
 ## 程序截图
-![images](https://github.com/4379711/lol-helper/tree/master/src/main/resources/assets/01.png)
-![images](https://github.com/4379711/lol-helper/tree/master/src/main/resources/assets/02.png)
-![images](https://github.com/4379711/lol-helper/tree/master/src/main/resources/assets/03.png)
+![images](https://github.com/4379711/lol-helper/blob/master/src/main/resources/assets/03.png)
+![images](https://github.com/4379711/lol-helper/blob/master/src/main/resources/assets/02.png)
+![images](https://github.com/4379711/lol-helper/blob/master/src/main/resources/assets/01.png)
 
 ## 环境要求
 
