@@ -8,6 +8,11 @@
 - 由于本项目的依赖库并没有提供maven支持,所以我将jar包安装到自己本地的maven仓库,groupId:`yalong.site`
 - 另外Release中提供了依赖的jar包,请自行替换maven依赖
 
+## 程序截图
+![images](https://github.com/4379711/lol-helper/src/resources/assets/01.png)
+![images](https://github.com/4379711/lol-helper/src/resources/assets/02.png)
+![images](https://github.com/4379711/lol-helper/src/resources/assets/03.png)
+
 ## 环境要求
 
 - jre1.8(32位).
