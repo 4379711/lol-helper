@@ -1,6 +1,6 @@
 package yalong.site.frame.panel.result;
 
-import yalong.site.frame.bo.GlobalDataBO;
+import yalong.site.bo.GlobalData;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,7 +19,7 @@ public class ResultPanel extends JScrollPane {
         this.setBorder(null);
         this.getViewport().setOpaque(false);
         this.setAutoscrolls(true);
-        this.setMaximumSize(new Dimension(GlobalDataBO.WIDTH, GlobalDataBO.HEIGHT));
+        this.setMaximumSize(new Dimension(GlobalData.WIDTH, GlobalData.HEIGHT));
     }
 
     public static ResultPanel builder() {

@@ -1,4 +1,6 @@
-package yalong.site.frame.bo;
+package yalong.site.bo;
+
+import yalong.site.services.LeagueClientService;
 
 import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.SimpleAttributeSet;
@@ -12,7 +14,7 @@ import java.util.ArrayList;
  *
  * @author yaLong
  */
-public class GlobalDataBO {
+public class GlobalData {
     /**
      * 宽度
      */
@@ -35,7 +37,15 @@ public class GlobalDataBO {
     /**
      * 编辑好要发送的数据
      */
-    public static ArrayList<String> data;
+    public static ArrayList<String> data = new ArrayList<>();
 
+    public static boolean autoAccept = false;
 
+    public static boolean autoReconnect = false;
+
+    public static boolean autoSend = false;
+
+    public static RankBO currentRankBO = new RankBO();
+
+    public static LeagueClientService service;
 }

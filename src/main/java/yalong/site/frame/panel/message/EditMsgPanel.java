@@ -1,6 +1,6 @@
 package yalong.site.frame.panel.message;
 
-import yalong.site.frame.bo.GlobalDataBO;
+import yalong.site.bo.GlobalData;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +14,7 @@ public class EditMsgPanel extends JScrollPane {
     public EditMsgPanel() {
         super(new MessageTextArea());
         this.setName("对喷内容");
-        this.setMaximumSize(new Dimension(GlobalDataBO.WIDTH, GlobalDataBO.HEIGHT));
+        this.setMaximumSize(new Dimension(GlobalData.WIDTH, GlobalData.HEIGHT));
         // 设置透明
         this.setOpaque(false);
         this.setBorder(null);

@@ -4,53 +4,56 @@ import yalong.site.bo.GlobalData;
 import yalong.site.frame.bo.ComponentBO;
 import yalong.site.frame.bo.ItemBO;
 import yalong.site.frame.panel.base.BaseComboBox;
+import yalong.site.frame.utils.FrameMsgUtil;
 
 import java.awt.*;
+import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.IOException;
 
 /**
  * @author yaLong
  */
-public class GameStatusBox extends BaseComboBox<ItemBO> {
+public class RankThirdBox extends BaseComboBox<ItemBO> {
 
-    public GameStatusBox() {
+
+    public RankThirdBox() {
         this.setItems();
-        this.addItemListener(changeStatusListener());
+        this.addItemListener(listener());
     }
 
     public void setItems() {
-        this.addItem(new ItemBO("chat", "在线"));
-        this.addItem(new ItemBO("away", "离开"));
-        this.addItem(new ItemBO("dnd", "游戏中"));
-        this.addItem(new ItemBO("offline", "离线"));
-        this.addItem(new ItemBO("mobile", "手机在线"));
+        this.addItem(new ItemBO("IV", "IV"));
+        this.addItem(new ItemBO("III", "III"));
+        this.addItem(new ItemBO("II", "II"));
+        this.addItem(new ItemBO("I", "I"));
     }
 
-    private ItemListener changeStatusListener() {
+    private ItemListener listener() {
         return e -> {
-            int stateChange = e.getStateChange();
-            //选中返回1
-            if (stateChange == 1) {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
                 ItemBO item = (ItemBO) e.getItem();
-                try {
-                    GlobalData.service.setGameStatus(item.getValue());
-                } catch (IOException ex) {
-                    ex.printStackTrace();
+                GlobalData.currentRankBO.setThirdRank(item.getValue());
+                if (!GlobalData.currentRankBO.isNull()) {
+                    try {
+                        GlobalData.service.setRank(GlobalData.currentRankBO);
+                    } catch (IOException ex) {
+                        FrameMsgUtil.sendLine(ex.getMessage());
+                    }
                 }
+
             }
         };
-
     }
 
     /**
      * @return 带布局的盒子
      */
     public static ComponentBO builder() {
-        GameStatusBox box = new GameStatusBox();
+        RankThirdBox box = new RankThirdBox();
         GridBagConstraints grid = new GridBagConstraints(
-                // 第(0,2)个格子
-                0, 2,
+                // 第(2,0)个格子
+                2, 0,
                 // 占1列,占1行
                 1, 1,
                 //横向占100%长度,纵向占100%长度
@@ -64,6 +67,5 @@ public class GameStatusBox extends BaseComboBox<ItemBO> {
         );
         return new ComponentBO(box, grid);
     }
-
 
 }

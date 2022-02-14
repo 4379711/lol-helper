@@ -3,6 +3,7 @@ package yalong.site.services;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import yalong.site.bo.RankBO;
 import yalong.site.bo.ScoreBO;
 import yalong.site.bo.SummonerInfoBO;
 import yalong.site.bo.TeamPuuidBO;
@@ -74,12 +75,12 @@ public class LinkLeagueClientApi {
      * value="RANKED_FLEX_TT">灵活组排 3v3
      * value="RANKED_TFT">云顶之弈
      */
-    public void setRank() throws IOException {
+    public void setRank(RankBO bo) throws IOException {
         JSONObject body = new JSONObject(1);
         JSONObject jsonObject = new JSONObject(3);
-        jsonObject.put("rankedLeagueTier", "CHALLENGER");
-        jsonObject.put("rankedLeagueDivision", "I");
-        jsonObject.put("rankedLeagueQueue", "RANKED_SOLO_5x5");
+        jsonObject.put("rankedLeagueQueue", bo.getFirstRank());
+        jsonObject.put("rankedLeagueTier", bo.getSecondRank());
+        jsonObject.put("rankedLeagueDivision", bo.getThirdRank());
         body.put("lol", jsonObject);
         requestUtil.doPut("/lol-chat/v1/me", body.toJSONString());
     }
@@ -125,10 +126,10 @@ public class LinkLeagueClientApi {
      *
      * @param status 状态值
      */
-    public String changeStatus(String status) throws IOException {
+    public void changeStatus(String status) throws IOException {
         JSONObject body = new JSONObject(1);
         body.put("availability", status);
-        return requestUtil.doPut("/lol-chat/v1/me", body.toJSONString());
+        requestUtil.doPut("/lol-chat/v1/me", body.toJSONString());
     }
 
     /**
@@ -139,7 +140,7 @@ public class LinkLeagueClientApi {
      */
     public void msg2Room(String roomId, String msg) throws IOException {
         JSONObject body = new JSONObject(2);
-        body.put("body", msg + "    - - - 来自LoL Helper");
+        body.put("body", msg);
         body.put("type", "chat");
         String endpoint = "/lol-chat/v1/conversations/" + roomId + "/messages";
         requestUtil.doPost(endpoint, body.toJSONString());
@@ -265,13 +266,7 @@ public class LinkLeagueClientApi {
      * 接受对局
      */
     public void accept() throws IOException {
-        String s = requestUtil.doPost("/lol-matchmaking/v1/ready-check/accept", "");
-        if ("".equals(s)) {
-            System.out.println("自动接受对局成功");
-        } else {
-            System.out.println("自动接受对局失败:" + s);
-        }
-
+        requestUtil.doPost("/lol-matchmaking/v1/ready-check/accept", "");
     }
 
     /**
@@ -318,8 +313,9 @@ public class LinkLeagueClientApi {
                     .collect(Collectors.toList());
             result.setTeamPuuid1(teamOne);
             result.setTeamPuuid2(teamTwo);
+            return result;
         } catch (NullPointerException ignored) {
+            throw new IOException("游戏对局未开始");
         }
-        return result;
     }
 }

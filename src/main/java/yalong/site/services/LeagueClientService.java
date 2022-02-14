@@ -1,10 +1,7 @@
 package yalong.site.services;
 
 import org.jawin.COMException;
-import yalong.site.bo.LeagueClientBO;
-import yalong.site.bo.ScoreBO;
-import yalong.site.bo.SummonerInfoBO;
-import yalong.site.bo.TeamPuuidBO;
+import yalong.site.bo.*;
 import yalong.site.enums.GameStatusEnum;
 import yalong.site.utils.DmUtil;
 import yalong.site.utils.ProcessUtil;
@@ -13,12 +10,13 @@ import yalong.site.utils.RequestUtil;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author yaLong
  */
 public class LeagueClientService {
-    public final LinkLeagueClientApi api;
+    private final LinkLeagueClientApi api;
     private boolean roomMessageSend;
     private boolean gameMessageSend;
     private final SummonerInfoBO owner;
@@ -28,16 +26,15 @@ public class LeagueClientService {
         this.clearFlag();
         LeagueClientBO leagueClientBO = ProcessUtil.getClientProcess();
         if (leagueClientBO.equals(new LeagueClientBO())) {
-            System.out.println("未检测到游戏启动");
-            System.exit(0);
+            throw new IOException("未检测到游戏启动");
         }
         RequestUtil requestUtil = new RequestUtil(leagueClientBO);
         api = new LinkLeagueClientApi(requestUtil);
-        // 设置段位
-        api.setRank();
         // 获取登录人的信息
         owner = api.getCurrentSummoner();
         this.dmUtil = dmUtil;
+        // 添加到全局变量
+        GlobalData.service = this;
     }
 
     /**
@@ -46,6 +43,22 @@ public class LeagueClientService {
     private void clearFlag() {
         roomMessageSend = false;
         gameMessageSend = false;
+    }
+
+    /**
+     * 设置游戏状态
+     *
+     * @param status 状态值
+     */
+    public void setGameStatus(String status) throws IOException {
+        api.changeStatus(status);
+    }
+
+    /**
+     * 设置段位
+     */
+    public void setRank(RankBO bo) throws IOException {
+        api.setRank(bo);
     }
 
     /**
@@ -88,26 +101,42 @@ public class LeagueClientService {
             //整理输出信息
             if (scoreBuilder.length() != 0) {
                 String score = scoreBuilder.toString();
-                result.add("玩家名称:<" + displayName + ">近几局战绩:       "
-                        + score + "                 .");
+                result.add("玩家名称:<" + displayName + ">近几局战绩:       " + score + "                 .");
             }
         }
         return result;
     }
 
-    public void switchGameStatus() throws IOException, InterruptedException, COMException {
+    /**
+     * 持续监听游戏状态
+     */
+    public void runForever() throws COMException, IOException, InterruptedException {
+        while (true) {
+            this.switchGameStatus();
+            TimeUnit.SECONDS.sleep(1);
+        }
+    }
+
+    /**
+     * 不同游戏状态做不同的事情
+     */
+    public void switchGameStatus() throws IOException, COMException {
         //监听游戏状态
         GameStatusEnum gameStatus = api.getGameStatus();
         switch (gameStatus) {
             case ReadyCheck: {
-                // 自动接受对局
-                api.accept();
+                if (GlobalData.autoAccept) {
+                    // 自动接受对局
+                    api.accept();
+                }
                 this.clearFlag();
                 break;
             }
             case Reconnect: {
-                //重连
-                api.reconnect();
+                if (GlobalData.autoReconnect) {
+                    //重连
+                    api.reconnect();
+                }
                 break;
             }
             case PreEndOfGame:
@@ -117,15 +146,15 @@ public class LeagueClientService {
                 break;
             }
             case ChampSelect: {
-                if (!roomMessageSend) {
+                if (!roomMessageSend && GlobalData.autoSend) {
                     roomMessageSend = true;
                     // 获取红蓝方
                     String mapSide = api.getBlueRed();
                     String message = null;
                     if ("blue".equals(mapSide)) {
-                        message = "这把是蓝色方,泉水在左下角.";
+                        message = "这把是蓝色方,泉水在左下角.    - - - 来自LoL Helper";
                     } else if ("red".equals(mapSide)) {
-                        message = "这把是红色方,泉水在右上角.";
+                        message = "这把是红色方,泉水在右上角.    - - - 来自LoL Helper";
                     }
                     if (message != null) {
                         //获取房间号
@@ -138,22 +167,19 @@ public class LeagueClientService {
                 break;
             }
             case InProgress: {
-                if (!gameMessageSend) {
+                if (!gameMessageSend && GlobalData.autoSend) {
                     Float gameTime;
                     try {
                         gameTime = api.getOnlineData();
                     } catch (Throwable e) {
-                        System.out.println("getOnlineData出错:\n" + e.getMessage());
+                        //可能对局信息还没建立,比如在加载页面
                         break;
                     }
                     //游戏进去的30秒内,发送这些消息
                     if (gameTime < 30) {
-                        int hwnd = dmUtil.getHwnd();
-                        if (hwnd != 0) {
-                            ArrayList<String> strings = dealScore2Msg();
-                            for (String msg : strings) {
-                                dmUtil.sendMessage(hwnd, msg);
-                            }
+                        ArrayList<String> strings = dealScore2Msg();
+                        if (strings != null && strings.size() > 0) {
+                            this.sendMsg2game(strings);
                         }
                     }
                     gameMessageSend = true;
@@ -163,6 +189,17 @@ public class LeagueClientService {
             default: {
                 break;
             }
+        }
+    }
+
+    public void sendMsg2game(ArrayList<String> strings) throws COMException, IOException {
+        int hwnd = dmUtil.getHwnd();
+        if (hwnd != 0) {
+            for (String msg : strings) {
+                dmUtil.sendMessage(hwnd, msg);
+            }
+        } else {
+            throw new IOException("游戏不在进行中");
         }
     }
 }

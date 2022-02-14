@@ -1,7 +1,7 @@
 package yalong.site.frame.panel;
 
-import yalong.site.frame.panel.client.ClientPanel;
 import yalong.site.frame.panel.about.AboutPanel;
+import yalong.site.frame.panel.client.ClientPanel;
 import yalong.site.frame.panel.message.EditMsgPanel;
 import yalong.site.frame.panel.result.ResultPanel;
 import yalong.site.frame.ui.MyTabbedPaneUI;

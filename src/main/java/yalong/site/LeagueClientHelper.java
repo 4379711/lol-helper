@@ -1,5 +1,6 @@
 package yalong.site;
 
+import yalong.site.frame.MainFrame;
 import yalong.site.services.LeagueClientService;
 import yalong.site.utils.DmUtil;
 
@@ -8,15 +9,18 @@ import yalong.site.utils.DmUtil;
  */
 public class LeagueClientHelper {
 
-    public static void main(String[] args) throws Exception {
-        DmUtil dmUtil = new DmUtil();
-        LeagueClientService leagueClientService = new LeagueClientService(dmUtil);
+    public static void main(String[] args) {
         while (true) {
-            leagueClientService.switchGameStatus();
-            //F11 开关
-            int key = dmUtil.waitKey(122, 3);
-            if (key == 1) {
-                break;
+            try {
+                DmUtil dmUtil = new DmUtil();
+                LeagueClientService service = new LeagueClientService(dmUtil);
+                service.runForever();
+                MainFrame.start();
+            } catch (Exception e) {
+                int running = MainFrame.isRunning();
+                if (running == 1) {
+                    System.exit(0);
+                }
             }
         }
     }

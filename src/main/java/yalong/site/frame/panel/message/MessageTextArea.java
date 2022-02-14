@@ -1,6 +1,6 @@
 package yalong.site.frame.panel.message;
 
-import yalong.site.frame.bo.GlobalDataBO;
+import yalong.site.bo.GlobalData;
 import yalong.site.frame.panel.base.BaseTextArea;
 import yalong.site.utils.FileUtil;
 
@@ -23,9 +23,9 @@ public class MessageTextArea extends BaseTextArea {
 
     public MessageTextArea() {
         // 加载保存的数据
-        GlobalDataBO.data = FileUtil.readFile(filePath);
+        GlobalData.data = FileUtil.readFile(filePath);
         StringBuilder stringBuilder = new StringBuilder();
-        GlobalDataBO.data.forEach(i -> stringBuilder.append(i).append(System.lineSeparator()));
+        GlobalData.data.forEach(i -> stringBuilder.append(i).append(System.lineSeparator()));
         this.setText(stringBuilder.toString());
         // 鼠标移出时保存
         this.addMouseListener(saveFile());
@@ -79,7 +79,7 @@ public class MessageTextArea extends BaseTextArea {
                     //写到文件中保存
                     FileUtil.writeFile(filePath, stringList);
                     //更新数据到全局变量中
-                    GlobalDataBO.data = stringList;
+                    GlobalData.data = stringList;
                     change = false;
                 }
             }

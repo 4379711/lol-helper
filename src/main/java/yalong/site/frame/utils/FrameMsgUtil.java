@@ -1,13 +1,13 @@
 package yalong.site.frame.utils;
 
-import yalong.site.frame.bo.GlobalDataBO;
+import yalong.site.bo.GlobalData;
 import yalong.site.frame.panel.result.ResultTextPane;
 
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import java.util.Date;
 
-import static yalong.site.frame.bo.GlobalDataBO.SIMPLE_DATE_FORMAT;
+import static yalong.site.bo.GlobalData.SIMPLE_DATE_FORMAT;
 
 /**
  * @author yaLong
@@ -30,8 +30,8 @@ public class FrameMsgUtil {
             Document document = resultPane.getDocument();
             String time = SIMPLE_DATE_FORMAT.format(new Date());
             try {
-                document.insertString(document.getLength(), time, GlobalDataBO.GREEN_ATTR);
-                document.insertString(document.getLength(), msg+System.lineSeparator(), GlobalDataBO.BLACK_ATTR);
+                document.insertString(document.getLength(), time, GlobalData.GREEN_ATTR);
+                document.insertString(document.getLength(), msg + System.lineSeparator(), GlobalData.BLACK_ATTR);
             } catch (BadLocationException e) {
                 e.printStackTrace();
             }

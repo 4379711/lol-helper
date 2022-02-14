@@ -1,6 +1,6 @@
 package yalong.site.frame.panel.client;
 
-import yalong.site.frame.panel.base.BaseButton;
+import yalong.site.frame.bo.ComponentBO;
 import yalong.site.frame.panel.base.BasePanel;
 
 import java.awt.*;
@@ -16,19 +16,34 @@ public class ClientPanel extends BasePanel {
     }
 
     public static ClientPanel builder() {
-        // TODO: 2022/2/12 注入服务
         ClientPanel clientPanel = new ClientPanel();
-        //布局
+        //布局3*3
         GridBagLayout layout = new GridBagLayout();
         clientPanel.setLayout(layout);
+        //第一行三个
+        ComponentBO rankFirstBox = RankFirstBox.builder();
+        clientPanel.add(rankFirstBox.getComp(), rankFirstBox.getConstraints());
+        ComponentBO rankSecondBox = RankSecondBox.builder();
+        clientPanel.add(rankSecondBox.getComp(), rankSecondBox.getConstraints());
+        ComponentBO rankThirdBox = RankThirdBox.builder();
+        clientPanel.add(rankThirdBox.getComp(), rankThirdBox.getConstraints());
 
+        //第二行三个
+        ComponentBO checkBox = AutoAcceptCheckBox.builder();
+        clientPanel.add(checkBox.getComp(), checkBox.getConstraints());
+        ComponentBO reconnectCheckBox = AutoReconnectCheckBox.builder();
+        clientPanel.add(reconnectCheckBox.getComp(), reconnectCheckBox.getConstraints());
+        ComponentBO sendCheckBox = AutoSendCheckBox.builder();
+        clientPanel.add(sendCheckBox.getComp(), sendCheckBox.getConstraints());
 
+        //第三行3个
+        ComponentBO gameStatusBox = GameStatusBox.builder();
+        clientPanel.add(gameStatusBox.getComp(), gameStatusBox.getConstraints());
+        ComponentBO rivalButton = RivalButton.builder();
+        clientPanel.add(rivalButton.getComp(), rivalButton.getConstraints());
+        ComponentBO scoreButton = ScoreButton.builder();
+        clientPanel.add(scoreButton.getComp(), scoreButton.getConstraints());
 
-
-        GameStatusBox gameStatusBox = new GameStatusBox(null);
-        clientPanel.add(gameStatusBox);
-        BaseButton button = new AutoEnsureButton();
-        clientPanel.add(button);
         return clientPanel;
 
     }

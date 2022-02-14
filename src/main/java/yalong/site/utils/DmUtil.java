@@ -1,9 +1,12 @@
 package yalong.site.utils;
 
+import com.qiyou.javaelf.elf.GlobalSetting;
 import com.qiyou.javaelf.operation.Keyboard;
 import com.qiyou.javaelf.operation.Window;
 import com.qiyou.javaelf.system.Elf;
 import org.jawin.COMException;
+
+import java.io.IOException;
 
 /**
  * 驱动级别模拟发送消息
@@ -14,8 +17,8 @@ public class DmUtil {
     private final Window window;
     private final Keyboard keyboard;
 
-    public DmUtil() throws COMException {
-        //GlobalSetting.copy_dlls();
+    public DmUtil() throws COMException, IOException {
+        GlobalSetting.copy_dlls();
         Elf.init();
         Elf elf = new Elf();
         window = new Window(elf);

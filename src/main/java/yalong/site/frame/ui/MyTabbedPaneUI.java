@@ -1,6 +1,6 @@
 package yalong.site.frame.ui;
 
-import yalong.site.frame.bo.GlobalDataBO;
+import yalong.site.bo.GlobalData;
 
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import java.awt.*;
@@ -131,13 +131,13 @@ public class MyTabbedPaneUI extends BasicTabbedPaneUI {
     @Override
     protected int calculateMaxTabHeight(int tabPlacement) {
         int height = super.calculateMaxTabHeight(tabPlacement);
-        return Math.min(height, GlobalDataBO.HEIGHT);
+        return Math.min(height, GlobalData.HEIGHT);
     }
 
     @Override
     protected int calculateMaxTabWidth(int tabPlacement) {
         int width = super.calculateMaxTabWidth(tabPlacement);
-        return Math.min(width, GlobalDataBO.WIDTH);
+        return Math.min(width, GlobalData.WIDTH);
     }
 
 
