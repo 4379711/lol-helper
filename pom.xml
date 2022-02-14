@@ -16,7 +16,7 @@
         <lombok.version>1.18.22</lombok.version>
         <okhttp.version>4.9.3</okhttp.version>
         <!-- 在这里定义程序入口类 -->
-        <mainClass>LeagueClientHelper</mainClass>
+        <mainClass>yalong.site.LeagueClientHelper</mainClass>
     </properties>
 
     <dependencies>
