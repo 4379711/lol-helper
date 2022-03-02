@@ -9,8 +9,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @author yaLong
@@ -20,7 +18,6 @@ public class LeagueClientService {
     private boolean roomMessageSend;
     private boolean gameMessageSend;
     private final SummonerInfoBO owner;
-    private final Pattern roomIdPattern = Pattern.compile("\\{\"chatRoomName\":\"(.*)?\\@");
 
     public LeagueClientService() throws IOException {
         this.clearFlag();
@@ -114,8 +111,6 @@ public class LeagueClientService {
         while (true) {
             this.switchGameStatus();
             TimeUnit.SECONDS.sleep(1);
-            String roomGameInfo = api.getRoomGameInfo();
-            System.out.println(roomGameInfo);
         }
     }
 
@@ -153,14 +148,11 @@ public class LeagueClientService {
                     }
                     if (message != null) {
                         //获取房间号
-                        String roomInfo = api.getRoomGameInfo();
-                        Matcher matcher = roomIdPattern.matcher(roomInfo);
-                        if (matcher.find()) {
-                            String s = api.msg2Room(matcher.group(1), message);
-                            System.out.println(s);
+                        String roomId = api.getRoomId();
+                        if (roomId != null) {
+                            String s = api.msg2Room(roomId, message);
                             roomMessageSend = true;
                         }
-
                     }
                 }
                 break;
