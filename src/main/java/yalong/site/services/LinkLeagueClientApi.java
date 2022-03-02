@@ -166,9 +166,9 @@ public class LinkLeagueClientApi {
     }
 
     /**
-     * 获取房间id
+     * 获取当前聊天室id
      */
-    public String getRoomId() throws IOException {
+    public String getChatRoomId() throws IOException {
         String roomId;
         String resp = requestUtil.doGet("/lol-chat/v1/conversations");
         JSONArray array = JSON.parseArray(resp);
