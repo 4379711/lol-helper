@@ -1,6 +1,5 @@
 package yalong.site.frame.panel.base;
 
-import org.jb2011.lnf.beautyeye.ch14_combox.BEComboBoxUI;
 
 import javax.swing.*;
 
@@ -10,8 +9,6 @@ import javax.swing.*;
 public class BaseComboBox<E> extends JComboBox<E> {
 
     public BaseComboBox() {
-        BEComboBoxUI ui = new BEComboBoxUI();
-        this.setUI(ui);
     }
 
 }

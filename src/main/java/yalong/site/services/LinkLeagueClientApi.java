@@ -292,12 +292,12 @@ public class LinkLeagueClientApi {
         return jsonObject.getString("mapSide");
     }
 
-    public String getSelectChampSession() throws IOException{
-       return requestUtil.doGet("/lol-champ-select/v1/session");
+    public String getSelectChampSession() throws IOException {
+        return requestUtil.doGet("/lol-champ-select/v1/session");
     }
 
-    public String getSearchState() throws IOException{
-       return requestUtil.doGet("/lol-lobby/v2/lobby/matchmaking/search-state");
+    public String getSearchState() throws IOException {
+        return requestUtil.doGet("/lol-lobby/v2/lobby/matchmaking/search-state");
     }
 
     /**

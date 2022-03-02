@@ -2,7 +2,6 @@ package yalong.site.bo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * 当前段位选择

@@ -21,18 +21,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>yalong.site</groupId>
-            <artifactId>swing-ui</artifactId>
-            <version>1.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>yalong.site</groupId>
-            <artifactId>dm</artifactId>
-            <version>1.0</version>
-        </dependency>
-
-        <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
             <version>${okhttp.version}</version>

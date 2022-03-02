@@ -28,7 +28,7 @@ public class RequestUtil {
         defaultHost = "https://127.0.0.1:" + bo.getPort();
         String basic = Credentials.basic("riot", bo.getToken());
         defaultHeaders = new Headers.Builder()
-                .add("Content-Type", "'application/json")
+                .add("Content-Type", "application/json")
                 .add("Accept", "application/json")
                 .add("Authorization", basic)
                 .build();
@@ -86,12 +86,13 @@ public class RequestUtil {
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
                 .writeTimeout(30, TimeUnit.SECONDS)
+                .protocols(Arrays.asList(Protocol.HTTP_1_1, Protocol.HTTP_2))
                 .build();
     }
 
     private static SSLSocketFactory getSslSocketFactory() {
         try {
-            SSLContext sslContext = SSLContext.getInstance("SSL");
+            SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
             sslContext.init(null, getTrustManager(), new SecureRandom());
             return sslContext.getSocketFactory();
         } catch (Exception e) {

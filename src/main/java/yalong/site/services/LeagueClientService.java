@@ -1,9 +1,7 @@
 package yalong.site.services;
 
-import org.jawin.COMException;
 import yalong.site.bo.*;
 import yalong.site.enums.GameStatusEnum;
-import yalong.site.utils.DmUtil;
 import yalong.site.utils.ProcessUtil;
 import yalong.site.utils.RequestUtil;
 
@@ -20,9 +18,8 @@ public class LeagueClientService {
     private boolean roomMessageSend;
     private boolean gameMessageSend;
     private final SummonerInfoBO owner;
-    private final DmUtil dmUtil;
 
-    public LeagueClientService(DmUtil dmUtil) throws IOException {
+    public LeagueClientService() throws IOException {
         this.clearFlag();
         LeagueClientBO leagueClientBO = ProcessUtil.getClientProcess();
         if (leagueClientBO.equals(new LeagueClientBO())) {
@@ -32,7 +29,7 @@ public class LeagueClientService {
         api = new LinkLeagueClientApi(requestUtil);
         // 获取登录人的信息
         owner = api.getCurrentSummoner();
-        this.dmUtil = dmUtil;
+        api.getLoginInfo();
         // 添加到全局变量
         GlobalData.service = this;
     }
@@ -110,7 +107,7 @@ public class LeagueClientService {
     /**
      * 持续监听游戏状态
      */
-    public void runForever() throws COMException, IOException, InterruptedException {
+    public void runForever() throws IOException, InterruptedException {
         while (true) {
             this.switchGameStatus();
             TimeUnit.SECONDS.sleep(1);
@@ -120,7 +117,7 @@ public class LeagueClientService {
     /**
      * 不同游戏状态做不同的事情
      */
-    public void switchGameStatus() throws IOException, COMException {
+    public void switchGameStatus() throws IOException {
         //监听游戏状态
         GameStatusEnum gameStatus = api.getGameStatus();
         switch (gameStatus) {
@@ -161,40 +158,7 @@ public class LeagueClientService {
                 break;
             }
             case InProgress: {
-                if (GlobalData.rival){
-                    //游戏内F11按下时,发送消息
-                    int key = dmUtil.waitKey(122, 2);
-                    if (key == 1 ) {
-                        this.sendMsg2game(GlobalData.data);
-                    }
-                }
-
-                if (!gameMessageSend && GlobalData.autoSend) {
-                    Float gameTime;
-                    try {
-                        gameTime = api.getOnlineData();
-                    } catch (Throwable e) {
-                        //可能对局信息还没建立,比如在加载页面
-                        break;
-                    }
-                    //游戏进去的60秒内,发送这些消息
-                    if (gameTime < 60) {
-                        ArrayList<String> strings;
-                        try {
-                            strings = dealScore2Msg();
-                        } catch (IOException ignored) {
-                            break;
-                        }
-                        if (strings != null && strings.size() > 0) {
-                            this.sendMsg2game(strings);
-                            gameMessageSend = true;
-                        }
-                    } else {
-                        gameMessageSend = true;
-                    }
-
-                    break;
-                }
+                //todo 发送文字到游戏
             }
             default: {
                 this.clearFlag();
@@ -203,16 +167,4 @@ public class LeagueClientService {
         }
     }
 
-    public void sendMsg2game(ArrayList<String> strings) throws COMException, IOException {
-        int hwnd = dmUtil.getHwnd();
-        if (hwnd != 0) {
-            for (String msg : strings) {
-                if (msg != null && !"".equals(msg.trim())) {
-                    dmUtil.sendMessage(hwnd, msg);
-                }
-            }
-        } else {
-            throw new IOException("游戏不在进行中");
-        }
-    }
 }

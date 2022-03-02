@@ -19,7 +19,7 @@ public class HelpButton extends BaseButton {
     }
 
     private ActionListener listener() {
-        return e -> JOptionPane.showMessageDialog(getParent(), "某些API好像调试几次后就不能用,猜测是被TP发现特征码");
+        return e -> JOptionPane.showMessageDialog(getParent(), "俺帮不了你");
     }
 
     /**

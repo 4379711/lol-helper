@@ -47,7 +47,7 @@ public class GlobalData {
 
     public static boolean rival = true;
 
-    public static RankBO currentRankBO = new RankBO("RANKED_SOLO_5x5","CHALLENGER","IV");
+    public static RankBO currentRankBO = new RankBO("RANKED_SOLO_5x5", "CHALLENGER", "IV");
 
     public static LeagueClientService service;
 }
