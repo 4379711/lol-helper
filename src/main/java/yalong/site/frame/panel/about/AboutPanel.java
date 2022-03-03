@@ -25,8 +25,7 @@ public class AboutPanel extends BasePanel {
                 + "本项目使用RIOT公开的LCU API开发,地址:\n"
                 + "https://developer.riotgames.com/docs/lol/\n"
                 + "https://riot-api-libraries.readthedocs.io/\n\n"
-                + "本人承诺:绝不上传用户任何数据!!!\n"
-                + "联系方式:QQ4379711"
+                + "本人承诺:绝不上传用户任何数据!!!"
         );
         textArea.setEditable(false);
         textArea.setForeground(Color.red);

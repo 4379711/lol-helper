@@ -45,7 +45,9 @@ public class GlobalData {
 
     public static boolean autoSend = true;
 
-    public static boolean rival = true;
+    public static boolean leave = false;
+
+    public static boolean moyan = false;
 
     public static RankBO currentRankBO = new RankBO("RANKED_SOLO_5x5", "CHALLENGER", "IV");
 

@@ -155,7 +155,6 @@ public class LeagueClientService {
                         Matcher matcher = roomIdPattern.matcher(roomInfo);
                         if (matcher.find()) {
                             String s = api.msg2Room(matcher.group(1), message);
-                            System.out.println(s);
                             roomMessageSend = true;
                         }
 
