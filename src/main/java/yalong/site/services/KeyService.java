@@ -2,10 +2,10 @@ package yalong.site.services;
 
 import org.jnativehook.keyboard.NativeKeyEvent;
 import yalong.site.bo.GlobalData;
-import yalong.site.utils.DdUtil;
 
+import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 /**
@@ -14,60 +14,72 @@ import java.util.function.Consumer;
  */
 public class KeyService {
     public static Random random = new Random();
+    public static Robot robot;
+    /**
+     * 屏幕大小
+     */
+    public static Dimension screenSize;
 
+    static {
+        try {
+            robot = new Robot();
+        } catch (AWTException e) {
+            e.printStackTrace();
+        }
+        screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    }
+
+    /**
+     * 游戏内发送消息
+     */
+    public static void sendMsg2Game(String msg) {
+        // TODO: 发送消息
+    }
+
+
+    /**
+     * 瞎子光速摸眼
+     */
     public static Consumer<Integer> moyan() {
         return i -> {
             if (GlobalData.moyan && i == NativeKeyEvent.VC_T) {
-                try {
-                    // 可能没按到,多试几次
-                    DdUtil.INSTANCE.DD_key(204, 1);
-                    DdUtil.INSTANCE.DD_key(204, 2);
-                    TimeUnit.MILLISECONDS.sleep(10);
-                    DdUtil.INSTANCE.DD_key(403, 1);
-                    DdUtil.INSTANCE.DD_key(403, 2);
-                    TimeUnit.MILLISECONDS.sleep(10);
-                    for (int j = 0; j < 5; j++) {
-                        DdUtil.INSTANCE.DD_key(302, 1);
-                        TimeUnit.MILLISECONDS.sleep(20);
-                        DdUtil.INSTANCE.DD_key(302, 2);
-                    }
-
-                } catch (InterruptedException ignored) {
+                // 按键:4DW
+                robot.keyPress(KeyEvent.VK_4);
+                robot.keyRelease(KeyEvent.VK_4);
+                robot.delay(50);
+                robot.keyPress(KeyEvent.VK_D);
+                robot.keyRelease(KeyEvent.VK_D);
+                robot.delay(50);
+                //w可能没按到,多试几次
+                for (int j = 0; j < 5; j++) {
+                    robot.keyPress(KeyEvent.VK_W);
+                    robot.delay(50);
+                    robot.keyRelease(KeyEvent.VK_W);
+                    robot.delay(50);
                 }
             }
         };
     }
 
+    /**
+     * 挂机模式,自己乱动
+     */
     public static void leave() {
         while (true) {
             if (GlobalData.leave) {
-                int x = random.nextInt(300);
-                int y = random.nextInt(100);
-                if (x % 2 == 1) {
-                    x = -x;
-                }
-                if (y % 2 == 1) {
-                    y = -y;
-                }
-
+                // 过滤屏幕下边的1/4区域
+                int xx = screenSize.width / 4;
+                int yy = screenSize.height / 4;
+                int x = random.nextInt(xx * 4);
+                int y = random.nextInt(yy * 3);
                 //移动
-                DdUtil.INSTANCE.DD_movR(x, y);
+                robot.mouseMove(x, y);
                 //鼠标右键点击
-                DdUtil.INSTANCE.DD_btn(4);
-                DdUtil.INSTANCE.DD_btn(8);
-                try {
-                    TimeUnit.SECONDS.sleep(2);
-                } catch (InterruptedException ignored) {
-                    break;
-                }
-
-            } else {
-                try {
-                    TimeUnit.SECONDS.sleep(2);
-                } catch (InterruptedException ignored) {
-                    break;
-                }
+                robot.mousePress(KeyEvent.BUTTON3_DOWN_MASK);
+                robot.delay(100);
+                robot.mouseRelease(KeyEvent.BUTTON3_DOWN_MASK);
             }
+            robot.delay(3000);
         }
     }
 

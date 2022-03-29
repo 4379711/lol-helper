@@ -11,6 +11,7 @@ import yalong.site.enums.GameStatusEnum;
 import yalong.site.utils.RequestUtil;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -166,18 +167,26 @@ public class LinkLeagueClientApi {
     }
 
     /**
-     * 获取房间id
+     * 获取选英雄房间信息
      */
-    public String getRoomId() throws IOException {
-        String roomId;
-        String resp = requestUtil.doGet("/lol-chat/v1/conversations");
+    public ArrayList<String> getRoomSummonerId(String roomId) throws IOException {
+        String endpoint = "/lol-chat/v1/conversations/" + roomId + "/messages";
+        String resp = requestUtil.doGet(endpoint);
         JSONArray array = JSON.parseArray(resp);
-        if (array.size() == 0) {
-            return null;
+        ArrayList<String> arrayList = new ArrayList<>();
+        for (int i = 0; i < array.size(); i++) {
+            // jsonObject0.getString("fromId")
+            String fromSummonerId = array.getJSONObject(i).getString("fromSummonerId");
+            if (!arrayList.contains(fromSummonerId)) {
+                arrayList.add(fromSummonerId);
+            }
         }
-        JSONObject jsonObject = array.getJSONObject(0);
-        roomId = jsonObject.getString("id");
-        return roomId;
+        return arrayList;
+    }
+
+    public void getRoomInfo() throws IOException {
+        String resp = requestUtil.doGet("/lol-chat/v1/conversations");
+        System.out.println(resp);
     }
 
     /**
@@ -306,6 +315,7 @@ public class LinkLeagueClientApi {
     public TeamPuuidBO getTeamPuuid() throws IOException {
         TeamPuuidBO result = new TeamPuuidBO();
         String resp = requestUtil.doGet("/lol-gameflow/v1/session");
+        System.out.println(resp);
         try {
             JSONObject jsonObject = JSON.parseObject(resp).getJSONObject("gameData");
             List<String> teamOne = jsonObject.getJSONArray("teamOne")

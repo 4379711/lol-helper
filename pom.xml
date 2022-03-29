@@ -15,7 +15,7 @@
         <fastjson.version>1.2.79</fastjson.version>
         <lombok.version>1.18.22</lombok.version>
         <okhttp.version>4.9.3</okhttp.version>
-        <jna.version>5.9.0</jna.version>
+        <jna.version>5.10.0</jna.version>
         <jnativehook.version>2.1.0</jnativehook.version>
         <!-- 在这里定义程序入口类 -->
         <mainClass>yalong.site.LeagueClientHelper</mainClass>

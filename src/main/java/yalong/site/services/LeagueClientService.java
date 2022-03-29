@@ -62,10 +62,9 @@ public class LeagueClientService {
     }
 
     /**
-     * 查询战绩,格式化为要发送的消息
+     * 查询对方puuid,必须进入游戏后才能查到
      */
-    public ArrayList<String> dealScore2Msg() throws IOException {
-        ArrayList<String> result = new ArrayList<>();
+    public List<String> getOtherPuuid() throws IOException {
         String ownerPuuid = owner.getPuuid();
         //查询两队的所有人puuid
         TeamPuuidBO teamPuuidBO = api.getTeamPuuid();
@@ -74,6 +73,15 @@ public class LeagueClientService {
         if (puuidList.contains(ownerPuuid)) {
             puuidList = teamPuuidBO.getTeamPuuid2();
         }
+        return puuidList;
+    }
+
+
+    /**
+     * 查询战绩,格式化为要发送的消息
+     */
+    public ArrayList<String> dealScore2Msg(List<String> puuidList) throws IOException {
+        ArrayList<String> result = new ArrayList<>();
         //根据puuid查最近几次的战绩
         for (String id : puuidList) {
             //查询战绩
@@ -101,7 +109,7 @@ public class LeagueClientService {
             //整理输出信息
             if (scoreBuilder.length() != 0) {
                 String score = scoreBuilder.toString();
-                result.add("玩家名称:<" + displayName + ">近几局战绩:       " + score + "                 .");
+                result.add("玩家名称:<" + displayName + ">\n近几局战绩:" + score);
             }
         }
         return result;
@@ -141,29 +149,51 @@ public class LeagueClientService {
             }
             case ChampSelect: {
                 if (!roomMessageSend && GlobalData.autoSend) {
-                    // 获取红蓝方
-                    String mapSide = api.getBlueRed();
-                    String message = null;
-                    if ("blue".equals(mapSide)) {
-                        message = "这把是蓝色方,泉水在左下角.\n - - - 来自 LoL Helper";
-                    } else if ("red".equals(mapSide)) {
-                        message = "这把是红色方,泉水在右上角.\n - - - 来自 LoL Helper";
-                    }
-                    if (message != null) {
+                    try {
                         //获取房间号
                         String roomInfo = api.getRoomGameInfo();
                         Matcher matcher = roomIdPattern.matcher(roomInfo);
+                        String roomId;
                         if (matcher.find()) {
-                            String s = api.msg2Room(matcher.group(1), message);
+                            roomId = matcher.group(1);
+                        } else {
+                            break;
+                        }
+                        ArrayList<String> summonerIdList = api.getRoomSummonerId(roomId);
+                        //可能队友还没进入房间
+                        if (summonerIdList.size() != 5) {
+                            break;
+                        }
+                        ArrayList<String> strings = new ArrayList<>();
+                        for (String id : summonerIdList) {
+                            String mySummonerId = owner.getSummonerId();
+                            // 排除自己
+                            if (mySummonerId.equals(id)) {
+                                continue;
+                            }
+                            SummonerInfoBO infoBySummonerId = api.getInfoBySummonerId(id);
+                            String puuid = infoBySummonerId.getPuuid();
+                            strings.add(puuid);
+                        }
+                        ArrayList<String> msg = this.dealScore2Msg(strings);
+                        if (msg != null) {
+                            for (String s : msg) {
+                                api.msg2Room(roomId, s);
+                            }
                             roomMessageSend = true;
                         }
-
+                    } catch (Exception ignored) {
+                        break;
                     }
                 }
                 break;
             }
             case InProgress: {
-                //todo 发送文字到游戏
+                if (GlobalData.autoSend && !gameMessageSend) {
+                    KeyService.sendMsg2Game("string");
+                    gameMessageSend = true;
+                }
+                break;
             }
             default: {
                 this.clearFlag();
