@@ -30,14 +30,6 @@ public class KeyService {
     }
 
     /**
-     * 游戏内发送消息
-     */
-    public static void sendMsg2Game(String msg) {
-        // TODO: 发送消息
-    }
-
-
-    /**
      * 瞎子光速摸眼
      */
     public static Consumer<Integer> moyan() {

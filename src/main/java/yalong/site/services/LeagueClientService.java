@@ -2,6 +2,7 @@ package yalong.site.services;
 
 import yalong.site.bo.*;
 import yalong.site.enums.GameStatusEnum;
+import yalong.site.frame.utils.FrameMsgUtil;
 import yalong.site.utils.ProcessUtil;
 import yalong.site.utils.RequestUtil;
 
@@ -190,9 +191,22 @@ public class LeagueClientService {
             }
             case InProgress: {
                 if (GlobalData.autoSend && !gameMessageSend) {
-                    KeyService.sendMsg2Game("string");
-                    gameMessageSend = true;
+                    List<String> otherPuuid = getOtherPuuid();
+                    if (!otherPuuid.contains(null) && otherPuuid.size() == 5) {
+                        ArrayList<String> strings = dealScore2Msg(otherPuuid);
+                        for (String string : strings) {
+                            FrameMsgUtil.sendLine(string);
+                        }
+                        FrameMsgUtil.sendLine("-----------------------------------");
+                        gameMessageSend = true;
+                    }
+
                 }
+                break;
+            }
+            case EndOfGame: {
+                //暂停挂机
+                GlobalData.leave = false;
                 break;
             }
             default: {

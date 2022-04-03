@@ -243,13 +243,19 @@ public class LinkLeagueClientApi {
         String endpoint = "/lol-match-history/v1/products/lol/" + id + "/matches?begIndex=0&endIndex=" + endIndex;
         String resp = requestUtil.doGet(endpoint);
         JSONObject jsonObject = JSON.parseObject(resp);
-        return jsonObject.getJSONObject("games").getJSONArray("games")
-                .toJavaList(JSONObject.class)
-                .stream().map(i -> {
-                    JSONObject participants = i.getJSONArray("participants").getJSONObject(0);
-                    JSONObject stats = participants.getJSONObject("stats");
-                    return stats.toJavaObject(ScoreBO.class);
-                }).collect(Collectors.toList());
+        List<ScoreBO> collect = new ArrayList<>();
+        try {
+            collect = jsonObject.getJSONObject("games").getJSONArray("games")
+                    .toJavaList(JSONObject.class)
+                    .stream().map(i -> {
+                        JSONObject participants = i.getJSONArray("participants").getJSONObject(0);
+                        JSONObject stats = participants.getJSONObject("stats");
+                        return stats.toJavaObject(ScoreBO.class);
+                    }).collect(Collectors.toList());
+        } catch (NullPointerException ignored) {
+
+        }
+        return collect;
     }
 
     /**
@@ -315,7 +321,6 @@ public class LinkLeagueClientApi {
     public TeamPuuidBO getTeamPuuid() throws IOException {
         TeamPuuidBO result = new TeamPuuidBO();
         String resp = requestUtil.doGet("/lol-gameflow/v1/session");
-        System.out.println(resp);
         try {
             JSONObject jsonObject = JSON.parseObject(resp).getJSONObject("gameData");
             List<String> teamOne = jsonObject.getJSONArray("teamOne")

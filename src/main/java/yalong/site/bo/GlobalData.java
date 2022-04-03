@@ -43,7 +43,7 @@ public class GlobalData {
 
     public static boolean autoReconnect = true;
 
-    public static boolean autoSend = true;
+    public static boolean autoSend = false;
 
     public static boolean leave = false;
 
