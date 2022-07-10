@@ -9,8 +9,8 @@ import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.BufferedReader;
-import java.io.FileReader;
-import java.net.URL;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 /**
  * @author yaLong
@@ -41,10 +41,10 @@ public class AutoSendCheckBox extends BaseCheckBox {
      */
     public static ComponentBO builder() {
         //喷人的词语从文件读取
-        URL resource = AutoSendCheckBox.class.getResource("/fuck.txt");
         try {
+            InputStream inputStream = AutoSendCheckBox.class.getResourceAsStream("/fuck.txt");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
             String line;
-            BufferedReader reader = new BufferedReader(new FileReader(resource.getFile()));
             while ((line = reader.readLine()) != null) {
                 GlobalData.battleWords.add(line);
             }
