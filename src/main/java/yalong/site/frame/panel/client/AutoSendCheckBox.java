@@ -11,6 +11,8 @@ import java.awt.event.ItemListener;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author yaLong
@@ -43,7 +45,7 @@ public class AutoSendCheckBox extends BaseCheckBox {
         //喷人的词语从文件读取
         try {
             InputStream inputStream = AutoSendCheckBox.class.getResourceAsStream("/fuck.txt");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
             String line;
             while ((line = reader.readLine()) != null) {
                 GlobalData.battleWords.add(line);
