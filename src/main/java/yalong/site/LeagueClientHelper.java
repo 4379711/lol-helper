@@ -2,6 +2,7 @@ package yalong.site;
 
 import yalong.site.bo.GlobalData;
 import yalong.site.frame.MainFrame;
+import yalong.site.services.HotKeyService;
 import yalong.site.services.LeagueClientService;
 
 /**
@@ -13,6 +14,7 @@ public class LeagueClientHelper {
         while (true) {
             try {
                 MainFrame.start();
+                new HotKeyService();
                 LeagueClientService service = new LeagueClientService();
                 service.setRank(GlobalData.currentRankBO);
                 service.runForever();

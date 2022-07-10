@@ -9,10 +9,10 @@ import java.util.function.Consumer;
  * @author yaLong
  * @date 2022/3/3 23:31
  */
-public class KeyBoardListener implements NativeKeyListener {
+public class HotKeyListener implements NativeKeyListener {
     private final Consumer<Integer> function;
 
-    public KeyBoardListener(Consumer<Integer> function) {
+    public HotKeyListener(Consumer<Integer> function) {
         this.function = function;
     }
 

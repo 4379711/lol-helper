@@ -45,11 +45,15 @@ public class GlobalData {
 
     public static boolean autoSend = false;
 
-    public static boolean leave = false;
+    public static boolean battle = false;
 
     public static boolean moyan = false;
 
     public static RankBO currentRankBO = new RankBO("RANKED_SOLO_5x5", "CHALLENGER", "IV");
 
     public static LeagueClientService service;
+
+    public static ArrayList<String> otherTeamScore = new ArrayList<>();
+
+    public static ArrayList<String> battleWords = new ArrayList<>();
 }

@@ -39,7 +39,7 @@ public class ClientPanel extends BasePanel {
         //第三行3个
         ComponentBO gameStatusBox = GameStatusBox.builder();
         clientPanel.add(gameStatusBox.getComp(), gameStatusBox.getConstraints());
-        ComponentBO leaveBox = LeaveCheckBox.builder();
+        ComponentBO leaveBox = BattleCheckBox.builder();
         clientPanel.add(leaveBox.getComp(), leaveBox.getConstraints());
         ComponentBO moyanBox = MoyanCheckBox.builder();
         clientPanel.add(moyanBox.getComp(), moyanBox.getConstraints());

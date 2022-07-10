@@ -13,33 +13,33 @@ import java.awt.event.ItemListener;
  * @author yaLong
  * @date 2022/2/11
  */
-public class MoyanCheckBox extends BaseCheckBox {
-
-    public MoyanCheckBox() {
-        this.setText("光速摸眼");
-        this.setSelected(GlobalData.moyan);
+public class BattleCheckBox extends BaseCheckBox {
+    public BattleCheckBox() {
+        this.setText("对线模式");
+        this.setSelected(GlobalData.battle);
         this.addItemListener(listener());
         this.addActionListener(i -> {
-            MoyanCheckBox source = (MoyanCheckBox) i.getSource();
+            BattleCheckBox source = (BattleCheckBox) i.getSource();
             //选中状态下弹框提示
             if (source.getSelectedObjects() != null) {
-                JOptionPane.showMessageDialog(null, "盲仔按T光速摸眼");
+                JOptionPane.showMessageDialog(null, "按F1开喷");
             }
         });
+
     }
 
     private ItemListener listener() {
-        return e -> GlobalData.moyan = e.getStateChange() == ItemEvent.SELECTED;
+        return e -> GlobalData.battle = e.getStateChange() == ItemEvent.SELECTED;
     }
 
     /**
      * @return 带布局的盒子
      */
     public static ComponentBO builder() {
-        MoyanCheckBox box = new MoyanCheckBox();
+        BattleCheckBox box = new BattleCheckBox();
         GridBagConstraints grid = new GridBagConstraints(
-                // 第(2,2)个格子
-                2, 2,
+                // 第(1,2)个格子
+                1, 2,
                 // 占1列,占1行
                 1, 1,
                 //横向占100%长度,纵向占100%长度
