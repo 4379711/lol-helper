@@ -13,30 +13,30 @@ import java.awt.event.ItemListener;
  * @author yaLong
  * @date 2022/2/11
  */
-public class BattleCheckBox extends BaseCheckBox {
-    public BattleCheckBox() {
-        this.setText("对线模式");
-        this.setSelected(GlobalData.battle);
+public class CommunicateCheckBox extends BaseCheckBox {
+    public CommunicateCheckBox() {
+        this.setText("互动模式");
+        this.setSelected(GlobalData.communicate);
         this.addItemListener(listener());
         this.addActionListener(i -> {
-            BattleCheckBox source = (BattleCheckBox) i.getSource();
+            CommunicateCheckBox source = (CommunicateCheckBox) i.getSource();
             //选中状态下弹框提示
             if (source.getSelectedObjects() != null) {
-                JOptionPane.showMessageDialog(null, "按F1开喷");
+                JOptionPane.showMessageDialog(null, "按Home键喷队友,按End键鼓励队友");
             }
         });
 
     }
 
     private ItemListener listener() {
-        return e -> GlobalData.battle = e.getStateChange() == ItemEvent.SELECTED;
+        return e -> GlobalData.communicate = e.getStateChange() == ItemEvent.SELECTED;
     }
 
     /**
      * @return 带布局的盒子
      */
     public static ComponentBO builder() {
-        BattleCheckBox box = new BattleCheckBox();
+        CommunicateCheckBox box = new CommunicateCheckBox();
         GridBagConstraints grid = new GridBagConstraints(
                 // 第(1,2)个格子
                 1, 2,

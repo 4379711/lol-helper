@@ -8,6 +8,8 @@ import yalong.site.utils.RequestUtil;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -82,36 +84,36 @@ public class LeagueClientService {
      */
     public ArrayList<String> dealScore2Msg(List<String> puuidList) throws IOException {
         ArrayList<String> result = new ArrayList<>();
+        TreeMap<Float, String> treeMap = new TreeMap<>();
         //根据puuid查最近几次的战绩
         for (String id : puuidList) {
             //查询战绩
             List<ScoreBO> scoreBOList = api.getScoreById(id, 3);
-            //战绩
-            StringBuilder scoreBuilder = new StringBuilder();
+            // 计算得分 最近三把(KDA+输赢)的平均值
+            // KDA->(击杀*1.2+助攻*0.8)/(死亡*1.2)
+            // 输赢->赢+1 输-1
+            float score = 0.0f;
             for (ScoreBO scoreBO : scoreBOList) {
                 if (scoreBO.getWin()) {
-                    scoreBuilder.append("胜");
+                    score += 1;
                 } else {
-                    scoreBuilder.append("败");
+                    score -= 1;
                 }
-                scoreBuilder.append("(");
-                scoreBuilder.append(scoreBO.getKills());
-                scoreBuilder.append("/");
-                scoreBuilder.append(scoreBO.getDeaths());
-                scoreBuilder.append("/");
-                scoreBuilder.append(scoreBO.getAssists());
-                scoreBuilder.append(") ");
+                Integer kills = scoreBO.getKills();
+                Integer deaths = scoreBO.getDeaths();
+                Integer assists = scoreBO.getAssists();
+                score += (kills * 1.2 + assists * 0.8) / Math.max(deaths * 1.2, 1);
             }
+            score /= 3.0f;
             //查看玩家名称
             SummonerInfoBO infoByPuuId = api.getInfoByPuuId(id);
             String displayName = infoByPuuId.getDisplayName();
-
-            //整理输出信息
-            if (scoreBuilder.length() != 0) {
-                String score = scoreBuilder.toString();
-                result.add("玩家名称:<" + displayName + ">\n近几局战绩:" + score);
-            }
+            treeMap.put(score, displayName);
         }
+        Map.Entry<Float, String> firstEntry = treeMap.firstEntry();
+        Map.Entry<Float, String> lastEntry = treeMap.lastEntry();
+        result.add("牛马是:<" + firstEntry.getValue() + "> 得分:" + firstEntry.getKey());
+        result.add("大神是:<" + lastEntry.getValue() + "> 得分:" + lastEntry.getKey());
         return result;
     }
 
@@ -121,7 +123,7 @@ public class LeagueClientService {
     public void runForever() throws IOException, InterruptedException {
         while (true) {
             this.switchGameStatus();
-            TimeUnit.SECONDS.sleep(1);
+            TimeUnit.MILLISECONDS.sleep(500);
         }
     }
 

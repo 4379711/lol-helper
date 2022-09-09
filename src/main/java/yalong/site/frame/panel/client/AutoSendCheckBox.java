@@ -1,5 +1,6 @@
 package yalong.site.frame.panel.client;
 
+import cn.hutool.core.io.FileUtil;
 import yalong.site.bo.GlobalData;
 import yalong.site.frame.bo.ComponentBO;
 import yalong.site.frame.panel.base.BaseCheckBox;
@@ -8,9 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
@@ -41,18 +40,32 @@ public class AutoSendCheckBox extends BaseCheckBox {
     /**
      * @return 带布局的盒子
      */
-    public static ComponentBO builder() {
+    public static ComponentBO builder()  {
+        String userFile="words.txt";
         //喷人的词语从文件读取
+        boolean exist = FileUtil.exist(userFile);
+        if(!exist){
+            //读取默认文件
+            try {
+                InputStream inputStream = AutoSendCheckBox.class.getResourceAsStream("/fuck.txt");
+                //复制默认文件
+                FileUtil.writeFromStream(inputStream,new File(userFile));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        //加载到内存
         try {
-            InputStream inputStream = AutoSendCheckBox.class.getResourceAsStream("/fuck.txt");
+            InputStream inputStream = new FileInputStream(userFile);
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
             String line;
             while ((line = reader.readLine()) != null) {
-                GlobalData.battleWords.add(line);
+                GlobalData.communicateWords.add(line);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+
         AutoSendCheckBox box = new AutoSendCheckBox();
         GridBagConstraints grid = new GridBagConstraints(
                 // 第(2,1)个格子

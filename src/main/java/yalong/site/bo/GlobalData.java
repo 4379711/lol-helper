@@ -34,18 +34,13 @@ public class GlobalData {
         StyleConstants.setForeground(BLACK_ATTR, Color.black);
     }
 
-    /**
-     * 编辑好要发送的数据
-     */
-    public static ArrayList<String> data = new ArrayList<>();
-
     public static boolean autoAccept = true;
 
     public static boolean autoReconnect = true;
 
     public static boolean autoSend = false;
 
-    public static boolean battle = false;
+    public static boolean communicate = false;
 
     public static boolean moyan = false;
 
@@ -55,5 +50,5 @@ public class GlobalData {
 
     public static ArrayList<String> otherTeamScore = new ArrayList<>();
 
-    public static ArrayList<String> battleWords = new ArrayList<>();
+    public static ArrayList<String> communicateWords = new ArrayList<>();
 }

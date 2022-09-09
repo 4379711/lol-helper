@@ -17,11 +17,22 @@
         <okhttp.version>4.9.3</okhttp.version>
         <jna.version>5.11.0</jna.version>
         <jnativehook.version>2.1.0</jnativehook.version>
+        <hutool.version>5.8.4</hutool.version>
         <!-- 在这里定义程序入口类 -->
         <mainClass>yalong.site.LeagueClientHelper</mainClass>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-http</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-json</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
         <dependency>
             <groupId>com.1stleg</groupId>
             <artifactId>jnativehook</artifactId>

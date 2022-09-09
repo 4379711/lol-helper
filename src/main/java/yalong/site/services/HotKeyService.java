@@ -1,5 +1,7 @@
 package yalong.site.services;
 
+import cn.hutool.http.HttpUtil;
+import cn.hutool.json.JSONUtil;
 import lombok.Data;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
@@ -9,7 +11,6 @@ import yalong.site.utils.MyUser32Util;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.util.Random;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,7 +21,7 @@ import java.util.logging.Logger;
 @Data
 public class HotKeyService {
     private static int keyDelay = 100;
-    public static Random random = new Random();
+    private static int nextLineNo = 0;
     public static Robot robot;
     /**
      * 屏幕大小
@@ -31,7 +32,7 @@ public class HotKeyService {
     public HotKeyService() {
         GlobalScreen.addNativeKeyListener(new HotKeyListener(sendOtherTeamScore()));
         GlobalScreen.addNativeKeyListener(new HotKeyListener(moyan()));
-        GlobalScreen.addNativeKeyListener(new HotKeyListener(battle()));
+        GlobalScreen.addNativeKeyListener(new HotKeyListener(communicate()));
     }
 
 
@@ -104,14 +105,26 @@ public class HotKeyService {
         };
     }
 
-    public static Consumer<Integer> battle() {
+    public static Consumer<Integer> communicate() {
         return i -> {
-            if (GlobalData.battle && i == NativeKeyEvent.VC_F1) {
-                int i1 = random.nextInt(GlobalData.battleWords.size());
-                String s = GlobalData.battleWords.get(i1);
+            if (GlobalData.communicate && i == NativeKeyEvent.VC_HOME) {
+                String s = GlobalData.communicateWords.get(nextLineNo);
                 sendMsg(s);
+                int size = GlobalData.communicateWords.size();
+                nextLineNo = (nextLineNo + 1) % size;
+            }
+            if (GlobalData.communicate && i == NativeKeyEvent.VC_END) {
+                String s = requestCaiHongPiText();
+                if (!"".equals(s)) {
+                    sendMsg(s);
+                }
             }
         };
+    }
+
+    public static String requestCaiHongPiText() {
+        String result = HttpUtil.get("https://api.shadiao.app/chp");
+        return JSONUtil.parseObj(result).getByPath("data.text", String.class);
     }
 
 }
