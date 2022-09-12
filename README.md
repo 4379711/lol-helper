@@ -1,10 +1,13 @@
 # lol-helper
 
-英雄联盟助手,主要使用LCU API,未修改客户端内容,不会封号!
+- 英雄联盟助手,主要使用LCU API,**未修改**客户端内容,**不会封号!**
+- 点击[Releases](https://github.com/4379711/lol-helper/releases)页面下载**.msi**安装包,安装后启动软件即可
+- 功能失效可能是**未以管理员身份运行程序**
+  - 方式一: 对着图标右键 -> 以管理员身份运行
+  - 方式二: 对着图标右键 -> 属性 -> 以管理员身份运行此程序  -> 确定
 
 ## 项目说明
 
-- 可以在右侧的release页面下载安装包,双击直接使用
 - 使用 [LCU API](https://riot-api-libraries.readthedocs.io/) 开发,另外附上 [拳头文档](https://developer.riotgames.com/docs/lol/)
 - V2.0版本,只使用了API的功能,绝不封号
 - V2.0+版本,添加了模拟行为,例如光速摸眼,挂机模式等
@@ -30,6 +33,15 @@
   - 最近三把(KDA+输赢)的平均值
   - KDA->(击杀*1.2+助攻*0.8)/(死亡*1.2)
   - 输赢->赢+1 输-1
+
+## 软件截图
+![安装后的图标](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/logo.jpg)
+![主界面](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/main.jpg)
+![段位和状态](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/01.jpg)
+![自动接受对局](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/02.jpg)
+![房间内发送文字](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/03.jpg)
+![游戏内发送文字](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/04.jpg)
+
 
 ## 未来功能
 
