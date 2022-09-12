@@ -33,7 +33,7 @@ public class ClientPanel extends BasePanel {
         clientPanel.add(checkBox.getComp(), checkBox.getConstraints());
         ComponentBO reconnectCheckBox = AutoReconnectCheckBox.builder();
         clientPanel.add(reconnectCheckBox.getComp(), reconnectCheckBox.getConstraints());
-        ComponentBO sendCheckBox = AutoSendCheckBox.builder();
+        ComponentBO sendCheckBox = SendScoreCheckBox.builder();
         clientPanel.add(sendCheckBox.getComp(), sendCheckBox.getConstraints());
 
         //第三行3个

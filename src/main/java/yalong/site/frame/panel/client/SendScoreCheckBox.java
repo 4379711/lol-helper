@@ -10,21 +10,20 @@ import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.*;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 /**
  * @author yaLong
  * @date 2022/2/14
  */
-public class AutoSendCheckBox extends BaseCheckBox {
+public class SendScoreCheckBox extends BaseCheckBox {
 
-    public AutoSendCheckBox() {
-        this.setText("自动发送战绩");
-        this.setSelected(GlobalData.autoSend);
+    public SendScoreCheckBox() {
+        this.setText("一键发送战绩");
+        this.setSelected(GlobalData.sendScore);
         this.addItemListener(listener());
         this.addActionListener(i -> {
-            AutoSendCheckBox source = (AutoSendCheckBox) i.getSource();
+            SendScoreCheckBox source = (SendScoreCheckBox) i.getSource();
             //选中状态下弹框提示
             if (source.getSelectedObjects() != null) {
                 JOptionPane.showMessageDialog(null, "按F2发送战绩");
@@ -33,7 +32,7 @@ public class AutoSendCheckBox extends BaseCheckBox {
     }
 
     private ItemListener listener() {
-        return e -> GlobalData.autoSend = e.getStateChange() == ItemEvent.SELECTED;
+        return e -> GlobalData.sendScore = e.getStateChange() == ItemEvent.SELECTED;
 
     }
 
@@ -47,7 +46,7 @@ public class AutoSendCheckBox extends BaseCheckBox {
         if(!exist){
             //读取默认文件
             try {
-                InputStream inputStream = AutoSendCheckBox.class.getResourceAsStream("/fuck.txt");
+                InputStream inputStream = SendScoreCheckBox.class.getResourceAsStream("/fuck.txt");
                 //复制默认文件
                 FileUtil.writeFromStream(inputStream,new File(userFile));
             } catch (Exception e) {
@@ -66,7 +65,7 @@ public class AutoSendCheckBox extends BaseCheckBox {
             throw new RuntimeException(e);
         }
 
-        AutoSendCheckBox box = new AutoSendCheckBox();
+        SendScoreCheckBox box = new SendScoreCheckBox();
         GridBagConstraints grid = new GridBagConstraints(
                 // 第(2,1)个格子
                 2, 1,

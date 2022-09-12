@@ -112,8 +112,8 @@ public class LeagueClientService {
         }
         Map.Entry<Float, String> firstEntry = treeMap.firstEntry();
         Map.Entry<Float, String> lastEntry = treeMap.lastEntry();
-        result.add("牛马是:<" + firstEntry.getValue() + "> 得分:" + firstEntry.getKey());
-        result.add("大神是:<" + lastEntry.getValue() + "> 得分:" + lastEntry.getKey());
+        result.add("牛马是:<" + firstEntry.getValue() + "> 得分:" + String.format("%.2f", firstEntry.getKey()));
+        result.add("大神是:<" + lastEntry.getValue() + "> 得分:" + String.format("%.2f", lastEntry.getKey()));
         return result;
     }
 
@@ -133,6 +133,7 @@ public class LeagueClientService {
     public void switchGameStatus() throws IOException {
         //监听游戏状态
         GameStatusEnum gameStatus = api.getGameStatus();
+        GlobalData.gameStatus = gameStatus;
         switch (gameStatus) {
             case ReadyCheck: {
                 if (GlobalData.autoAccept) {
@@ -150,7 +151,7 @@ public class LeagueClientService {
                 break;
             }
             case ChampSelect: {
-                if (!roomMessageSend && GlobalData.autoSend) {
+                if (!roomMessageSend && GlobalData.sendScore) {
                     try {
                         //获取房间号
                         String roomInfo = api.getRoomGameInfo();
@@ -179,9 +180,8 @@ public class LeagueClientService {
                         }
                         ArrayList<String> msg = this.dealScore2Msg(strings);
                         if (msg != null) {
-                            for (String s : msg) {
-                                api.msg2Room(roomId, s);
-                            }
+                            // 查询我方队员战绩,放到公共数据区
+                            GlobalData.myTeamScore = msg;
                             roomMessageSend = true;
                         }
                     } catch (Exception ignored) {
@@ -191,7 +191,7 @@ public class LeagueClientService {
                 break;
             }
             case InProgress: {
-                if (GlobalData.autoSend && !gameMessageSend) {
+                if (GlobalData.sendScore && !gameMessageSend) {
                     List<String> otherPuuid = getOtherPuuid();
                     if (!otherPuuid.contains(null) && otherPuuid.size() == 5) {
                         // 查询对方队员战绩,放到公共数据区

@@ -30,7 +30,7 @@ public class HotKeyService {
 
 
     public HotKeyService() {
-        GlobalScreen.addNativeKeyListener(new HotKeyListener(sendOtherTeamScore()));
+        GlobalScreen.addNativeKeyListener(new HotKeyListener(sendTeamScore()));
         GlobalScreen.addNativeKeyListener(new HotKeyListener(moyan()));
         GlobalScreen.addNativeKeyListener(new HotKeyListener(communicate()));
     }
@@ -70,12 +70,24 @@ public class HotKeyService {
         robot.delay(keyDelay);
     }
 
-    public static Consumer<Integer> sendOtherTeamScore() {
+    public static Consumer<Integer> sendTeamScore() {
         return i -> {
-            if (GlobalData.autoSend && i == NativeKeyEvent.VC_F2) {
-                for (String s : GlobalData.otherTeamScore) {
-                    sendMsg(s);
+            if (GlobalData.sendScore && i == NativeKeyEvent.VC_F2) {
+                switch (GlobalData.gameStatus) {
+                    case ChampSelect:
+                        for (String s : GlobalData.myTeamScore) {
+                            sendMsg("我方" + s);
+                        }
+                        break;
+                    case InProgress:
+                        for (String s : GlobalData.otherTeamScore) {
+                            sendMsg("对方" + s);
+                        }
+                        break;
+                    default:
+                        break;
                 }
+
             }
 
         };

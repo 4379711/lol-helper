@@ -1,5 +1,6 @@
 package yalong.site.bo;
 
+import yalong.site.enums.GameStatusEnum;
 import yalong.site.services.LeagueClientService;
 
 import javax.swing.text.MutableAttributeSet;
@@ -38,7 +39,7 @@ public class GlobalData {
 
     public static boolean autoReconnect = true;
 
-    public static boolean autoSend = false;
+    public static boolean sendScore = false;
 
     public static boolean communicate = false;
 
@@ -47,8 +48,8 @@ public class GlobalData {
     public static RankBO currentRankBO = new RankBO("RANKED_SOLO_5x5", "CHALLENGER", "IV");
 
     public static LeagueClientService service;
-
+    public static GameStatusEnum gameStatus;
     public static ArrayList<String> otherTeamScore = new ArrayList<>();
-
+    public static ArrayList<String> myTeamScore = new ArrayList<>();
     public static ArrayList<String> communicateWords = new ArrayList<>();
 }
