@@ -1,7 +1,7 @@
 package yalong.site;
 
-import yalong.site.bo.GlobalData;
 import yalong.site.frame.MainFrame;
+import yalong.site.frame.utils.FrameMsgUtil;
 import yalong.site.services.HotKeyService;
 import yalong.site.services.LeagueClientService;
 
@@ -11,19 +11,19 @@ import yalong.site.services.LeagueClientService;
 public class LeagueClientHelper {
 
     public static void main(String[] args) {
+        MainFrame.start();
+        HotKeyService.start();
         while (true) {
             try {
-                MainFrame.start();
-                new HotKeyService();
-                LeagueClientService service = new LeagueClientService();
-                service.setRank(GlobalData.currentRankBO);
-                service.runForever();
+                LeagueClientService.start();
             } catch (Exception e) {
-                e.printStackTrace();
+                FrameMsgUtil.sendLine(e.getLocalizedMessage());
                 MainFrame.hiddenFrame();
                 int running = MainFrame.continueRun(e.getMessage());
                 if (running == 1) {
                     System.exit(0);
+                } else {
+                    MainFrame.showFrame();
                 }
             }
         }

@@ -38,9 +38,15 @@ public class MainFrame extends JFrame {
         frame.setVisible(true);
     }
 
+    public static void showFrame() {
+        if (frame != null) {
+            frame.setVisible(true);
+        }
+    }
+
     public static void hiddenFrame() {
         if (frame != null) {
-            frame.dispose();
+            frame.setVisible(false);
         }
     }
 

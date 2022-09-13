@@ -24,6 +24,12 @@ public class LeagueClientService {
     private final SummonerInfoBO owner;
     private final Pattern roomIdPattern = Pattern.compile("\\{\"chatRoomName\":\"(.*)?\\@");
 
+    public static void start() throws IOException, InterruptedException {
+        LeagueClientService service = new LeagueClientService();
+        service.setRank(GlobalData.currentRankBO);
+        service.runForever();
+    }
+
     public LeagueClientService() throws IOException {
         this.clearFlag();
         LeagueClientBO leagueClientBO = ProcessUtil.getClientProcess();

@@ -28,13 +28,11 @@ public class HotKeyService {
      */
     public static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-
-    public HotKeyService() {
+    public static void start() {
         GlobalScreen.addNativeKeyListener(new HotKeyListener(sendTeamScore()));
         GlobalScreen.addNativeKeyListener(new HotKeyListener(moyan()));
         GlobalScreen.addNativeKeyListener(new HotKeyListener(communicate()));
     }
-
 
     static {
         //关闭日志
