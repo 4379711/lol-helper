@@ -7,6 +7,7 @@ import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import org.jnativehook.keyboard.NativeKeyEvent;
 import yalong.site.bo.GlobalData;
+import yalong.site.frame.utils.FrameMsgUtil;
 import yalong.site.utils.MyUser32Util;
 
 import java.awt.*;
@@ -20,19 +21,13 @@ import java.util.logging.Logger;
  */
 @Data
 public class HotKeyService {
-    private static int keyDelay = 100;
-    private static int nextLineNo = 0;
     public static Robot robot;
     /**
      * 屏幕大小
      */
     public static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-
-    public static void start() {
-        GlobalScreen.addNativeKeyListener(new HotKeyListener(sendTeamScore()));
-        GlobalScreen.addNativeKeyListener(new HotKeyListener(moyan()));
-        GlobalScreen.addNativeKeyListener(new HotKeyListener(communicate()));
-    }
+    private static int keyDelay = 100;
+    private static int nextLineNo = 0;
 
     static {
         //关闭日志
@@ -54,6 +49,12 @@ public class HotKeyService {
                 e.printStackTrace();
             }
         }));
+    }
+
+    public static void start() {
+        GlobalScreen.addNativeKeyListener(new HotKeyListener(sendTeamScore()));
+        GlobalScreen.addNativeKeyListener(new HotKeyListener(moyan()));
+        GlobalScreen.addNativeKeyListener(new HotKeyListener(communicate()));
     }
 
     private static void sendMsg(String s) {
@@ -122,11 +123,18 @@ public class HotKeyService {
                 sendMsg(s);
                 int size = GlobalData.communicateWords.size();
                 nextLineNo = (nextLineNo + 1) % size;
+                GlobalData.lastCommunicateWord = s;
             }
             if (GlobalData.communicate && i == NativeKeyEvent.VC_END) {
                 String s = requestCaiHongPiText();
                 if (!"".equals(s)) {
                     sendMsg(s);
+                }
+            }
+            if (GlobalData.communicate && i == NativeKeyEvent.VC_DELETE) {
+                String lastCommunicateWord = GlobalData.lastCommunicateWord;
+                if (lastCommunicateWord != null && !"".equals(lastCommunicateWord)) {
+                    FrameMsgUtil.sendLine("[屏蔽]:" + lastCommunicateWord);
                 }
             }
         };

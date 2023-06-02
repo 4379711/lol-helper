@@ -51,5 +51,6 @@ public class GlobalData {
     public static GameStatusEnum gameStatus;
     public static ArrayList<String> otherTeamScore = new ArrayList<>();
     public static ArrayList<String> myTeamScore = new ArrayList<>();
-    public static ArrayList<String> communicateWords = new ArrayList<>();
+    public static ArrayList<String> communicateWords;
+    public static String lastCommunicateWord;
 }

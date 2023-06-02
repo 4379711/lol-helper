@@ -22,7 +22,7 @@ public class CommunicateCheckBox extends BaseCheckBox {
             CommunicateCheckBox source = (CommunicateCheckBox) i.getSource();
             //选中状态下弹框提示
             if (source.getSelectedObjects() != null) {
-                JOptionPane.showMessageDialog(null, "按Home键喷队友,按End键鼓励队友");
+                JOptionPane.showMessageDialog(null, "按Home键喷队友,按End键鼓励队友,按delete标记屏蔽词");
             }
         });
 

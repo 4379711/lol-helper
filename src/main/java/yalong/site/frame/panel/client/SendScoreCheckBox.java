@@ -1,16 +1,14 @@
 package yalong.site.frame.panel.client;
 
-import cn.hutool.core.io.FileUtil;
 import yalong.site.bo.GlobalData;
 import yalong.site.frame.bo.ComponentBO;
 import yalong.site.frame.panel.base.BaseCheckBox;
+import yalong.site.services.LoadGarbageWord;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.*;
-import java.nio.charset.StandardCharsets;
 
 /**
  * @author yaLong
@@ -31,39 +29,14 @@ public class SendScoreCheckBox extends BaseCheckBox {
         });
     }
 
-    private ItemListener listener() {
-        return e -> GlobalData.sendScore = e.getStateChange() == ItemEvent.SELECTED;
-
-    }
-
     /**
      * @return 带布局的盒子
      */
-    public static ComponentBO builder()  {
-        String userFile="words.txt";
-        //喷人的词语从文件读取
-        boolean exist = FileUtil.exist(userFile);
-        if(!exist){
-            //读取默认文件
-            try {
-                InputStream inputStream = SendScoreCheckBox.class.getResourceAsStream("/fuck.txt");
-                //复制默认文件
-                FileUtil.writeFromStream(inputStream,new File(userFile));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        //加载到内存
-        try {
-            InputStream inputStream = new FileInputStream(userFile);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                GlobalData.communicateWords.add(line);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public static ComponentBO builder() {
+        // 加载垃圾话
+        LoadGarbageWord loadGarbageWord = new LoadGarbageWord();
+        loadGarbageWord.loadDefaultFile();
+        GlobalData.communicateWords = loadGarbageWord.loadWord();
 
         SendScoreCheckBox box = new SendScoreCheckBox();
         GridBagConstraints grid = new GridBagConstraints(
@@ -81,6 +54,11 @@ public class SendScoreCheckBox extends BaseCheckBox {
                 0, 0
         );
         return new ComponentBO(box, grid);
+    }
+
+    private ItemListener listener() {
+        return e -> GlobalData.sendScore = e.getStateChange() == ItemEvent.SELECTED;
+
     }
 
 }
