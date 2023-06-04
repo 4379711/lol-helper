@@ -52,9 +52,11 @@ public class HotKeyService {
     }
 
     public static void start() {
-        GlobalScreen.addNativeKeyListener(new HotKeyListener(sendTeamScore()));
-        GlobalScreen.addNativeKeyListener(new HotKeyListener(moyan()));
-        GlobalScreen.addNativeKeyListener(new HotKeyListener(communicate()));
+        GlobalScreen.addNativeKeyListener(new HotKeyListener(sendTeamScoreF2()));
+        GlobalScreen.addNativeKeyListener(new HotKeyListener(moYanT()));
+        GlobalScreen.addNativeKeyListener(new HotKeyListener(caiHongEnd()));
+        GlobalScreen.addNativeKeyListener(new HotKeyListener(garbageHome()));
+        GlobalScreen.addNativeKeyListener(new HotKeyListener(markWordDelete()));
     }
 
     private static void sendMsg(String s) {
@@ -69,7 +71,7 @@ public class HotKeyService {
         robot.delay(keyDelay);
     }
 
-    public static Consumer<Integer> sendTeamScore() {
+    public static Consumer<Integer> sendTeamScoreF2() {
         return i -> {
             if (GlobalData.sendScore && i == NativeKeyEvent.VC_F2) {
                 switch (GlobalData.gameStatus) {
@@ -95,7 +97,7 @@ public class HotKeyService {
     /**
      * 瞎子光速摸眼
      */
-    public static Consumer<Integer> moyan() {
+    public static Consumer<Integer> moYanT() {
         return i -> {
             if (GlobalData.moyan && i == NativeKeyEvent.VC_T) {
                 // 按键:4DW
@@ -116,7 +118,23 @@ public class HotKeyService {
         };
     }
 
-    public static Consumer<Integer> communicate() {
+    public static String requestCaiHongPiText() {
+        String result = HttpUtil.get("https://api.shadiao.app/chp");
+        return JSONUtil.parseObj(result).getByPath("data.text", String.class);
+    }
+
+    public static Consumer<Integer> caiHongEnd() {
+        return i -> {
+            if (GlobalData.communicate && i == NativeKeyEvent.VC_END) {
+                String s = requestCaiHongPiText();
+                if (!"".equals(s)) {
+                    sendMsg(s);
+                }
+            }
+        };
+    }
+
+    public static Consumer<Integer> garbageHome() {
         return i -> {
             if (GlobalData.communicate && i == NativeKeyEvent.VC_HOME) {
                 String s = GlobalData.communicateWords.get(nextLineNo);
@@ -125,12 +143,11 @@ public class HotKeyService {
                 nextLineNo = (nextLineNo + 1) % size;
                 GlobalData.lastCommunicateWord = s;
             }
-            if (GlobalData.communicate && i == NativeKeyEvent.VC_END) {
-                String s = requestCaiHongPiText();
-                if (!"".equals(s)) {
-                    sendMsg(s);
-                }
-            }
+        };
+    }
+
+    public static Consumer<Integer> markWordDelete() {
+        return i -> {
             if (GlobalData.communicate && i == NativeKeyEvent.VC_DELETE) {
                 String lastCommunicateWord = GlobalData.lastCommunicateWord;
                 if (lastCommunicateWord != null && !"".equals(lastCommunicateWord)) {
@@ -138,11 +155,6 @@ public class HotKeyService {
                 }
             }
         };
-    }
-
-    public static String requestCaiHongPiText() {
-        String result = HttpUtil.get("https://api.shadiao.app/chp");
-        return JSONUtil.parseObj(result).getByPath("data.text", String.class);
     }
 
 }

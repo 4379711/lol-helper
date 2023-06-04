@@ -37,11 +37,11 @@ public class GlobalData {
 
     public static boolean autoAccept = true;
 
-    public static boolean autoReconnect = true;
+    public static boolean autoReconnect = false;
 
-    public static boolean sendScore = false;
+    public static boolean sendScore = true;
 
-    public static boolean communicate = false;
+    public static boolean communicate = true;
 
     public static boolean moyan = false;
 
