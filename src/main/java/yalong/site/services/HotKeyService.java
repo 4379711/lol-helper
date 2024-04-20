@@ -119,7 +119,7 @@ public class HotKeyService {
     }
 
     public static String requestCaiHongPiText() {
-        String result = HttpUtil.get("https://api.shadiao.app/chp");
+        String result = HttpUtil.get("https://api.shadiao.pro/chp");
         return JSONUtil.parseObj(result).getByPath("data.text", String.class);
     }
 
