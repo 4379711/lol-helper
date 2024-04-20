@@ -39,6 +39,35 @@ public class GlobalData {
 
     public static boolean autoReconnect = false;
 
+    public static boolean autoBan = true;
+
+    public static int pickChampionId = 86;
+    /*
+    // todo 换成自选英雄
+    [{
+"id":910,
+"name":"异画师",
+"alias":"Hwei",
+"squarePortraitPath":"/lol-game-data/assets/v1/champion-icons/910.png",
+"roles":[
+"mage"
+]
+},
+{
+"id":950,
+"name":"百裂冥犬",
+"alias":"Naafiri",
+"squarePortraitPath":"/lol-game-data/assets/v1/champion-icons/950.png",
+"roles":[
+"assassin"
+]
+}
+]
+    * */
+    public static int banChampionId = 432;
+
+    public static boolean autoPick = true;
+
     public static boolean sendScore = true;
 
     public static boolean communicate = true;

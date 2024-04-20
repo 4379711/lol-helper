@@ -1,5 +1,7 @@
 package yalong.site.services;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import yalong.site.bo.*;
 import yalong.site.enums.GameStatusEnum;
 import yalong.site.utils.ProcessUtil;
@@ -11,18 +13,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @author yaLong
  */
 public class LeagueClientService {
     private final LinkLeagueClientApi api;
-    private boolean roomMessageSend;
-    private boolean gameMessageSend;
     private final SummonerInfoBO owner;
-    private final Pattern roomIdPattern = Pattern.compile("\\{\"chatRoomName\":\"(.*)?\\@");
 
     public static void start() throws IOException, InterruptedException {
         LeagueClientService service = new LeagueClientService();
@@ -31,7 +28,6 @@ public class LeagueClientService {
     }
 
     public LeagueClientService() throws IOException {
-        this.clearFlag();
         LeagueClientBO leagueClientBO = ProcessUtil.getClientProcess();
         if (leagueClientBO.equals(new LeagueClientBO())) {
             throw new IOException("未检测到游戏启动");
@@ -40,17 +36,8 @@ public class LeagueClientService {
         api = new LinkLeagueClientApi(requestUtil);
         // 获取登录人的信息
         owner = api.getCurrentSummoner();
-        api.getLoginInfo();
         // 添加到全局变量
         GlobalData.service = this;
-    }
-
-    /**
-     * 清空标记
-     */
-    private void clearFlag() {
-        roomMessageSend = false;
-        gameMessageSend = false;
     }
 
     /**
@@ -92,9 +79,15 @@ public class LeagueClientService {
         ArrayList<String> result = new ArrayList<>();
         TreeMap<Float, String> treeMap = new TreeMap<>();
         //根据puuid查最近几次的战绩
-        for (String id : puuidList) {
+        for (String puuid : puuidList) {
+            //查看玩家名称
+            SummonerInfoBO summonerInfo = api.getInfoByPuuId(puuid);
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("【");
+            stringBuilder.append(summonerInfo.getDisplayName());
+            stringBuilder.append("】, 最近三场战绩为：");
             //查询战绩
-            List<ScoreBO> scoreBOList = api.getScoreById(id, 3);
+            List<ScoreBO> scoreBOList = api.getScoreById(puuid, 3);
             // 计算得分 最近三把(KDA+输赢)的平均值
             // KDA->(击杀*1.2+助攻*0.8)/(死亡*1.2)
             // 输赢->赢+1 输-1
@@ -109,17 +102,22 @@ public class LeagueClientService {
                 Integer deaths = scoreBO.getDeaths();
                 Integer assists = scoreBO.getAssists();
                 score += (kills * 1.2 + assists * 0.8) / Math.max(deaths * 1.2, 1);
+                stringBuilder.append(kills);
+                stringBuilder.append("-");
+                stringBuilder.append(deaths);
+                stringBuilder.append("-");
+                stringBuilder.append(assists);
+                stringBuilder.append(",  ");
             }
             score /= 3.0f;
-            //查看玩家名称
-            SummonerInfoBO infoByPuuId = api.getInfoByPuuId(id);
-            String displayName = infoByPuuId.getDisplayName();
-            treeMap.put(score, displayName);
+            stringBuilder.append("评分: ");
+            stringBuilder.append(String.format("%.2f", score));
+            treeMap.put(score, stringBuilder.toString());
         }
         Map.Entry<Float, String> firstEntry = treeMap.firstEntry();
         Map.Entry<Float, String> lastEntry = treeMap.lastEntry();
-        result.add("牛马是:<" + firstEntry.getValue() + "> 得分:" + String.format("%.2f", firstEntry.getKey()));
-        result.add("大神是:<" + lastEntry.getValue() + "> 得分:" + String.format("%.2f", lastEntry.getKey()));
+        result.add("傻鸟是:" + firstEntry.getValue());
+        result.add("大神是:<" + lastEntry.getValue());
         return result;
     }
 
@@ -146,7 +144,6 @@ public class LeagueClientService {
                     // 自动接受对局
                     String accept = api.accept();
                 }
-                this.clearFlag();
                 break;
             }
             case Reconnect: {
@@ -157,58 +154,88 @@ public class LeagueClientService {
                 break;
             }
             case ChampSelect: {
-                if (!roomMessageSend && GlobalData.sendScore) {
-                    try {
-                        //获取房间号
-                        String roomInfo = api.getRoomGameInfo();
-                        Matcher matcher = roomIdPattern.matcher(roomInfo);
-                        String roomId;
-                        if (matcher.find()) {
-                            roomId = matcher.group(1);
-                        } else {
-                            break;
-                        }
-                        ArrayList<String> summonerIdList = api.getRoomSummonerId(roomId);
-                        //可能队友还没进入房间
-                        if (summonerIdList.size() != 5) {
-                            break;
-                        }
-                        ArrayList<String> strings = new ArrayList<>();
-                        for (String id : summonerIdList) {
-                            String mySummonerId = owner.getSummonerId();
-                            // 排除自己
-                            if (mySummonerId.equals(id)) {
-                                continue;
+                //{"errorCode":"RPC_ERROR","httpStatus":500,"implementationDetails":{},"message":"Error response for PATCH /lol-lobby-team-builder/champ-select/v1/session/actions/2: Unable to process action change: Received status Error: INVALID_STATE instead of expected status of OK from request to teambuilder-draft:updateActionV1"}
+                if (GlobalData.autoPick) {
+                    String roomGameInfo = api.getChampSelectInfo();
+                    JSONObject jsonObject = JSONObject.parseObject(roomGameInfo);
+                    int localPlayerCellId = jsonObject.getIntValue("localPlayerCellId");
+                    JSONArray actions = jsonObject.getJSONArray("actions");
+                    for (int j = 0; j < actions.size(); j++) {
+                        JSONArray action = actions.getJSONArray(j);
+                        for (int i = 0; i < action.size(); i++) {
+                            JSONObject actionElement = action.getJSONObject(i);
+                            if (localPlayerCellId == actionElement.getIntValue("actorCellId")) {
+                                int actionId = actionElement.getIntValue("id");
+                                String type = actionElement.getString("type");
+                                if ("pick".equals(type)) {
+                                    String resp = api.banPick("pick", actionId, GlobalData.pickChampionId);
+                                    System.out.println("pick:" + resp);
+                                }
                             }
-                            SummonerInfoBO infoBySummonerId = api.getInfoBySummonerId(id);
-                            String puuid = infoBySummonerId.getPuuid();
-                            strings.add(puuid);
                         }
-                        ArrayList<String> msg = this.dealScore2Msg(strings);
-                        if (msg != null) {
-                            // 查询我方队员战绩,放到公共数据区
-                            GlobalData.myTeamScore = msg;
-                            roomMessageSend = true;
+
+                    }
+                }
+
+                if (GlobalData.autoBan) {
+                    String roomGameInfo = api.getChampSelectInfo();
+                    System.out.println(roomGameInfo);
+                    JSONObject jsonObject = JSONObject.parseObject(roomGameInfo);
+                    int localPlayerCellId = jsonObject.getIntValue("localPlayerCellId");
+                    JSONArray actions = jsonObject.getJSONArray("actions");
+                    for (int j = 0; j < actions.size(); j++) {
+                        JSONArray action = actions.getJSONArray(j);
+                        for (int i = 0; i < action.size(); i++) {
+                            JSONObject actionElement = action.getJSONObject(i);
+                            if (localPlayerCellId == actionElement.getIntValue("actorCellId")) {
+                                int actionId = actionElement.getIntValue("id");
+                                String type = actionElement.getString("type");
+                                if ("ban".equals(type)) {
+                                    String resp = api.banPick("ban", actionId, GlobalData.banChampionId);
+                                    System.out.println("ban:" + resp);
+                                }
+                            }
                         }
-                    } catch (Exception ignored) {
+
+                    }
+                }
+
+                if (GlobalData.sendScore) {
+                    String roomGameInfo = api.getChampSelectInfo();
+                    JSONObject jsonObject = JSONObject.parseObject(roomGameInfo);
+                    JSONArray myTeam = jsonObject.getJSONArray("myTeam");
+                    //可能队友还没进入房间
+                    if (myTeam.size() != 5) {
                         break;
+                    }
+                    ArrayList<String> puuidList = new ArrayList<>();
+                    for (int i = 0; i < myTeam.size(); i++) {
+                        String puuid = myTeam.getJSONObject(i).getString("puuid");
+                        puuidList.add(puuid);
+                    }
+                    ArrayList<String> msg = this.dealScore2Msg(puuidList);
+                    if (msg != null) {
+                        // 查询我方队员战绩,放到公共数据区
+                        GlobalData.myTeamScore = msg;
                     }
                 }
                 break;
             }
             case InProgress: {
-                if (GlobalData.sendScore && !gameMessageSend) {
+                if (GlobalData.sendScore) {
                     List<String> otherPuuid = getOtherPuuid();
                     if (!otherPuuid.contains(null) && otherPuuid.size() == 5) {
                         // 查询对方队员战绩,放到公共数据区
                         GlobalData.otherTeamScore = dealScore2Msg(otherPuuid);
-                        gameMessageSend = true;
                     }
                 }
                 break;
             }
+            case EndOfGame: {
+                api.playAgain();
+                break;
+            }
             default: {
-                this.clearFlag();
                 break;
             }
         }

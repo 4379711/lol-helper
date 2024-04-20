@@ -28,27 +28,11 @@ public class LinkLeagueClientApi {
     }
 
     /**
-     * 获取游戏时长
-     */
-    public Float getOnlineData() throws IOException {
-        String resp = requestUtil.doGet("https://127.0.0.1:2999", "/liveclientdata/allgamedata");
-        return JSON.parseObject(resp).getJSONObject("gameData").getFloat("gameTime");
-    }
-
-    /**
-     * 获取登录用户信息
-     */
-    public String getLoginInfo() throws IOException {
-        return requestUtil.doGet("/lol-login/v1/session");
-    }
-
-    /**
      * 获取登录用户信息
      */
     public SummonerInfoBO getCurrentSummoner() throws IOException {
         String resp = requestUtil.doGet("/lol-summoner/v1/current-summoner");
         return JSON.parseObject(resp, SummonerInfoBO.class);
-
     }
 
     /**
@@ -103,16 +87,16 @@ public class LinkLeagueClientApi {
     /**
      * 获取某个英雄的皮肤
      *
-     * @param heroId 英雄id
+     * @param championId 英雄id
      */
-    public String getBackgroundSkin(int heroId) throws IOException {
-        return requestUtil.doGet("/lol-game-data/assets/v1/champions/" + heroId + ".json");
+    public String getBackgroundSkin(int championId) throws IOException {
+        return requestUtil.doGet("/lol-game-data/assets/v1/champions/" + championId + ".json");
     }
 
     /**
      * 获取所有英雄
      */
-    public String getHero() throws IOException {
+    public String getAllChampion() throws IOException {
         return requestUtil.doGet("/lol-game-data/assets/v1/champion-summary.json");
     }
 
@@ -148,52 +132,21 @@ public class LinkLeagueClientApi {
     }
 
     /**
-     * 给好友发消息
-     *
-     * @param name 好友的游戏名
-     * @param msg  消息内容
+     * 英雄选择界面信息
      */
-    public String msg2Friend(String name, String msg) throws IOException {
-        String endpoint = "/lol-game-client-chat/v1/instant-messages?summonerName=" + name + "&message=" + msg;
-        return requestUtil.doGet(endpoint);
-    }
-
-
-    /**
-     * 获取好友列表
-     */
-    public String getFriendList() throws IOException {
-        return requestUtil.doGet("/lol-game-client-chat/v1/buddies");
-    }
-
-    /**
-     * 获取选英雄房间信息
-     */
-    public ArrayList<String> getRoomSummonerId(String roomId) throws IOException {
-        String endpoint = "/lol-chat/v1/conversations/" + roomId + "/messages";
-        String resp = requestUtil.doGet(endpoint);
-        JSONArray array = JSON.parseArray(resp);
-        ArrayList<String> arrayList = new ArrayList<>();
-        for (int i = 0; i < array.size(); i++) {
-            // jsonObject0.getString("fromId")
-            String fromSummonerId = array.getJSONObject(i).getString("fromSummonerId");
-            if (!arrayList.contains(fromSummonerId)) {
-                arrayList.add(fromSummonerId);
-            }
-        }
-        return arrayList;
-    }
-
-    public void getRoomInfo() throws IOException {
-        String resp = requestUtil.doGet("/lol-chat/v1/conversations");
-        System.out.println(resp);
-    }
-
-    /**
-     * 获取组队房间的信息
-     */
-    public String getRoomGameInfo() throws IOException {
+    public String getChampSelectInfo() throws IOException {
         return requestUtil.doGet("/lol-champ-select/v1/session");
+    }
+
+    /**
+     *ban pick
+     * */
+    public String banPick(String type, int actionId, int championId) throws IOException {
+        JSONObject body = new JSONObject(3);
+        body.put("completed", true);
+        body.put("type", type);
+        body.put("championId", championId);
+        return requestUtil.doPatch("/lol-champ-select/v1/session/actions/" + actionId, body.toJSONString());
     }
 
     /**
@@ -296,23 +249,6 @@ public class LinkLeagueClientApi {
      */
     public void playAgain() throws IOException {
         requestUtil.doPost("/lol-lobby/v2/play-again", "");
-    }
-
-    /**
-     * 判断是红方还是蓝方
-     */
-    public String getBlueRed() throws IOException {
-        String resp = requestUtil.doGet("/lol-champ-select/v1/pin-drop-notification");
-        JSONObject jsonObject = JSON.parseObject(resp);
-        return jsonObject.getString("mapSide");
-    }
-
-    public String getSelectChampSession() throws IOException {
-        return requestUtil.doGet("/lol-champ-select/v1/session");
-    }
-
-    public String getSearchState() throws IOException {
-        return requestUtil.doGet("/lol-lobby/v2/lobby/matchmaking/search-state");
     }
 
     /**
