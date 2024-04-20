@@ -55,6 +55,9 @@ public class RequestUtil {
     public String doPut(String endpoint, String bodyStr) throws IOException {
         return this.doPut(defaultHost, endpoint, bodyStr);
     }
+    public String doPatch(String endpoint, String bodyStr) throws IOException {
+        return this.doPatch(defaultHost, endpoint, bodyStr);
+    }
 
     public String doPut(String host, String endpoint, String bodyStr) throws IOException {
         RequestBody body = RequestBody.create(bodyStr, JSON);
@@ -72,6 +75,16 @@ public class RequestUtil {
         Request request = new Request.Builder()
                 .url(host + endpoint)
                 .post(body)
+                .headers(defaultHeaders)
+                .build();
+        Response response = client.newCall(request).execute();
+        return response.body().string();
+    }
+    public String doPatch(String host, String endpoint, String bodyStr) throws IOException {
+        RequestBody body = RequestBody.create(bodyStr, JSON);
+        Request request = new Request.Builder()
+                .url(host + endpoint)
+                .patch(body)
                 .headers(defaultHeaders)
                 .build();
         Response response = client.newCall(request).execute();
