@@ -11,41 +11,41 @@ import java.awt.*;
  */
 public class ClientPanel extends BasePanel {
 
-    public ClientPanel() {
-        this.setName("游戏设置");
-    }
+	public ClientPanel() {
+		this.setName("游戏设置");
+	}
 
-    public static ClientPanel builder() {
-        ClientPanel clientPanel = new ClientPanel();
-        //布局3*3
-        GridBagLayout layout = new GridBagLayout();
-        clientPanel.setLayout(layout);
-        //第一行三个
-        ComponentBO rankFirstBox = RankFirstBox.builder();
-        clientPanel.add(rankFirstBox.getComp(), rankFirstBox.getConstraints());
-        ComponentBO rankSecondBox = RankSecondBox.builder();
-        clientPanel.add(rankSecondBox.getComp(), rankSecondBox.getConstraints());
-        ComponentBO rankThirdBox = RankThirdBox.builder();
-        clientPanel.add(rankThirdBox.getComp(), rankThirdBox.getConstraints());
+	public static ClientPanel builder() {
+		ClientPanel clientPanel = new ClientPanel();
+		//网格布局
+		GridBagLayout layout = new GridBagLayout();
+		clientPanel.setLayout(layout);
+		ComponentBO rankFirstBox = RankFirstBox.builder();
+		clientPanel.add(rankFirstBox.getComp(), rankFirstBox.getConstraints());
+		ComponentBO rankSecondBox = RankSecondBox.builder();
+		clientPanel.add(rankSecondBox.getComp(), rankSecondBox.getConstraints());
+		ComponentBO rankThirdBox = RankThirdBox.builder();
+		clientPanel.add(rankThirdBox.getComp(), rankThirdBox.getConstraints());
+		ComponentBO checkBox = AutoAcceptCheckBox.builder();
+		clientPanel.add(checkBox.getComp(), checkBox.getConstraints());
+		ComponentBO reconnectCheckBox = AutoReconnectCheckBox.builder();
+		clientPanel.add(reconnectCheckBox.getComp(), reconnectCheckBox.getConstraints());
+		ComponentBO sendCheckBox = SendScoreCheckBox.builder();
+		clientPanel.add(sendCheckBox.getComp(), sendCheckBox.getConstraints());
+		ComponentBO gameStatusBox = GameStatusBox.builder();
+		clientPanel.add(gameStatusBox.getComp(), gameStatusBox.getConstraints());
+		ComponentBO leaveBox = CommunicateCheckBox.builder();
+		clientPanel.add(leaveBox.getComp(), leaveBox.getConstraints());
+		ComponentBO moyanBox = MoyanCheckBox.builder();
+		clientPanel.add(moyanBox.getComp(), moyanBox.getConstraints());
+		ComponentBO playAgainBox = AutoPlayAgainCheckBox.builder();
+		clientPanel.add(playAgainBox.getComp(), playAgainBox.getConstraints());
+		ComponentBO banBox = BanBox.builder();
+		clientPanel.add(banBox.getComp(), banBox.getConstraints());
+		ComponentBO pickBox = PickBox.builder();
+		clientPanel.add(pickBox.getComp(), pickBox.getConstraints());
+		return clientPanel;
 
-        //第二行三个
-        ComponentBO checkBox = AutoAcceptCheckBox.builder();
-        clientPanel.add(checkBox.getComp(), checkBox.getConstraints());
-        ComponentBO reconnectCheckBox = AutoReconnectCheckBox.builder();
-        clientPanel.add(reconnectCheckBox.getComp(), reconnectCheckBox.getConstraints());
-        ComponentBO sendCheckBox = SendScoreCheckBox.builder();
-        clientPanel.add(sendCheckBox.getComp(), sendCheckBox.getConstraints());
-
-        //第三行3个
-        ComponentBO gameStatusBox = GameStatusBox.builder();
-        clientPanel.add(gameStatusBox.getComp(), gameStatusBox.getConstraints());
-        ComponentBO leaveBox = CommunicateCheckBox.builder();
-        clientPanel.add(leaveBox.getComp(), leaveBox.getConstraints());
-        ComponentBO moyanBox = MoyanCheckBox.builder();
-        clientPanel.add(moyanBox.getComp(), moyanBox.getConstraints());
-
-        return clientPanel;
-
-    }
+	}
 
 }

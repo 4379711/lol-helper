@@ -10,6 +10,6 @@ import java.util.List;
  */
 @Data
 public class TeamPuuidBO {
-    private List<String> teamPuuid1 = new ArrayList<>();
-    private List<String> teamPuuid2 = new ArrayList<>();
+	private List<String> teamPuuid1 = new ArrayList<>();
+	private List<String> teamPuuid2 = new ArrayList<>();
 }

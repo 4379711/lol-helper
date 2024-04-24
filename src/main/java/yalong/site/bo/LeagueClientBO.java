@@ -9,13 +9,13 @@ import lombok.Data;
  */
 @Data
 public class LeagueClientBO {
-    /**
-     * 端口
-     */
-    private String port;
+	/**
+	 * 端口
+	 */
+	private String port;
 
-    /**
-     * 密钥
-     */
-    private String token;
+	/**
+	 * 密钥
+	 */
+	private String token;
 }

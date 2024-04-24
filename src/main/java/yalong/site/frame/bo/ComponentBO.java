@@ -13,12 +13,12 @@ import java.awt.*;
 @AllArgsConstructor
 public class ComponentBO {
 
-    /**
-     * Component
-     */
-    private Component comp;
-    /**
-     * layout constraints
-     */
-    private Object constraints;
+	/**
+	 * Component
+	 */
+	private Component comp;
+	/**
+	 * layout constraints
+	 */
+	private Object constraints;
 }

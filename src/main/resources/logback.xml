@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <!-- 日志存放路径 -->
+    <property name="log.path" value="logs"/>
+    <!-- 日志输出格式 -->
+    <property name="log.pattern" value="%d{MM-dd HH:mm:ss} [%thread] %-5level %logger{20} - [%method,%line] - %msg%n"/>
+    <!-- 控制台输出 -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${log.pattern}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}/log.log</file>
+        <!-- 循环政策：基于时间创建日志文件 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 日志文件名格式 -->
+            <fileNamePattern>${log.path}/error.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- 日志最大的历史 10天 -->
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${log.pattern}</pattern>
+        </encoder>
+        <!--  只记录warn级别以上的      -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <!-- 过滤的级别 -->
+            <level>WARN</level>
+        </filter>
+    </appender>
+
+    <!-- 本模块日志级别控制  -->
+    <logger name="yalong.site" level="INFO"/>
+
+    <root level="debug">
+        <appender-ref ref="console"/>
+        <appender-ref ref="file"/>
+    </root>
+</configuration>

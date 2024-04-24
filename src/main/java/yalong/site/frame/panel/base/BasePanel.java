@@ -8,11 +8,11 @@ import javax.swing.*;
  */
 public class BasePanel extends JPanel {
 
-    public BasePanel() {
-        //设置背景
-        this.setBackground(null);
-        // 设置透明
-        this.setOpaque(false);
-        this.setBorder(null);
-    }
+	public BasePanel() {
+		//设置背景
+		this.setBackground(null);
+		// 设置透明
+		this.setOpaque(false);
+		this.setBorder(null);
+	}
 }

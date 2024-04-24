@@ -1,6 +1,6 @@
 package yalong.site.frame.panel.result;
 
-import yalong.site.bo.GlobalData;
+import yalong.site.cache.FrameSetting;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,20 +11,20 @@ import java.awt.*;
  * @author yaLong
  */
 public class ResultPanel extends JScrollPane {
-    public ResultPanel(ResultTextPane area) {
-        super(area);
-        this.setName("执行结果");
-        // 设置透明
-        this.setOpaque(false);
-        this.setBorder(null);
-        this.getViewport().setOpaque(false);
-        this.setAutoscrolls(true);
-        this.setMaximumSize(new Dimension(GlobalData.WIDTH, GlobalData.HEIGHT));
-    }
+	public ResultPanel(ResultTextPane area) {
+		super(area);
+		this.setName("执行结果");
+		// 设置透明
+		this.setOpaque(false);
+		this.setBorder(null);
+		this.getViewport().setOpaque(false);
+		this.setAutoscrolls(true);
+		this.setMaximumSize(new Dimension(FrameSetting.WIDTH, FrameSetting.HEIGHT));
+	}
 
-    public static ResultPanel builder() {
-        ResultTextPane pane = ResultTextPane.builder();
-        return new ResultPanel(pane);
-    }
+	public static ResultPanel builder() {
+		ResultTextPane pane = ResultTextPane.builder();
+		return new ResultPanel(pane);
+	}
 
 }

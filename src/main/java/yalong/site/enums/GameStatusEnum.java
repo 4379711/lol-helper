@@ -6,15 +6,15 @@ package yalong.site.enums;
  * @author yaLong
  */
 public enum GameStatusEnum {
-    None,
-    Lobby,
-    Matchmaking,
-    ReadyCheck,
-    ChampSelect,
-    InProgress,
-    PreEndOfGame,
-    WaitingForStats,
-    EndOfGame,
-    Reconnect
+	None,
+	Lobby,
+	Matchmaking,
+	ReadyCheck,
+	ChampSelect,
+	InProgress,
+	PreEndOfGame,
+	WaitingForStats,
+	EndOfGame,
+	Reconnect
 
 }
