@@ -25,6 +25,7 @@ public class CalculateScore {
 	public ArrayList<String> dealScore2Msg(List<String> puuidList) throws IOException {
 		ArrayList<String> result = new ArrayList<>();
 		TreeMap<Float, String> treeMap = new TreeMap<>();
+		int gameNum=3;
 		//根据puuid查最近几次的战绩
 		for (String puuid : puuidList) {
 			//查看玩家名称
@@ -32,9 +33,11 @@ public class CalculateScore {
 			StringBuilder stringBuilder = new StringBuilder();
 			stringBuilder.append("【");
 			stringBuilder.append(summonerInfo.getDisplayName());
-			stringBuilder.append("】, 最近三场战绩为：");
+			stringBuilder.append("】, 最近");
+			stringBuilder.append(gameNum);
+			stringBuilder.append("场战绩为：");
 			//查询战绩
-			List<ScoreBO> scoreBOList = api.getScoreById(puuid, 3);
+			List<ScoreBO> scoreBOList = api.getScoreById(puuid, gameNum-1);
 			// 计算得分 最近三把(KDA+输赢)的平均值
 			// KDA->(击杀*1.2+助攻*0.8)/(死亡*1.2)
 			// 输赢->赢+1 输-1
@@ -56,7 +59,7 @@ public class CalculateScore {
 				stringBuilder.append(assists);
 				stringBuilder.append(",  ");
 			}
-			score /= 3.0f;
+			score /= gameNum;
 			stringBuilder.append("评分: ");
 			stringBuilder.append(String.format("%.2f", score));
 			treeMap.put(score, stringBuilder.toString());
@@ -64,7 +67,7 @@ public class CalculateScore {
 		Map.Entry<Float, String> firstEntry = treeMap.firstEntry();
 		Map.Entry<Float, String> lastEntry = treeMap.lastEntry();
 		result.add("傻鸟是:" + firstEntry.getValue());
-		result.add("大神是:<" + lastEntry.getValue());
+		result.add("大神是:" + lastEntry.getValue());
 		return result;
 	}
 

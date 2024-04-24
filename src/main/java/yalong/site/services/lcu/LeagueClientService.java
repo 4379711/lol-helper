@@ -47,6 +47,7 @@ public class LeagueClientService {
 				break;
 			}
 			default: {
+				gameStatusContext.setStrategy(new OtherStatusStrategy());
 				break;
 			}
 		}

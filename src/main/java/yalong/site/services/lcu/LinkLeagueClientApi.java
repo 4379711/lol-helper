@@ -60,14 +60,14 @@ public class LinkLeagueClientApi {
 	 * value="RANKED_FLEX_TT">灵活组排 3v3
 	 * value="RANKED_TFT">云顶之弈
 	 */
-	public void setRank(RankBO bo) throws IOException {
+	public String setRank(RankBO bo) throws IOException {
 		JSONObject body = new JSONObject(1);
 		JSONObject jsonObject = new JSONObject(3);
 		jsonObject.put("rankedLeagueQueue", bo.getFirstRank());
 		jsonObject.put("rankedLeagueTier", bo.getSecondRank());
 		jsonObject.put("rankedLeagueDivision", bo.getThirdRank());
 		body.put("lol", jsonObject);
-		requestLcuUtil.doPut("/lol-chat/v1/me", body.toJSONString());
+		return requestLcuUtil.doPut("/lol-chat/v1/me", body.toJSONString());
 	}
 
 	/**

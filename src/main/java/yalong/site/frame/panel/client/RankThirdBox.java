@@ -19,8 +19,8 @@ public class RankThirdBox extends BaseComboBox<ItemBO> {
 
 	public RankThirdBox() {
 		this.setItems();
-		this.addItemListener(listener());
 		this.addItemListener(new RankBoxItemListener());
+		this.addItemListener(listener());
 	}
 
 	/**

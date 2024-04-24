@@ -24,6 +24,6 @@ public class FrameCache {
 
 	public static boolean moyan = false;
 
-	public static RankBO currentRankBO = new RankBO();
+	public static RankBO currentRankBO = new RankBO("RANKED_SOLO_5x5", "UNRANKED", "I");
 
 }

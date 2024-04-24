@@ -3,6 +3,7 @@ package yalong.site.services.hotkey;
 import yalong.site.cache.GameDataCache;
 import yalong.site.utils.KeyEventUtil;
 
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 /**
@@ -15,6 +16,11 @@ public class SendOtherTeamScoreConsumer implements HotKeyConsumer {
 		return i -> {
 			for (String s : GameDataCache.otherTeamScore) {
 				KeyEventUtil.sendMsg("对方" + s);
+				try {
+					TimeUnit.MILLISECONDS.sleep(500);
+				} catch (InterruptedException e) {
+					throw new RuntimeException(e);
+				}
 			}
 		};
 	}
