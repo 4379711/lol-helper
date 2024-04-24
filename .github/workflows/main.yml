@@ -3,28 +3,23 @@ name: Java CI with Maven
 on:
   push:
     tags:
-    - 'V*'
-
+      - '*'
 jobs:
   build:
     runs-on: ubuntu-latest
-    
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
           java-version: '8'
           distribution: 'temurin'
-      
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           java-version: '8'
           distribution: 'temurin'
-          
       - name: Build with Maven
         run: mvn -B package -DfinalName="lol-helper.jar" --file pom.xml
-        
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -35,7 +30,6 @@ jobs:
           release_name: ${{ github.ref }}
           draft: false
           prerelease: false
-  
       - name: Release JAR
         uses: actions/upload-release-asset@v1
         env:
