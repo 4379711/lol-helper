@@ -4,6 +4,9 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.jnativehook.GlobalScreen;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * @author yalong
  */
@@ -25,7 +28,13 @@ public class HotKeyService {
 			return;
 		}
 		try {
-			GlobalScreen.registerNativeHook();
+			//关闭日志
+			Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
+			logger.setLevel(Level.OFF);
+			logger.setUseParentHandlers(false);
+			if(!GlobalScreen.isNativeHookRegistered()){
+				GlobalScreen.registerNativeHook();
+			}
 		} catch (Exception e) {
 			log.error("hook按键失败", e);
 			throw new RuntimeException(e);
@@ -35,7 +44,9 @@ public class HotKeyService {
 		Runtime run = Runtime.getRuntime();
 		run.addShutdownHook(new Thread(() -> {
 			try {
-				GlobalScreen.unregisterNativeHook();
+				if(GlobalScreen.isNativeHookRegistered()){
+					GlobalScreen.unregisterNativeHook();
+				}
 			} catch (Exception e) {
 				log.error("取消hook按键失败", e);
 			}
