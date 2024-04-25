@@ -1,6 +1,7 @@
 # lol-helper
 - 英雄联盟助手,主要使用LCU API,**未修改**客户端内容,**理论上不会封号!**,另外附上 [拳头文档](https://developer.riotgames.com/docs/lol/)
-- 点击[Releases](https://github.com/4379711/lol-helper/releases)页面下载**.msi**安装包,安装后启动软件即可
+- 点击[GITHUB Releases](https://github.com/4379711/lol-helper/releases)页面下载**.msi**安装包,安装后启动软件即可
+- 点击[GITEE Releases](https://gitee.com/qq4379711/lol-helper/releases)页面下载**.msi**安装包,安装后启动软件即可
 - 更新最新版时,无需重新卸载安装,直接替换安装目录里的`lol-helper.jar`即可
 - 也可自行制作windows安装程序,在releases页面下载最新的`lol-helper.jar`,使用jdk17+,命令:
 ```jpackage -i ./ -n lol-helper --type "msi" --app-version "5.3" --icon icon.ico --vendor "YaLong" --description "lol小助手" --copyright "yalong" --win-per-user-install --win-menu --verbose --win-dir-chooser --win-shortcut --main-jar lol-helper.jar```
