@@ -6,11 +6,11 @@ import yalong.site.bo.LeagueClientBO;
 import yalong.site.cache.AppCache;
 import yalong.site.cache.FrameInnerCache;
 import yalong.site.cache.GameDataCache;
+import yalong.site.enums.GameStatusEnum;
+import yalong.site.exception.NoProcessException;
 import yalong.site.frame.bo.ItemBO;
-import yalong.site.frame.utils.FrameMsgUtil;
 import yalong.site.http.RequestLcuUtil;
-import yalong.site.services.lcu.LeagueClientService;
-import yalong.site.services.lcu.LinkLeagueClientApi;
+import yalong.site.services.lcu.*;
 import yalong.site.services.word.LoadGarbageWord;
 import yalong.site.utils.ProcessUtil;
 
@@ -23,28 +23,17 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class ClientStarter {
 	private LinkLeagueClientApi api;
-	private LeagueClientService leagueClientService;
 
-	private ClientStarter() {
-	}
-
-	public static void start() throws Exception {
-		ClientStarter clientStarter = new ClientStarter();
-		clientStarter.initLcu();
-		clientStarter.cacheData();
-		clientStarter.loadFrameData();
-		clientStarter.listenGameStatus();
-	}
-
-	private void initLcu() throws Exception {
+	public void initLcu() throws Exception {
 		LeagueClientBO leagueClientBO = ProcessUtil.getClientProcess();
-		assert !leagueClientBO.equals(new LeagueClientBO());
+		if(leagueClientBO.equals(new LeagueClientBO())){
+			throw new NoProcessException();
+		}
 		RequestLcuUtil requestUtil = new RequestLcuUtil(leagueClientBO);
 		api = new LinkLeagueClientApi(requestUtil);
-		leagueClientService = new LeagueClientService(api);
 	}
 
-	private void cacheData() {
+	public void cacheData() {
 		// 加载垃圾话
 		LoadGarbageWord loadGarbageWord = new LoadGarbageWord();
 		AppCache.communicateWords = loadGarbageWord.loadWord();
@@ -65,7 +54,7 @@ public class ClientStarter {
 		}
 	}
 
-	private void loadFrameData(){
+	public void loadFrameData(){
 		// 所有英雄添加到面板下拉框
 		int itemCount = FrameInnerCache.pickBox.getItemCount();
 		if (itemCount == 1) {
@@ -79,10 +68,40 @@ public class ClientStarter {
 
 
 	@SuppressWarnings("InfiniteLoopStatement")
-	private void listenGameStatus() throws InterruptedException, IOException {
+	public void listenGameStatus() throws InterruptedException, IOException {
 		while (true) {
 			TimeUnit.MILLISECONDS.sleep(500);
-			leagueClientService.switchGameStatus();
+			GameStatusContext gameStatusContext = new GameStatusContext();
+			CalculateScore calculateScore = new CalculateScore(api);
+			//监听游戏状态
+			GameStatusEnum gameStatus = api.getGameStatus();
+			switch (gameStatus) {
+				case ReadyCheck: {
+					gameStatusContext.setStrategy(new ReadyCheckStrategy(api));
+					break;
+				}
+				case ChampSelect: {
+					gameStatusContext.setStrategy(new ChampSelectStrategy(api, calculateScore));
+					break;
+				}
+				case InProgress: {
+					gameStatusContext.setStrategy(new InProgressStrategy(api, calculateScore));
+					break;
+				}
+				case EndOfGame: {
+					gameStatusContext.setStrategy(new EndOfGameStrategy(api));
+					break;
+				}
+				case Reconnect: {
+					gameStatusContext.setStrategy(new ReconnectStrategy(api));
+					break;
+				}
+				default: {
+					gameStatusContext.setStrategy(new OtherStatusStrategy());
+					break;
+				}
+			}
+			gameStatusContext.executeStrategy();
 		}
 	}
 

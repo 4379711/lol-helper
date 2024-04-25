@@ -1,8 +1,11 @@
 package yalong.site;
 
 import lombok.extern.slf4j.Slf4j;
+import yalong.site.exception.NoProcessException;
 import yalong.site.frame.MainFrame;
 import yalong.site.services.hotkey.HotKeyService;
+
+import java.net.ConnectException;
 
 /**
  *
@@ -12,20 +15,32 @@ import yalong.site.services.hotkey.HotKeyService;
 public class LeagueClientHelper {
 
 	public static void main(String[] args) {
-		MainFrame.start();
-		HotKeyService.start();
+
 		while (true) {
+			String msg="";
 			try {
-				ClientStarter.start();
-			} catch (Exception e) {
-				log.error("主进程错误",e);
-				MainFrame.hiddenFrame();
-				int running = MainFrame.continueRun(e.getMessage());
-				if (running == 1) {
-					System.exit(0);
-				} else {
-					MainFrame.showFrame();
-				}
+				ClientStarter clientStarter = new ClientStarter();
+				clientStarter.initLcu();
+				clientStarter.cacheData();
+				MainFrame.start();
+				clientStarter.loadFrameData();
+				HotKeyService.start();
+				clientStarter.listenGameStatus();
+			}catch (NoProcessException ignored){
+				msg="请先启动游戏";
+			}catch (ConnectException ignored){
+				msg="游戏客户端连接失败";
+			}
+			catch (Exception e) {
+				msg=e.getMessage();
+				log.error(msg,e);
+			}
+			MainFrame.hiddenFrame();
+			int running = MainFrame.continueRun(msg);
+			if (running == 1) {
+				System.exit(0);
+			} else {
+				MainFrame.showFrame();
 			}
 		}
 	}

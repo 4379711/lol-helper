@@ -19,7 +19,7 @@ public class AboutPanel extends BasePanel {
 		AboutPanel aboutPanel = new AboutPanel();
 		BaseTextArea textArea = new BaseTextArea();
 		textArea.setOpaque(false);
-		textArea.setText("作者: YaLong\n\n"
+		textArea.setText("作者: YaLong  微信:4379711\n\n"
 				+ "本项目开源,源代码地址:\n"
 				+ "https://github.com/4379711/lol-helper\n\n"
 				+ "本项目使用RIOT公开的LCU API开发,地址:\n"
