@@ -6,6 +6,8 @@ import yalong.site.frame.utils.FrameMsgUtil;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 /**
  * 主窗体
@@ -15,6 +17,8 @@ import java.awt.*;
  */
 public class MainFrame extends JFrame {
 	private static MainFrame frame;
+
+	private static volatile boolean  hasPainted = false;
 
 	public MainFrame() throws HeadlessException {
 		super();
@@ -37,7 +41,21 @@ public class MainFrame extends JFrame {
 		TabPane tabPane = TabPane.builder();
 		frame.add(tabPane);
 		frame.setVisible(true);
-        helpMsg();
+		frame.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentShown(ComponentEvent e) {
+				hasPainted = true;
+			}
+		});
+
+		//等组件渲染 再显示帮助信息
+		while (!hasPainted) {
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException ignored) {
+			}
+		}
+		helpMsg();
 	}
 
     private static void helpMsg(){
