@@ -12,7 +12,7 @@ public class FrameCache {
 
 	public static boolean autoReconnect = true;
 
-	public static boolean autoPlayAgain = true;
+	public static boolean autoPlayAgain = false;
 
 	public static Integer pickChampionId = null;
 

@@ -5,7 +5,7 @@ import yalong.site.frame.MainFrame;
 import yalong.site.services.hotkey.HotKeyService;
 
 /**
- * jpackage -i ./ -n lol-helper --type "msi" --app-version "5.1" --icon icon.ico --vendor "YaLong" --description "lol小助手" --copyright "yalong" --win-per-user-install --win-menu --verbose --win-dir-chooser --win-shortcut --main-jar lol-helper.jar
+ *
  * @author yaLong
  */
 @Slf4j
