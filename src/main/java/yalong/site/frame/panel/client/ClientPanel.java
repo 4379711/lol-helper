@@ -44,6 +44,8 @@ public class ClientPanel extends BasePanel {
 		clientPanel.add(banBox.getComp(), banBox.getConstraints());
 		ComponentBO pickBox = PickBox.builder();
 		clientPanel.add(pickBox.getComp(), pickBox.getConstraints());
+		ComponentBO pickSkinBox = PickSkinBox.builder();
+		clientPanel.add(pickSkinBox.getComp(), pickSkinBox.getConstraints());
 		return clientPanel;
 
 	}

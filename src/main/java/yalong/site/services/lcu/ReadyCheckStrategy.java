@@ -17,8 +17,6 @@ public class ReadyCheckStrategy implements GameStatusStrategy {
 
 	@Override
 	public void doThis() {
-		//接受对局时为游戏开始时机,此时清除对局缓存
-		GameDataCache.reset();
 		if (FrameCache.autoAccept) {
 			// 自动接受对局
 			try {

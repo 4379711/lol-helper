@@ -8,14 +8,14 @@ import lombok.Data;
  */
 @Data
 @AllArgsConstructor
-public class ChampionBO {
+public class SkinBO {
 
 	/**
-	 * 英雄id
+	 * 皮肤id
 	 */
 	private Integer id;
 	/**
-	 * 英雄中文名
+	 * 皮肤中文名
 	 */
 	private String name;
 

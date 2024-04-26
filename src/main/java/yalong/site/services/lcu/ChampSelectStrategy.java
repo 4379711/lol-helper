@@ -1,13 +1,18 @@
 package yalong.site.services.lcu;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
+import yalong.site.bo.SkinBO;
 import yalong.site.cache.FrameCache;
+import yalong.site.cache.FrameInnerCache;
 import yalong.site.cache.GameDataCache;
+import yalong.site.frame.bo.ItemBO;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author yalong
@@ -20,6 +25,22 @@ public class ChampSelectStrategy implements GameStatusStrategy {
 	public ChampSelectStrategy(LinkLeagueClientApi api, CalculateScore calculateScore) {
 		this.api = api;
 		this.calculateScore = calculateScore;
+	}
+
+	private void setSkin() throws IOException {
+		if(CollectionUtil.isEmpty(GameDataCache.currentChampionSkins)){
+			List<SkinBO> currentChampionSkins = api.getCurrentChampionSkins();
+			if(CollectionUtil.isEmpty(currentChampionSkins)){
+				return;
+			}
+			GameDataCache.currentChampionSkins = currentChampionSkins;
+			for (SkinBO bo : GameDataCache.currentChampionSkins) {
+				FrameInnerCache.pickSkinBox.addItem(new ItemBO(String.valueOf(bo.getId()), bo.getName()));
+			}
+		}
+		if(GameDataCache.skinId!=null){
+			api.setCurrentChampionSkins(GameDataCache.skinId);
+		}
 	}
 
 	private void autoBanPick() throws IOException {
@@ -83,6 +104,12 @@ public class ChampSelectStrategy implements GameStatusStrategy {
 			selectScore();
 		} catch (Exception e) {
 			log.error("sendScore错误", e);
+		}
+
+		try {
+			setSkin();
+		} catch (Exception e) {
+			log.error("设置皮肤错误", e);
 		}
 	}
 }

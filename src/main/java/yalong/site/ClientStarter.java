@@ -26,7 +26,7 @@ public class ClientStarter {
 
 	public void initLcu() throws Exception {
 		LeagueClientBO leagueClientBO = ProcessUtil.getClientProcess();
-		if(leagueClientBO.equals(new LeagueClientBO())){
+		if (leagueClientBO.equals(new LeagueClientBO())) {
 			throw new NoProcessException();
 		}
 		RequestLcuUtil requestUtil = new RequestLcuUtil(leagueClientBO);
@@ -54,7 +54,7 @@ public class ClientStarter {
 		}
 	}
 
-	public void loadFrameData(){
+	public void loadFrameData() {
 		// 所有英雄添加到面板下拉框
 		int itemCount = FrameInnerCache.pickBox.getItemCount();
 		if (itemCount == 1) {
@@ -66,9 +66,9 @@ public class ClientStarter {
 		}
 	}
 
-
 	@SuppressWarnings("InfiniteLoopStatement")
 	public void listenGameStatus() throws InterruptedException, IOException {
+		int currentStatus = 0;
 		while (true) {
 			TimeUnit.MILLISECONDS.sleep(500);
 			GameStatusContext gameStatusContext = new GameStatusContext();
@@ -76,6 +76,15 @@ public class ClientStarter {
 			//监听游戏状态
 			GameStatusEnum gameStatus = api.getGameStatus();
 			switch (gameStatus) {
+				case None:
+				case Lobby:
+				case Matchmaking:
+				case PreEndOfGame:
+				case WaitingForStats: {
+					gameStatusContext.setStrategy(new OtherStatusStrategy());
+					GameDataCache.reset();
+					break;
+				}
 				case ReadyCheck: {
 					gameStatusContext.setStrategy(new ReadyCheckStrategy(api));
 					break;

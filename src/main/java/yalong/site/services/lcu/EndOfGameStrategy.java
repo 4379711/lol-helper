@@ -17,8 +17,6 @@ public class EndOfGameStrategy implements GameStatusStrategy {
 
 	@Override
 	public void doThis() {
-		//游戏结束时,此时清除对局缓存
-		GameDataCache.reset();
 		if (FrameCache.autoPlayAgain) {
 			//再来一局
 			try {

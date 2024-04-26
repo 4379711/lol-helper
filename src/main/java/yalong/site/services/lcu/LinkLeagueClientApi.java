@@ -1,6 +1,7 @@
 package yalong.site.services.lcu;
 
 import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.TypeReference;
 import yalong.site.bo.*;
@@ -11,6 +12,7 @@ import yalong.site.http.RequestLcuUtil;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -85,12 +87,65 @@ public class LinkLeagueClientApi {
 	}
 
 	/**
-	 * 获取某个英雄的皮肤
+	 * 获取某个英雄的所有皮肤和炫彩皮肤的id名字
 	 *
 	 * @param championId 英雄id
 	 */
-	public String getBackgroundSkin(int championId) throws IOException {
-		return requestLcuUtil.doGet("/lol-game-data/assets/v1/champions/" + championId + ".json");
+	public List<SkinBO> getChromasSkinByChampionId(int championId) throws IOException {
+		String resp = requestLcuUtil.doGet("/lol-game-data/assets/v1/champions/" + championId + ".json");
+		ArrayList<SkinBO> arrayList = new ArrayList<>();
+		JSONArray skins = JSON.parseObject(resp).getJSONArray("skins");
+		for (int i = 0; i < skins.size(); i++) {
+			JSONObject jsonObject = skins.getJSONObject(i);
+			Integer id = jsonObject.getInteger("id");
+			String name = jsonObject.getString("name");
+			arrayList.add(new SkinBO(id, name));
+			JSONArray chromas = jsonObject.getJSONArray("chromas");
+			if (chromas == null) {
+				continue;
+			}
+			for (int j = 0; j < chromas.size(); j++) {
+				Integer chromasId = chromas.getJSONObject(j).getInteger("id");
+				String chromasName = chromas.getJSONObject(j).getString("name");
+				arrayList.add(new SkinBO(chromasId, chromasName));
+			}
+		}
+		return arrayList.stream().distinct().collect(Collectors.toList());
+	}
+
+	/**
+	 * 查询当前选定的英雄所有可用的炫彩皮肤
+	 */
+	public List<SkinBO> getCurrentChampionSkins() throws IOException {
+		String resp = requestLcuUtil.doGet("/lol-champ-select/v1/skin-carousel-skins");
+		JSONArray jsonArray = JSON.parseArray(resp);
+		if(jsonArray == null || jsonArray.isEmpty()) {
+			return new ArrayList<>();
+		}
+		Integer championId = jsonArray.getJSONObject(0).getInteger("championId");
+		//查询此英雄的皮肤名字
+		List<SkinBO> skinBOList = getChromasSkinByChampionId(championId);
+		Map<Integer, SkinBO> map = skinBOList.stream().collect(Collectors.toMap(SkinBO::getId, i->i));
+
+		List<SkinBO> childSkinList = new ArrayList<>();
+		for (int i = 0; i < jsonArray.size(); i++) {
+			JSONObject jsonObject = jsonArray.getJSONObject(i);
+			JSONArray childSkins = jsonObject.getJSONArray("childSkins");
+			for (int j = 0; j < childSkins.size(); j++) {
+				JSONObject childSkinsJsonObject = childSkins.getJSONObject(j);
+				if (childSkinsJsonObject.getBooleanValue("unlocked")) {
+					int skinId = childSkinsJsonObject.getIntValue("id");
+					childSkinList.add(map.get(skinId));
+				}
+			}
+		}
+		return childSkinList;
+	}
+
+	public String setCurrentChampionSkins(int skinId) throws IOException {
+		JSONObject body = new JSONObject(3);
+		body.put("selectedSkinId", skinId);
+		return requestLcuUtil.doPatch("/lol-champ-select/v1/session/my-selection", body.toString());
 	}
 
 	/**
