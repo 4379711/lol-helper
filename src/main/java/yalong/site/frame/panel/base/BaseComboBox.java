@@ -8,6 +8,8 @@ import javax.swing.*;
 public class BaseComboBox<E> extends JComboBox<E> {
 
 	public BaseComboBox() {
+		this.setOpaque(false);
+		this.setBorder(null);
 	}
 
 }

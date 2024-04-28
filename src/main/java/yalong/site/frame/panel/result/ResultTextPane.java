@@ -1,12 +1,10 @@
 package yalong.site.frame.panel.result;
 
-import yalong.site.frame.panel.TabPane;
+import yalong.site.cache.FrameInnerCache;
 import yalong.site.frame.ui.MyTabbedPaneUI;
 import yalong.site.frame.utils.FrameMsgUtil;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -22,43 +20,22 @@ public class ResultTextPane extends JTextPane {
 		this.setBackground(MyTabbedPaneUI.END_COLOR_SELECT);
 		this.setBorder(null);
 		//设置全局结果展示面板
-		FrameMsgUtil.resultPane = this;
+		FrameInnerCache.resultTextPane = this;
 		// 双击清屏
 		this.addMouseListener(clear());
-		// 出现信息时,自动跳转到tab面板
-		this.getDocument().addDocumentListener(link());
 	}
 
 	public static ResultTextPane builder() {
 		return new ResultTextPane();
 	}
 
-	private DocumentListener link() {
-		return new DocumentListener() {
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				ResultPanel resultPanel = (ResultPanel) getParent().getParent();
-				TabPane tabPane = (TabPane) resultPanel.getParent();
-				tabPane.setSelectedComponent(resultPanel);
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-
-			}
-		};
-	}
 
 	private MouseListener clear() {
 		return new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				//如果是双击,清屏
+				//noinspection AlibabaUndefineMagicConstant
 				if (e.getClickCount() == 2) {
 					FrameMsgUtil.clear();
 				}

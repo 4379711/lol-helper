@@ -36,7 +36,7 @@ public class ClientStarter {
 	public void cacheData() {
 		// 加载垃圾话
 		LoadGarbageWord loadGarbageWord = new LoadGarbageWord();
-		AppCache.communicateWords = loadGarbageWord.loadWord();
+		AppCache.garbageWordList = loadGarbageWord.loadWord();
 		log.info("垃圾话加载完成");
 
 		// 缓存登录人的信息

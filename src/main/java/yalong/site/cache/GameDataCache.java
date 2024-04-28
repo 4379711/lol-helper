@@ -2,7 +2,6 @@ package yalong.site.cache;
 
 import yalong.site.bo.SkinBO;
 import yalong.site.bo.SummonerInfoBO;
-import yalong.site.frame.bo.ItemBO;
 
 import java.util.ArrayList;
 import java.util.List;

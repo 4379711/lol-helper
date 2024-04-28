@@ -12,7 +12,7 @@ public class MarkWordDeleteConsumer implements HotKeyConsumer {
 	@Override
 	public Consumer<Integer> build() {
 		return i -> {
-			String lastCommunicateWord = AppCache.lastCommunicateWord;
+			String lastCommunicateWord = AppCache.lastGarbageWord;
 			if (lastCommunicateWord != null && !"".equals(lastCommunicateWord)) {
 				FrameMsgUtil.sendLine("[屏蔽]:" + lastCommunicateWord);
 			}

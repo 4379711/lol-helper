@@ -1,7 +1,6 @@
 package yalong.site.cache;
 
 import yalong.site.bo.ChampionBO;
-import yalong.site.bo.SummonerInfoBO;
 import yalong.site.services.lcu.LinkLeagueClientApi;
 
 import java.util.ArrayList;
@@ -12,8 +11,7 @@ import java.util.ArrayList;
 public class AppCache {
 	public static LinkLeagueClientApi api;
 	public static ArrayList<ChampionBO> allChampion = new ArrayList<>();
-	public static ArrayList<String> communicateWords = new ArrayList<>();
-
-	public static String lastCommunicateWord;
-
+	public static ArrayList<String> garbageWordList = new ArrayList<>();
+	public static String lastGarbageWord;
+	public static ArrayList<String> resultPanelMsgList = new ArrayList<>();
 }

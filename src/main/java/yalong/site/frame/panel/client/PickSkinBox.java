@@ -1,7 +1,6 @@
 package yalong.site.frame.panel.client;
 
 import lombok.extern.slf4j.Slf4j;
-import yalong.site.cache.FrameCache;
 import yalong.site.cache.FrameInnerCache;
 import yalong.site.cache.GameDataCache;
 import yalong.site.frame.bo.ComponentBO;
@@ -19,7 +18,7 @@ import java.awt.event.ItemListener;
 public class PickSkinBox extends BaseComboBox<ItemBO> {
 
 	public PickSkinBox() {
-		this.addItem(new ItemBO(null, "选择皮肤"));
+		this.addItem(new ItemBO(null, "选择炫彩皮肤"));
 		this.addItemListener(listener());
 	}
 

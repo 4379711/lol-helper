@@ -15,32 +15,29 @@ import java.net.ConnectException;
 public class LeagueClientHelper {
 
 	public static void main(String[] args) {
-
+		MainFrame.start();
 		while (true) {
 			String msg="";
 			try {
 				ClientStarter clientStarter = new ClientStarter();
 				clientStarter.initLcu();
 				clientStarter.cacheData();
-				MainFrame.start();
 				clientStarter.loadFrameData();
+				MainFrame.showFrame();
 				HotKeyService.start();
 				clientStarter.listenGameStatus();
 			}catch (NoProcessException ignored){
 				msg="请先启动游戏";
 			}catch (ConnectException ignored){
 				msg="游戏客户端连接失败";
-			}
-			catch (Exception e) {
+			}catch (Exception e) {
 				msg=e.getMessage();
 				log.error(msg,e);
 			}
 			MainFrame.hiddenFrame();
 			int running = MainFrame.continueRun(msg);
-			if (running == 1) {
+			if (running != 0) {
 				System.exit(0);
-			} else {
-				MainFrame.showFrame();
 			}
 		}
 	}

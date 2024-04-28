@@ -16,11 +16,11 @@ public class GarbageWordConsumer implements HotKeyConsumer {
     public Consumer<Integer> build() {
         return i -> {
             if (FrameCache.communicate) {
-                String s = AppCache.communicateWords.get(nextLineNo);
+                String s = AppCache.garbageWordList.get(nextLineNo);
                 KeyEventUtil.sendMsg(s);
-                int size = AppCache.communicateWords.size();
+                int size = AppCache.garbageWordList.size();
                 nextLineNo = (nextLineNo + 1) % size;
-                AppCache.lastCommunicateWord = s;
+                AppCache.lastGarbageWord = s;
             }
         };
     }
