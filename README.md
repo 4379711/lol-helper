@@ -35,8 +35,8 @@
 
 
 ## 快捷键说明
-- F1:发送队友最近三局战绩和得分(计算方式看上边)到聊天框,可在选择英雄界面使用
-- F2:发送对方最近三局战绩和得分(计算方式看上边)到聊天框,只能在游戏内使用,因为选英雄界面看不到对面玩家
+- F1:发送队友最近三局战绩和得分到聊天框,可在选择英雄界面使用
+- F2:发送对方最近三局战绩和得分到聊天框,只能在游戏内使用,因为选英雄界面看不到对面玩家
 - T:瞎子光速`眼闪W`(即自动按4DW)
 - HOME(问候家人,所以用了home):发送垃圾话(如果修改了垃圾话文件,可以取消勾选,再打开勾选,即可重新加载垃圾话)
 - END:发送鼓励的话,自动从网络上获取彩虹屁,并自动发送到聊天框
@@ -49,6 +49,7 @@
 ![自动接受对局](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/02.jpg)
 ![房间内发送文字](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/03.jpg)
 ![游戏内发送文字](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/04.jpg)
+![炫彩皮肤](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/6.png)
 
 ## 开发计划
 - 暂无想法,欢迎提供建议/PR
@@ -57,5 +58,5 @@
 - 本项目仅供学习,不得用作商业用途,不得用作违法行为
 
 ## 联系
-> 可以微信联系我,备注来意
+> 可以微信联系我,请备注来意
 ![微信添加好友](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/QR-Code.jpg)
