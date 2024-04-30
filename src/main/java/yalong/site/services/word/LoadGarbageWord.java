@@ -35,7 +35,7 @@ public class LoadGarbageWord {
 		ArrayList<String> strings = new ArrayList<>();
 		//加载到内存
 		try {
-			boolean exist = FileUtil.exist(USER_FILE);
+			boolean exist = FileUtil.exist(new File(USER_FILE));
 			if (!exist) {
 				loadDefaultFile();
 			}
