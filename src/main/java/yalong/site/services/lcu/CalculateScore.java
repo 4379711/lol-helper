@@ -74,10 +74,7 @@ public class CalculateScore {
 		stringBuilder.append(type);
 		stringBuilder.append("是:【");
 		stringBuilder.append(stupid.getSummonerInfo().getDisplayName());
-		stringBuilder.append("】,得分");
-		stringBuilder.append(String.format("%.2f", entry.getKey() / gameNum));
-		result.add(stringBuilder.toString());
-		stringBuilder = new StringBuilder();
+		stringBuilder.append(String.format("】,KDA: 【%.2f】 ", entry.getKey() / gameNum));
 		stringBuilder.append("近");
 		stringBuilder.append(gameNum);
 		stringBuilder.append("场战绩为：");
@@ -87,7 +84,9 @@ public class CalculateScore {
 			stringBuilder.append(scoreBO.getDeaths());
 			stringBuilder.append("-");
 			stringBuilder.append(scoreBO.getAssists());
-			stringBuilder.append("  ");
+			stringBuilder.append("(");
+			stringBuilder.append(scoreBO.getWin() ? "赢" : "输");
+			stringBuilder.append(") ");
 		}
 		result.add(stringBuilder.toString());
 		return result;
@@ -97,12 +96,19 @@ public class CalculateScore {
 	 * 查询战绩,格式化为要发送的消息
 	 */
 	public ArrayList<String> dealScore2Msg(List<String> puuidList) {
+		ArrayList<String> result = new ArrayList<>();
+		if(puuidList.isEmpty()){
+			return result;
+		}
 		int gameNum = 3;
 		ArrayList<SummonerScoreBO> scoreByPuuidList = new ArrayList<>();
 		try {
 			scoreByPuuidList = getScoreByPuuidList(puuidList, gameNum);
 		} catch (Exception e) {
 			log.error("查询战绩错误", e);
+		}
+		if(scoreByPuuidList.isEmpty()){
+			return result;
 		}
 		TreeMap<Float, SummonerScoreBO> treeMap = calcScore2treeMap(scoreByPuuidList);
 		Map.Entry<Float, SummonerScoreBO> firstEntry = treeMap.firstEntry();
@@ -116,8 +122,9 @@ public class CalculateScore {
 
 		ArrayList<String> stupidList = entry2String(firstEntry, "傻鸟");
 		ArrayList<String> smartList = entry2String(lastEntry, "大神");
-		smartList.addAll(stupidList);
-		return smartList;
+		result.addAll(stupidList);
+		result.addAll(smartList);
+		return result;
 	}
 
 }

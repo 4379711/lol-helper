@@ -16,12 +16,8 @@ public class SendOtherTeamScoreConsumer implements HotKeyConsumer {
 	public Consumer<Integer> build() {
 		return i -> {
 			ArrayList<String> otherTeamScore = GameDataCache.otherTeamScore;
-			for (int j = 0; j < otherTeamScore.size(); j++) {
-				String s = otherTeamScore.get(j);
-				if (j == 0) {
-					s = "对方" + s;
-				}
-				KeyEventUtil.sendMsg(s);
+			for (String s : otherTeamScore) {
+				KeyEventUtil.sendMsg("对方" + s);
 				try {
 					TimeUnit.MILLISECONDS.sleep(500);
 				} catch (InterruptedException e) {

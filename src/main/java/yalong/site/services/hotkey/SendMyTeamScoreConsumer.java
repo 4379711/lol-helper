@@ -18,12 +18,8 @@ public class SendMyTeamScoreConsumer implements HotKeyConsumer {
 		return i -> {
 			if (FrameCache.sendScore) {
 				ArrayList<String> myTeamScore = GameDataCache.myTeamScore;
-				for (int j = 0; j < myTeamScore.size(); j++) {
-					String s = myTeamScore.get(j);
-					if (j == 0) {
-						s = "我方" + s;
-					}
-					KeyEventUtil.sendMsg(s);
+				for (String s : myTeamScore) {
+					KeyEventUtil.sendMsg("我方" + s);
 					try {
 						TimeUnit.MILLISECONDS.sleep(500);
 					} catch (InterruptedException e) {
