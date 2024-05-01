@@ -1,10 +1,7 @@
 package yalong.site.services.lcu;
 
-import lombok.extern.slf4j.Slf4j;
 import yalong.site.bo.ScoreBO;
 import yalong.site.bo.SummonerInfoBO;
-import yalong.site.bo.SummonerScoreBO;
-import yalong.site.cache.GameDataCache;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,7 +12,6 @@ import java.util.TreeMap;
 /**
  * @author yalong
  */
-@Slf4j
 public class CalculateScore {
 	private final LinkLeagueClientApi api;
 
@@ -23,101 +19,56 @@ public class CalculateScore {
 		this.api = api;
 	}
 
-	public ArrayList<SummonerScoreBO> getScoreByPuuidList(List<String> puuidList, int gameNum) throws IOException {
-		ArrayList<SummonerScoreBO> arrayList = new ArrayList<>();
+	/**
+	 * 查询战绩,格式化为要发送的消息
+	 */
+	public ArrayList<String> dealScore2Msg(List<String> puuidList) throws IOException {
+		ArrayList<String> result = new ArrayList<>();
+		TreeMap<Float, String> treeMap = new TreeMap<>();
+		int gameNum=3;
 		//根据puuid查最近几次的战绩
 		for (String puuid : puuidList) {
 			//查看玩家名称
 			SummonerInfoBO summonerInfo = api.getInfoByPuuId(puuid);
+			StringBuilder stringBuilder = new StringBuilder();
+			stringBuilder.append("【");
+			stringBuilder.append(summonerInfo.getDisplayName());
+			stringBuilder.append("】, 最近");
+			stringBuilder.append(gameNum);
+			stringBuilder.append("场战绩为：");
 			//查询战绩
-			List<ScoreBO> scoreBOList = api.getScoreById(puuid, gameNum - 1);
-			SummonerScoreBO summonerScoreBO = new SummonerScoreBO(summonerInfo, scoreBOList);
-			arrayList.add(summonerScoreBO);
-		}
-		return arrayList;
-	}
-
-	/**
-	 * 根据战绩计算出得分
-	 */
-	public TreeMap<Float, SummonerScoreBO> calcScore2treeMap(ArrayList<SummonerScoreBO> list) {
-		TreeMap<Float, SummonerScoreBO> treeMap = new TreeMap<>();
-		for (SummonerScoreBO summonerScoreBO : list) {
+			List<ScoreBO> scoreBOList = api.getScoreById(puuid, gameNum-1);
 			// 计算得分 最近三把(KDA+输赢)的平均值
 			// KDA->(击杀*1.2+助攻*0.8)/(死亡*1.2)
 			// 输赢->赢+1 输-1
-			List<ScoreBO> scoreBOList = summonerScoreBO.getScoreBOList();
 			float score = 0.0f;
 			for (ScoreBO scoreBO : scoreBOList) {
 				if (scoreBO.getWin()) {
-					score += 1f;
+					score += 1;
 				} else {
-					score -= 1f;
+					score -= 1;
 				}
 				Integer kills = scoreBO.getKills();
 				Integer deaths = scoreBO.getDeaths();
 				Integer assists = scoreBO.getAssists();
-				score += ((kills * 1.2f + assists * 0.8f) / Math.max(deaths * 1.2f, 1f));
+				score += (kills * 1.2 + assists * 0.8) / Math.max(deaths * 1.2, 1);
+				stringBuilder.append(kills);
+				stringBuilder.append("-");
+				stringBuilder.append(deaths);
+				stringBuilder.append("-");
+				stringBuilder.append(assists);
+				stringBuilder.append(",  ");
 			}
-			treeMap.put(score, summonerScoreBO);
+			score /= gameNum;
+			stringBuilder.append("评分: ");
+			stringBuilder.append(String.format("%.2f", score));
+			treeMap.put(score, stringBuilder.toString());
 		}
-		return treeMap;
-	}
-
-	public ArrayList<String> entry2String(Map.Entry<Float, SummonerScoreBO> entry, String type) {
-		SummonerScoreBO stupid = entry.getValue();
-		//整理成字符串
-		ArrayList<String> result = new ArrayList<>();
-		StringBuilder stringBuilder = new StringBuilder();
-		List<ScoreBO> stupidScoreBOList = stupid.getScoreBOList();
-		int gameNum = stupidScoreBOList.size();
-		stringBuilder.append(type);
-		stringBuilder.append("是:【");
-		stringBuilder.append(stupid.getSummonerInfo().getDisplayName());
-		stringBuilder.append("】,得分");
-		stringBuilder.append(String.format("%.2f", entry.getKey() / gameNum));
-		result.add(stringBuilder.toString());
-		stringBuilder = new StringBuilder();
-		stringBuilder.append("近");
-		stringBuilder.append(gameNum);
-		stringBuilder.append("场战绩为：");
-		for (ScoreBO scoreBO : stupidScoreBOList) {
-			stringBuilder.append(scoreBO.getKills());
-			stringBuilder.append("-");
-			stringBuilder.append(scoreBO.getDeaths());
-			stringBuilder.append("-");
-			stringBuilder.append(scoreBO.getAssists());
-			stringBuilder.append("  ");
-		}
-		result.add(stringBuilder.toString());
+		Map.Entry<Float, String> firstEntry = treeMap.firstEntry();
+		Map.Entry<Float, String> lastEntry = treeMap.lastEntry();
+		result.add("傻鸟是:" + firstEntry.getValue());
+		result.add("大神是:" + lastEntry.getValue());
 		return result;
-	}
-
-	/**
-	 * 查询战绩,格式化为要发送的消息
-	 */
-	public ArrayList<String> dealScore2Msg(List<String> puuidList) {
-		int gameNum = 3;
-		ArrayList<SummonerScoreBO> scoreByPuuidList = new ArrayList<>();
-		try {
-			scoreByPuuidList = getScoreByPuuidList(puuidList, gameNum);
-		} catch (Exception e) {
-			log.error("查询战绩错误", e);
-		}
-		TreeMap<Float, SummonerScoreBO> treeMap = calcScore2treeMap(scoreByPuuidList);
-		Map.Entry<Float, SummonerScoreBO> firstEntry = treeMap.firstEntry();
-		Map.Entry<Float, SummonerScoreBO> lastEntry = treeMap.lastEntry();
-		//排除自己
-		SummonerScoreBO stupid = firstEntry.getValue();
-		if (stupid.getSummonerInfo().getPuuid().equals(GameDataCache.me.getPuuid())) {
-			treeMap.remove(firstEntry.getKey());
-			firstEntry = treeMap.firstEntry();
-		}
-
-		ArrayList<String> stupidList = entry2String(firstEntry, "傻鸟");
-		ArrayList<String> smartList = entry2String(lastEntry, "大神");
-		smartList.addAll(stupidList);
-		return smartList;
 	}
 
 }
