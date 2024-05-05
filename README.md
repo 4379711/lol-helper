@@ -4,7 +4,7 @@
 - 点击[GITEE Releases](https://gitee.com/qq4379711/lol-helper/releases)页面下载**.msi**安装包,安装后启动软件即可
 - 更新最新版时,无需重新卸载安装,直接替换安装目录里的`lol-helper.jar`即可
 - 也可自行制作windows安装程序,在releases页面下载最新的`lol-helper.jar`,使用jdk17+,命令:
-```jpackage -i ./ -n lol-helper --type "msi" --app-version "5.3" --icon icon.ico --vendor "YaLong" --description "lol小助手" --copyright "yalong" --win-per-user-install --win-menu --verbose --win-dir-chooser --win-shortcut --main-jar lol-helper.jar```
+```jpackage -i ./ -n lol-helper --type "msi" --app-version "7.2" --icon icon.ico --vendor "YaLong" --description "lol小助手" --copyright "yalong" --win-per-user-install --win-menu --verbose --win-dir-chooser --win-shortcut --main-jar lol-helper.jar```
 
 - 功能失效可能是**未以管理员身份运行程序**
   - 方式一: 对着图标右键 -> 以管理员身份运行
@@ -52,11 +52,12 @@
 ![炫彩皮肤](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/6.png)
 
 ## 开发计划
-- 暂无想法,欢迎提供建议/PR
+- 欢迎提供建议/PR
+- 共创邀请,目前已实现websocket连接,现邀请各位一起加入,用websocket改造相关功能(目前实现方案是每隔几秒轮询)
 
 ## 免责声明
-- 本项目仅供学习,不得用作商业用途,不得用作违法行为
+- 本项目仅供学习,未经许可,不得用作商业用途,不得用作违法行为!!!
 
 ## 联系
-> 可以微信联系我,请备注来意
+> 可以微信联系我,请备注来意,我拉你进群交流
 ![微信添加好友](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/QR-Code.jpg)
