@@ -25,14 +25,17 @@ public class GameDataCache {
 	public static ArrayList<String> myTeamScore = new ArrayList<>();
 
 	public static void reset() {
-		skinId = null;
-		currentChampionSkins = new ArrayList<>();
-		otherTeamScore = new ArrayList<>();
-		myTeamScore = new ArrayList<>();
+		resetScore();
 		resetPickSkinBoxData();
 	}
 
+	public static void resetScore() {
+		otherTeamScore = new ArrayList<>();
+		myTeamScore = new ArrayList<>();
+	}
 	public static void resetPickSkinBoxData() {
+		skinId = null;
+		currentChampionSkins = new ArrayList<>();
 		for (int i = 1; i < FrameInnerCache.pickSkinBox.getItemCount(); i++) {
 			FrameInnerCache.pickSkinBox.removeItemAt(i);
 		}

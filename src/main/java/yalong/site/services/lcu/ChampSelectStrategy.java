@@ -40,6 +40,8 @@ public class ChampSelectStrategy implements GameStatusStrategy {
 		}
 		if(GameDataCache.skinId!=null){
 			api.setCurrentChampionSkins(GameDataCache.skinId);
+			//设置皮肤完成后,清空缓存
+			GameDataCache.resetPickSkinBoxData();
 		}
 	}
 
