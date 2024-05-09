@@ -36,7 +36,7 @@ public class GameDataCache {
 	public static void resetPickSkinBoxData() {
 		skinId = null;
 		currentChampionSkins = new ArrayList<>();
-		for (int i = 1; i < FrameInnerCache.pickSkinBox.getItemCount(); i++) {
+		for (int i = FrameInnerCache.pickSkinBox.getItemCount() - 1; i >= 1; i--) {
 			FrameInnerCache.pickSkinBox.removeItemAt(i);
 		}
 	}
