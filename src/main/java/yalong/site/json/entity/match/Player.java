@@ -17,7 +17,7 @@ public class Player {
     private String platformId;
     private String profileIcon;
     private String puuid;
-    private Integer summonerId;
+    private Long summonerId;
     private String summonerName;
     private String tagLine;
 }

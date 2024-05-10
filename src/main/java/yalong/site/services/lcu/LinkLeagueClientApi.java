@@ -356,8 +356,8 @@ public class LinkLeagueClientApi {
     public ProductsMatchHistoryBO getProductsMatchHistoryByPuuid(String id, int begIndex, int endIndex) throws IOException {
         String endpoint = "/lol-match-history/v1/products/lol/" + id + "/matches?begIndex=" + begIndex + "&endIndex=" + endIndex;
         String resp = requestLcuUtil.doGet(endpoint);
-        JSONObject jsonObject = JSON.parseObject(resp);
-        return jsonObject.toJavaObject(ProductsMatchHistoryBO.class);
+        System.out.println(resp);
+        return JSONObject.parseObject(resp,ProductsMatchHistoryBO.class);
     }
 
     /**

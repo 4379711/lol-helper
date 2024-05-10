@@ -19,7 +19,7 @@ public class Teams {
     private Integer teamId;
     private Integer towerKills;
     private Integer vilemawKills;
-    private Boolean win;
+    private String win;
 
 
 }

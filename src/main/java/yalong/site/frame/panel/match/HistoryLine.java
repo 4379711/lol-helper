@@ -27,6 +27,9 @@ public class HistoryLine extends JPanel {
         this.setBackground(MyTabbedPaneUI.END_COLOR_SELECT);
         //设置边框为null
         this.setBorder(null);
+        //网格布局
+        GridBagLayout layout = new GridBagLayout();
+        this.setLayout(layout);
         // 使用GridBagLayout布局管理器
         GridBagConstraints grid1 = new GridBagConstraints(
                 // 第(0,0)个格子
@@ -50,7 +53,7 @@ public class HistoryLine extends JPanel {
                 //横向占100%长度,纵向占100%长度
                 2, 2,
                 //居中,组件小的话就两边铺满窗格
-                GridBagConstraints.CENTER, GridBagConstraints.NONE,
+                GridBagConstraints.SOUTHWEST, GridBagConstraints.NONE,
                 // 窗格之间的距离
                 new Insets(0, 0, 0, 0),
                 // 增加组件的首选宽度和高度
@@ -64,7 +67,7 @@ public class HistoryLine extends JPanel {
                 //横向占100%长度,纵向占100%长度
                 2, 2,
                 //居中,组件小的话就两边铺满窗格
-                GridBagConstraints.CENTER, GridBagConstraints.NONE,
+                GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                 // 窗格之间的距离
                 new Insets(0, 0, 0, 0),
                 // 增加组件的首选宽度和高度
@@ -72,13 +75,13 @@ public class HistoryLine extends JPanel {
         );
         GridBagConstraints grid4 = new GridBagConstraints(
                 // 第(0,0)个格子
-                3, 0,
+                2, 0,
                 // 占3列,占1行
-                7, 1,
+                1, 1,
                 //横向占100%长度,纵向占100%长度
-                2, 2,
+                100, 2,
                 //居中,组件小的话就两边铺满窗格
-                GridBagConstraints.CENTER, GridBagConstraints.NONE,
+                GridBagConstraints.SOUTHWEST, GridBagConstraints.NONE,
                 // 窗格之间的距离
                 new Insets(0, 0, 0, 0),
                 // 增加组件的首选宽度和高度
@@ -86,29 +89,24 @@ public class HistoryLine extends JPanel {
         );
         GridBagConstraints grid5 = new GridBagConstraints(
                 // 第(0,0)个格子
-                3, 1,
+                2, 1,
                 // 占3列,占1行
-                7, 1,
+                1, 1,
                 //横向占100%长度,纵向占100%长度
-                2, 2,
+                100, 2,
                 //居中,组件小的话就两边铺满窗格
-                GridBagConstraints.CENTER, GridBagConstraints.NONE,
+                GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
                 // 窗格之间的距离
                 new Insets(0, 0, 0, 0),
                 // 增加组件的首选宽度和高度
                 0, 0
         );
 
-        // 图片部分，占据两行
         add(championIcon, grid1);
-
-        // spellIcon1 的 gridy 设为 0
-        grid2.gridy = 0;
         add(spellIcon1, grid2);
-
-        // spellIcon2 的 gridy 设为 1，此处不需要再执行 grid2.gridy += 1;
-        grid2.gridy = 1;
-        add(spellIcon2, grid2);
+        add(spellIcon2, grid3);
+        add(new JLabel("测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1"), grid4);
+        add(new JLabel("测试2测试2测试2测试2测试2测试2测试2测试2测试2测试2测试2"), grid5);
 
 /*        add(item0, grid4);
         add(item1, grid4);
