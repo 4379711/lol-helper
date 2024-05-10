@@ -3,6 +3,7 @@ package yalong.site.frame.panel.client;
 import lombok.extern.slf4j.Slf4j;
 import yalong.site.bo.LeagueClientBO;
 import yalong.site.bo.SkinBO;
+import yalong.site.cache.AppCache;
 import yalong.site.cache.FrameCache;
 import yalong.site.cache.FrameInnerCache;
 import yalong.site.frame.bo.ComponentBO;
@@ -66,15 +67,12 @@ public class CareerBackgroundBox extends BaseComboBox<ItemBO> {
                             FrameInnerCache.careerBackgroundSkinBox.removeItemAt(i);
                         }
                         // 根据所选英雄获取皮肤
-                        LeagueClientBO leagueClientBO = ProcessUtil.getClientProcess();
-                        RequestLcuUtil requestUtil = new RequestLcuUtil(leagueClientBO);
-                        LinkLeagueClientApi api = new LinkLeagueClientApi(requestUtil);
-                        List<SkinBO> skin = api.getSkinByChampionId(FrameCache.careerChampionId);
+                        List<SkinBO> skin = AppCache.api.getSkinByChampionId(FrameCache.careerChampionId);
                         for (SkinBO bo : skin) {
                             FrameInnerCache.careerBackgroundSkinBox.addItem(new ItemBO(String.valueOf(bo.getId()), bo.getName()));
                         }
                     } catch (IOException ex) {
-                        ex.printStackTrace();
+                        log.error("选择生涯背景接口错误", ex);
                     }
                 }
 

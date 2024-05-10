@@ -2,6 +2,7 @@ package yalong.site.frame.panel.client;
 
 import lombok.extern.slf4j.Slf4j;
 import yalong.site.bo.LeagueClientBO;
+import yalong.site.cache.AppCache;
 import yalong.site.cache.FrameCache;
 import yalong.site.cache.FrameInnerCache;
 import yalong.site.frame.bo.ComponentBO;
@@ -59,12 +60,9 @@ public class CareerBackgroundSkinBox extends BaseComboBox<ItemBO> {
                     FrameCache.careerSkinChampionId = Integer.parseInt(item.getValue());
                     try {
                         // 设置生涯背景
-                        LeagueClientBO leagueClientBO = ProcessUtil.getClientProcess();
-                        RequestLcuUtil requestUtil = new RequestLcuUtil(leagueClientBO);
-                        LinkLeagueClientApi api = new LinkLeagueClientApi(requestUtil);
-                        api.setBackgroundSkin(FrameCache.careerSkinChampionId);
+                        AppCache.api.setBackgroundSkin(FrameCache.careerSkinChampionId);
                     }catch (Exception exception){
-                        exception.printStackTrace();
+                        log.error("选择生涯背景接口错误", exception);
                     }
                 }
 
