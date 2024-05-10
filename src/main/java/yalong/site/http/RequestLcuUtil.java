@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import yalong.site.bo.LeagueClientBO;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -117,13 +118,24 @@ public class RequestLcuUtil {
 		this.defaultHeaders = headers;
 	}
 
+	public String callString(Request request) throws IOException {
+		try (Response response = client.newCall(request).execute(); ResponseBody body = response.body()) {
+			return body.string();
+		}
+	}
+
+	public byte[] callStream(Request request) throws IOException {
+		try (Response response = client.newCall(request).execute(); ResponseBody body = response.body()) {
+			return body.bytes();
+		}
+	}
+
 	public String doGet(String endpoint) throws IOException {
 		Request request = new Request.Builder()
 				.url(defaultUrl + endpoint)
 				.get()
 				.build();
-		Response response = client.newCall(request).execute();
-		return response.body().string();
+		return this.callString(request);
 	}
 
 	public String doPut(String endpoint, String bodyStr) throws IOException {
@@ -132,8 +144,7 @@ public class RequestLcuUtil {
 				.url(defaultUrl + endpoint)
 				.put(body)
 				.build();
-		Response response = client.newCall(request).execute();
-		return response.body().string();
+		return this.callString(request);
 	}
 
 	public String doPost(String endpoint, String bodyStr) throws IOException {
@@ -142,8 +153,7 @@ public class RequestLcuUtil {
 				.url(defaultUrl + endpoint)
 				.post(body)
 				.build();
-		Response response = client.newCall(request).execute();
-		return response.body().string();
+		return this.callString(request);
 	}
 
 	public String doPatch(String endpoint, String bodyStr) throws IOException {
@@ -152,15 +162,14 @@ public class RequestLcuUtil {
 				.url(defaultUrl + endpoint)
 				.patch(body)
 				.build();
-		Response response = client.newCall(request).execute();
-		return response.body().string();
+		return this.callString(request);
 	}
 	public InputStream download(String endpoint) throws IOException {
 		Request request = new Request.Builder()
 				.url(defaultUrl + endpoint)
 				.get()
 				.build();
-		Response response = client.newCall(request).execute();
-		return response.body().byteStream();
+		byte[] bytes = this.callStream(request);
+		return new ByteArrayInputStream(bytes);
 	}
 }
