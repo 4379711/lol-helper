@@ -23,7 +23,7 @@ import java.awt.event.ItemListener;
 public class CareerBackgroundSkinBox extends BaseComboBox<ItemBO> {
 
     public CareerBackgroundSkinBox() {
-        this.addItem(new ItemBO(null, "请先选择英雄"));
+        this.addItem(new ItemBO(null, "选择生涯背景皮肤"));
         this.addItemListener(listener());
     }
 
@@ -35,9 +35,9 @@ public class CareerBackgroundSkinBox extends BaseComboBox<ItemBO> {
         FrameInnerCache.careerBackgroundSkinBox = box;
         GridBagConstraints grid = new GridBagConstraints(
                 // 第(1,5)个格子
-                0, 4,
+                1, 4,
                 // 占1列,占1行
-                2, 1,
+                3, 1,
                 //横向占100%长度,纵向占100%长度
                 100, 100,
                 //居中,组件小的话就两边铺满窗格
