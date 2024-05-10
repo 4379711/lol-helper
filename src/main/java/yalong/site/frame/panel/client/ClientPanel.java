@@ -46,6 +46,10 @@ public class ClientPanel extends BasePanel {
 		clientPanel.add(pickBox.getComp(), pickBox.getConstraints());
 		ComponentBO pickSkinBox = PickSkinBox.builder();
 		clientPanel.add(pickSkinBox.getComp(), pickSkinBox.getConstraints());
+		ComponentBO careerBox = CareerBackgroundBox.builder();
+		clientPanel.add(careerBox.getComp(), careerBox.getConstraints());
+		ComponentBO careerSkinBox = CareerBackgroundSkinBox.builder();
+		clientPanel.add(careerSkinBox.getComp(), careerSkinBox.getConstraints());
 		return clientPanel;
 
 	}
