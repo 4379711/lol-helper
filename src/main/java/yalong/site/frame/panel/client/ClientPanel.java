@@ -50,6 +50,12 @@ public class ClientPanel extends BasePanel {
 		clientPanel.add(careerBox.getComp(), careerBox.getConstraints());
 		ComponentBO careerSkinBox = CareerBackgroundSkinBox.builder();
 		clientPanel.add(careerSkinBox.getComp(), careerSkinBox.getConstraints());
+
+		//以下俩是空盒子,为了布局
+		ComponentBO bottomEmpty = BottomEmptyBox.builder();
+		clientPanel.add(bottomEmpty.getComp(), bottomEmpty.getConstraints());
+		ComponentBO rightEmpty = RightEmptyBox.builder();
+		clientPanel.add(rightEmpty.getComp(), rightEmpty.getConstraints());
 		return clientPanel;
 
 	}

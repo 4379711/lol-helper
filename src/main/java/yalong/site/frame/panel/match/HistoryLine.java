@@ -34,7 +34,7 @@ public class HistoryLine extends JPanel {
                 // 占2列,占2行
                 1, 2,
                 //横向占100%长度,纵向占100%长度
-                100, 100,
+                2, 2,
                 //居中,组件小的话就两边铺满窗格
                 GridBagConstraints.CENTER, GridBagConstraints.NONE,
                 // 窗格之间的距离
@@ -48,7 +48,7 @@ public class HistoryLine extends JPanel {
                 // 占3列,占1行
                 1, 1,
                 //横向占100%长度,纵向占100%长度
-                100, 100,
+                2, 2,
                 //居中,组件小的话就两边铺满窗格
                 GridBagConstraints.CENTER, GridBagConstraints.NONE,
                 // 窗格之间的距离
@@ -62,7 +62,7 @@ public class HistoryLine extends JPanel {
                 // 占3列,占1行
                 1, 1,
                 //横向占100%长度,纵向占100%长度
-                100, 100,
+                2, 2,
                 //居中,组件小的话就两边铺满窗格
                 GridBagConstraints.CENTER, GridBagConstraints.NONE,
                 // 窗格之间的距离
@@ -76,7 +76,7 @@ public class HistoryLine extends JPanel {
                 // 占3列,占1行
                 7, 1,
                 //横向占100%长度,纵向占100%长度
-                100, 100,
+                2, 2,
                 //居中,组件小的话就两边铺满窗格
                 GridBagConstraints.CENTER, GridBagConstraints.NONE,
                 // 窗格之间的距离
@@ -90,7 +90,7 @@ public class HistoryLine extends JPanel {
                 // 占3列,占1行
                 7, 1,
                 //横向占100%长度,纵向占100%长度
-                100, 100,
+                2, 2,
                 //居中,组件小的话就两边铺满窗格
                 GridBagConstraints.CENTER, GridBagConstraints.NONE,
                 // 窗格之间的距离
