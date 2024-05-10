@@ -1,6 +1,7 @@
 package yalong.site.cache;
 
 import yalong.site.bo.RankBO;
+import yalong.site.frame.MainFrame;
 
 /**
  * 配置全局属性
@@ -17,10 +18,6 @@ public class FrameCache {
 	public static Integer pickChampionId = null;
 
 	public static Integer banChampionId = null;
-
-	public static Integer careerChampionId = null;
-
-	public static Integer careerSkinChampionId = null;
 
 	public static boolean sendScore = true;
 

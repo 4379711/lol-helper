@@ -9,9 +9,9 @@ import lombok.Data;
  */
 @Data
 public class SummonerInfoBO {
-	private String puuid;
-	private String accountId;
-	private String displayName;
-	private String summonerId;
-	private String summonerLevel;
+    private String puuid;
+    private String accountId;
+    private String displayName;
+    private String summonerId;
+    private String summonerLevel;
 }

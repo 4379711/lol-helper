@@ -11,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import yalong.site.bo.LeagueClientBO;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -154,5 +155,12 @@ public class RequestLcuUtil {
 		Response response = client.newCall(request).execute();
 		return response.body().string();
 	}
-
+	public InputStream download(String endpoint) throws IOException {
+		Request request = new Request.Builder()
+				.url(defaultUrl + endpoint)
+				.get()
+				.build();
+		Response response = client.newCall(request).execute();
+		return response.body().byteStream();
+	}
 }
