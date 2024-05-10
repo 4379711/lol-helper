@@ -61,6 +61,7 @@ public class ClientStarter {
 			for (ChampionBO bo : AppCache.allChampion) {
 				FrameInnerCache.pickBox.addItem(new ItemBO(String.valueOf(bo.getId()), bo.getName()));
 				FrameInnerCache.banBox.addItem(new ItemBO(String.valueOf(bo.getId()), bo.getName()));
+				FrameInnerCache.careerBackgroundBox.addItem(new ItemBO(String.valueOf(bo.getId()), bo.getName()));
 			}
 			log.info("添加到面板下拉框完成");
 		}

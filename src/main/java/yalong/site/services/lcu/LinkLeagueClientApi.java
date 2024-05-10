@@ -114,6 +114,24 @@ public class LinkLeagueClientApi {
 	}
 
 	/**
+	 * 获取某个英雄的所有皮肤id名字
+	 *
+	 * @param championId 英雄id
+	 */
+	public List<SkinBO> getSkinByChampionId(int championId) throws IOException {
+		String resp = requestLcuUtil.doGet("/lol-game-data/assets/v1/champions/" + championId + ".json");
+		ArrayList<SkinBO> arrayList = new ArrayList<>();
+		JSONArray skins = JSON.parseObject(resp).getJSONArray("skins");
+		for (int i = 0; i < skins.size(); i++) {
+			JSONObject jsonObject = skins.getJSONObject(i);
+			Integer id = jsonObject.getInteger("id");
+			String name = jsonObject.getString("name");
+			arrayList.add(new SkinBO(id, name));
+		}
+		return arrayList.stream().distinct().collect(Collectors.toList());
+	}
+
+	/**
 	 * 查询当前选定的英雄所有可用的炫彩皮肤
 	 */
 	public List<SkinBO> getCurrentChampionSkins() throws IOException {
