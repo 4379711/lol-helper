@@ -30,7 +30,7 @@ public class PickSkinBox extends BaseComboBox<ItemBO> {
 		FrameInnerCache.pickSkinBox = box;
 		GridBagConstraints grid = new GridBagConstraints(
 				// 第(0,4)个格子
-				0, 4,
+				0, 5,
 				// 占3列,占1行
 				3, 1,
 				//横向占100%长度,纵向占100%长度

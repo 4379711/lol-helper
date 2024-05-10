@@ -35,7 +35,7 @@ public class CareerBackgroundSkinBox extends BaseComboBox<ItemBO> {
         FrameInnerCache.careerBackgroundSkinBox = box;
         GridBagConstraints grid = new GridBagConstraints(
                 // 第(1,5)个格子
-                1, 5,
+                0, 4,
                 // 占1列,占1行
                 2, 1,
                 //横向占100%长度,纵向占100%长度

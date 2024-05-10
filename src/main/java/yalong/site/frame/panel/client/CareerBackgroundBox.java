@@ -38,9 +38,9 @@ public class CareerBackgroundBox extends BaseComboBox<ItemBO> {
         FrameInnerCache.careerBackgroundBox = box;
         GridBagConstraints grid = new GridBagConstraints(
                 // 第(0,5)个格子
-                0, 5,
+                2, 4,
                 // 占1列,占1行
-                1, 1,
+                2, 1,
                 //横向占100%长度,纵向占100%长度
                 100, 100,
                 //居中,组件小的话就两边铺满窗格
