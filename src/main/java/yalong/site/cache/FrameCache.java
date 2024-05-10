@@ -19,6 +19,10 @@ public class FrameCache {
 
 	public static Integer banChampionId = null;
 
+	public static Integer careerChampionId = null;
+
+	public static Integer careerSkinChampionId = null;
+
 	public static boolean sendScore = true;
 
 	public static boolean communicate = true;
