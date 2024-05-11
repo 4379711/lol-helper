@@ -432,4 +432,13 @@ public class LinkLeagueClientApi {
         return JSON.parseObject(resp, new TypeReference<ArrayList<LOLItemBO>>() {
         });
     }
+
+    /**
+     * 根据英雄名称搜索英雄
+     *
+     * @since 7.3
+     */
+    public List<ChampionBO> getChampionByName(String name){
+        return AppCache.allChampion.stream().toList().stream().filter(e-> e.getName().contains(name)).collect(Collectors.toList());
+    }
 }
