@@ -66,5 +66,5 @@
 - 本项目仅供学习,未经许可,不得用作商业用途,不得用作违法行为!!!
 
 ## 联系
-> 可以微信联系我,请备注来意,我拉你进群交流
-![微信添加好友](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/QR-Code.jpg)
+> 加QQ群,群号882050965,或者用qq扫描下方二维码
+![QQ群](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/QR-Code.jpg)
