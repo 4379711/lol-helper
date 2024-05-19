@@ -12,19 +12,19 @@ import java.util.function.Consumer;
  */
 public class SendMyTeamScoreConsumer implements HotKeyConsumer {
 
-    @Override
-    public Consumer<Integer> build() {
-        return i -> {
-            if (FrameCache.sendScore) {
-                for (String s : GameDataCache.myTeamScore) {
-                    KeyEventUtil.sendMsg("我方" + s);
-                    try {
-                        TimeUnit.MILLISECONDS.sleep(500);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
-        };
-    }
+	@Override
+	public Consumer<Integer> build() {
+		return i -> {
+			if (FrameCache.sendScore) {
+				for (String s : GameDataCache.myTeamScore) {
+					KeyEventUtil.sendMsg("我方" + s);
+					try {
+						TimeUnit.MILLISECONDS.sleep(500);
+					} catch (InterruptedException e) {
+						throw new RuntimeException(e);
+					}
+				}
+			}
+		};
+	}
 }

@@ -11,5 +11,4 @@ public class FrameSetting {
 
 	public static final int IMG_SIZE = 50;
 
-
 }

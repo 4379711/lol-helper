@@ -11,12 +11,12 @@ import java.util.List;
  */
 @Data
 public class SummonerSpellsBO {
-    private Integer id;
-    private String name;
-    private String description;
-    private Integer summonerLevel;
-    private Integer cooldown;
-    private List<String> gameModes;
-    private String iconPath;
+	private Integer id;
+	private String name;
+	private String description;
+	private Integer summonerLevel;
+	private Integer cooldown;
+	private List<String> gameModes;
+	private String iconPath;
 
 }

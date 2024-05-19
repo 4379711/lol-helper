@@ -14,16 +14,16 @@ import java.util.List;
  */
 @Data
 public class GameMatchHistoryBO {
-    private String endOfGameResult;
-    private String gameCreation;
-    private Date gameCreationDate;
-    private String gameDuration;
-    private Long gameId;
-    private String gameVersion;
-    private Integer mapId;
-    private String gameMode;
-    private String gameType;
-    private List<ParticipantIdentities> participantIdentities;
-    private List<Participants> participants;
+	private String endOfGameResult;
+	private String gameCreation;
+	private Date gameCreationDate;
+	private String gameDuration;
+	private Long gameId;
+	private String gameVersion;
+	private Integer mapId;
+	private String gameMode;
+	private String gameType;
+	private List<ParticipantIdentities> participantIdentities;
+	private List<Participants> participants;
 
 }

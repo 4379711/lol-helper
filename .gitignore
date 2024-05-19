@@ -86,3 +86,4 @@ buildNumber.properties
 *.bak
 test/
 words.txt
+hotkey.txt

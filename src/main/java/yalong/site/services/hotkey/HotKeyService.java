@@ -21,6 +21,8 @@ public class HotKeyService {
 
 	public static void start() {
 		new HotKeyService().hook();
+		HotKeyFactory.loadDefaultHotKeys();
+		HotKeyFactory.applyDiyKey();
 	}
 
 	private synchronized void hook() {
@@ -32,7 +34,7 @@ public class HotKeyService {
 			Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
 			logger.setLevel(Level.OFF);
 			logger.setUseParentHandlers(false);
-			if(!GlobalScreen.isNativeHookRegistered()){
+			if (!GlobalScreen.isNativeHookRegistered()) {
 				GlobalScreen.registerNativeHook();
 			}
 		} catch (Exception e) {
@@ -44,7 +46,7 @@ public class HotKeyService {
 		Runtime run = Runtime.getRuntime();
 		run.addShutdownHook(new Thread(() -> {
 			try {
-				if(GlobalScreen.isNativeHookRegistered()){
+				if (GlobalScreen.isNativeHookRegistered()) {
 					GlobalScreen.unregisterNativeHook();
 				}
 			} catch (Exception e) {

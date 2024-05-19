@@ -164,6 +164,7 @@ public class RequestLcuUtil {
 				.build();
 		return this.callString(request);
 	}
+
 	public InputStream download(String endpoint) throws IOException {
 		Request request = new Request.Builder()
 				.url(defaultUrl + endpoint)

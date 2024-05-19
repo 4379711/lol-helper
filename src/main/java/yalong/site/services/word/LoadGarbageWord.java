@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class LoadGarbageWord {
 	private static final String USER_FILE = "words.txt";
 
-	public void loadDefaultFile() {
+	public static void loadDefaultFile() {
 		//读取默认文件到指定路径
 		try {
 			InputStream inputStream = LoadGarbageWord.class.getResourceAsStream("/fuck.txt");
@@ -31,7 +31,7 @@ public class LoadGarbageWord {
 		}
 	}
 
-	public ArrayList<String> loadWord() {
+	public static ArrayList<String> loadWord() {
 		ArrayList<String> strings = new ArrayList<>();
 		//加载到内存
 		try {
@@ -43,7 +43,7 @@ public class LoadGarbageWord {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
 			String line;
 			while ((line = reader.readLine()) != null) {
-				if (line.startsWith("#") || "".equals(line.trim())) {
+				if (line.startsWith("#") || "".equals(line.strip())) {
 					continue;
 				}
 				strings.add(line);

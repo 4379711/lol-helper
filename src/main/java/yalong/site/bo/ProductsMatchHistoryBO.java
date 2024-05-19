@@ -1,6 +1,5 @@
 package yalong.site.bo;
 
-import com.alibaba.fastjson2.annotation.JSONField;
 import lombok.Data;
 import yalong.site.json.Games;
 
@@ -11,6 +10,6 @@ import yalong.site.json.Games;
  */
 @Data
 public class ProductsMatchHistoryBO {
-    private Long accountId;
-    private Games games;
+	private Long accountId;
+	private Games games;
 }

@@ -9,6 +9,6 @@ import lombok.Data;
  */
 @Data
 public class ParticipantIdentities {
-    private Integer participantId;
-    private Player player;
+	private Integer participantId;
+	private Player player;
 }

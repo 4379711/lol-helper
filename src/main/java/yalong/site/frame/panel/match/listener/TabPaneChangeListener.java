@@ -19,24 +19,24 @@ import java.io.IOException;
  * @author WuYi
  */
 public class TabPaneChangeListener implements ChangeListener {
-    @Override
-    public void stateChanged(ChangeEvent e) {
-        Component selectedComponent = ((TabPane) e.getSource()).getSelectedComponent();
-        if (selectedComponent instanceof MatchPanel) {
-            if (FrameInnerCache.frame != null) {
-                FrameInnerCache.frame.setSize(FrameSetting.BIG_WIDTH, FrameSetting.BIG_HEIGHT);
-                try {
-                    ProductsMatchHistoryBO pmh = AppCache.api.getProductsMatchHistoryByPuuid(GameDataCache.me.getPuuid(), 0, 20);
-                    FrameInnerCache.matchPanel.setData(pmh);
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		Component selectedComponent = ((TabPane) e.getSource()).getSelectedComponent();
+		if (selectedComponent instanceof MatchPanel) {
+			if (FrameInnerCache.frame != null) {
+				FrameInnerCache.frame.setSize(FrameSetting.BIG_WIDTH, FrameSetting.BIG_HEIGHT);
+				try {
+					ProductsMatchHistoryBO pmh = AppCache.api.getProductsMatchHistoryByPuuid(GameDataCache.me.getPuuid(), 0, 20);
+					FrameInnerCache.matchPanel.setData(pmh);
+				} catch (IOException ex) {
+					throw new RuntimeException(ex);
+				}
+			}
 
-        } else {
-            if (FrameInnerCache.frame != null) {
-                FrameInnerCache.frame.setSize(FrameSetting.WIDTH, FrameSetting.HEIGHT);
-            }
-        }
-    }
+		} else {
+			if (FrameInnerCache.frame != null) {
+				FrameInnerCache.frame.setSize(FrameSetting.WIDTH, FrameSetting.HEIGHT);
+			}
+		}
+	}
 }
