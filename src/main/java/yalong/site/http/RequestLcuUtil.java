@@ -1,5 +1,6 @@
 package yalong.site.http;
 
+import cn.hutool.core.io.FileUtil;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.Data;
@@ -10,9 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import yalong.site.bo.LeagueClientBO;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -156,21 +155,40 @@ public class RequestLcuUtil {
 		return this.callString(request);
 	}
 
-	public String doPatch(String endpoint, String bodyStr) throws IOException {
-		RequestBody body = RequestBody.create(bodyStr, JSON);
-		Request request = new Request.Builder()
-				.url(defaultUrl + endpoint)
-				.patch(body)
-				.build();
-		return this.callString(request);
-	}
+    public String doPatch(String endpoint, String bodyStr) throws IOException {
+        RequestBody body = RequestBody.create(bodyStr, JSON);
+        Request request = new Request.Builder()
+                .url(defaultUrl + endpoint)
+                .patch(body)
+                .build();
+        return this.callString(request);
+    }
 
-	public InputStream download(String endpoint) throws IOException {
-		Request request = new Request.Builder()
-				.url(defaultUrl + endpoint)
-				.get()
-				.build();
-		byte[] bytes = this.callStream(request);
-		return new ByteArrayInputStream(bytes);
-	}
+    /**
+     * 下载图片资源
+     * 本地没有则按照地址请求后缓存到本地 有则直接去读本地
+     *
+     * @param endpoint 资源请求路径
+     * @return InputStream
+     */
+    public InputStream download(String endpoint) throws IOException {
+        String url;
+        if (endpoint.charAt(0) == '/') {
+            url = endpoint.substring(1);
+        } else {
+            url = endpoint;
+        }
+        boolean exist = FileUtil.exist(new File(url));
+        if (exist) {
+            return new FileInputStream(url);
+        } else {
+            Request request = new Request.Builder()
+                    .url(defaultUrl + endpoint)
+                    .get()
+                    .build();
+            byte[] bytes = this.callStream(request);
+            FileUtil.writeBytes(bytes, new File(url));
+            return new ByteArrayInputStream(bytes);
+        }
+    }
 }
