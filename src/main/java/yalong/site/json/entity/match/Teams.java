@@ -1,9 +1,14 @@
-package yalong.site.json;
+package yalong.site.json.entity.match;
 
 import lombok.Data;
 
 import java.util.List;
 
+/**
+ * 队伍数据
+ *
+ * @author WuYi
+ */
 @Data
 public class Teams {
 	private List<Integer> bans;

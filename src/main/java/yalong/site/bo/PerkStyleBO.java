@@ -3,17 +3,14 @@ package yalong.site.bo;
 import lombok.Data;
 
 /**
- * 天府符文
+ * 符文样式
  *
  * @author WuYi
  */
 @Data
-public class PerkBO {
+public class PerkStyleBO {
     private Integer id;
     private String name;
-    private String shortDesc;
-    private String recommendationDescriptor;
+    private String tooltip;
     private String iconPath;
-    private String[] endOfGameStatDescs;
-
 }

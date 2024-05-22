@@ -38,12 +38,16 @@ public class ClientStarter {
 		AppCache.garbageWordList = LoadGarbageWord.loadWord();
 		log.info("垃圾话加载完成");
 
-		try {
-			AppCache.items = api.getAllItems();
-			AppCache.summonerSpellsList = api.getAllSummonerSpells();
-		} catch (Exception e) {
-			log.error("获取战局记录信息错误");
-		}
+        try {
+            AppCache.perkList = api.getAllPerk();
+            AppCache.itemList = api.getAllItems();
+            AppCache.perkStyleList = api.getAllPerkStyleBO();
+            AppCache.summonerSpellsList = api.getAllSummonerSpells();
+            log.error("获取资源文件成功");
+        } catch (Exception e) {
+            log.error("获取资源文件失败");
+        }
+
 
 		// 缓存登录人的信息
 		try {

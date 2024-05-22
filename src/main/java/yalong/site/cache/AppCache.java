@@ -1,8 +1,6 @@
 package yalong.site.cache;
 
-import yalong.site.bo.ChampionBO;
-import yalong.site.bo.LOLItemBO;
-import yalong.site.bo.SummonerSpellsBO;
+import yalong.site.bo.*;
 import yalong.site.services.lcu.LinkLeagueClientApi;
 
 import java.util.ArrayList;
@@ -23,14 +21,19 @@ public class AppCache {
 
 	/**
 	 * 召唤师技能信息
-	 *
-	 * @since 7.3
 	 */
 	public static ArrayList<SummonerSpellsBO> summonerSpellsList = new ArrayList<>();
 	/**
 	 * 召唤师技能信息
-	 *
-	 * @since 7.3
 	 */
-	public static ArrayList<LOLItemBO> items = new ArrayList<>();
+	public static ArrayList<LOLItemBO> itemList = new ArrayList<>();
+	/**
+	 * 召唤师技能信息
+	 */
+	public static ArrayList<PerkBO> perkList = new ArrayList<>();
+	/**
+	 * 基石符文信息
+	 */
+	public static ArrayList<PerkStyleBO> perkStyleList = new ArrayList<>();
+
 }

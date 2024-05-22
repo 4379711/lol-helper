@@ -1,6 +1,5 @@
 package yalong.site.http;
 
-import cn.hutool.core.io.FileUtil;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.Data;
@@ -171,24 +170,11 @@ public class RequestLcuUtil {
      * @param endpoint 资源请求路径
      * @return InputStream
      */
-    public InputStream download(String endpoint) throws IOException {
-        String url;
-        if (endpoint.charAt(0) == '/') {
-            url = endpoint.substring(1);
-        } else {
-            url = endpoint;
-        }
-        boolean exist = FileUtil.exist(new File(url));
-        if (exist) {
-            return new FileInputStream(url);
-        } else {
-            Request request = new Request.Builder()
-                    .url(defaultUrl + endpoint)
-                    .get()
-                    .build();
-            byte[] bytes = this.callStream(request);
-            FileUtil.writeBytes(bytes, new File(url));
-            return new ByteArrayInputStream(bytes);
-        }
+    public byte[] download(String endpoint) throws IOException {
+        Request request = new Request.Builder()
+                .url(defaultUrl + endpoint)
+                .get()
+                .build();
+        return this.callStream(request);
     }
 }

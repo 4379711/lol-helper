@@ -1,154 +1,334 @@
 package yalong.site.frame.panel.match;
 
-import yalong.site.frame.ui.MyTabbedPaneUI;
+import yalong.site.frame.bo.LocationBO;
+import yalong.site.frame.panel.match.listener.SelectDetailListener;
+import yalong.site.json.entity.match.GameData;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
+/**
+ * 每一行的战绩
+ *
+ * @author WuYi
+ */
 public class HistoryLine extends JPanel {
-	// 创建用于显示图片的JLabel和用于显示文字的JLabel
-	private JLabel championIcon = new JLabel();
-	private JLabel spellIcon1 = new JLabel();
-	private JLabel spellIcon2 = new JLabel();
-	private JLabel item0 = new JLabel();
-	private JLabel item1 = new JLabel();
-	private JLabel item2 = new JLabel();
-	private JLabel item3 = new JLabel();
-	private JLabel item4 = new JLabel();
-	private JLabel item5 = new JLabel();
-	private JLabel item6 = new JLabel();
-	private JLabel textLabel = new JLabel();
+    // 创建用于显示图片的JLabel和用于显示文字的JLabel
+    private static ArrayList<GridBagConstraints> gridList = getGridBagConstraints();
 
-	public HistoryLine() {
-		//设置不可编辑
-		this.setOpaque(false);
-		//设置背景颜色
-		this.setBackground(MyTabbedPaneUI.END_COLOR_SELECT);
-		//设置边框为null
-		this.setBorder(null);
-		//网格布局
-		GridBagLayout layout = new GridBagLayout();
-		this.setLayout(layout);
-		// 使用GridBagLayout布局管理器
-		GridBagConstraints grid1 = new GridBagConstraints(
-				// 第(0,0)个格子
-				0, 0,
-				// 占2列,占2行
-				1, 2,
-				//横向占100%长度,纵向占100%长度
-				2, 2,
-				//居中,组件小的话就两边铺满窗格
-				GridBagConstraints.CENTER, GridBagConstraints.NONE,
-				// 窗格之间的距离
-				new Insets(0, 0, 0, 0),
-				// 增加组件的首选宽度和高度
-				0, 0
-		);
-		GridBagConstraints grid2 = new GridBagConstraints(
-				// 第(0,0)个格子
-				1, 0,
-				// 占3列,占1行
-				1, 1,
-				//横向占100%长度,纵向占100%长度
-				2, 2,
-				//居中,组件小的话就两边铺满窗格
-				GridBagConstraints.SOUTHWEST, GridBagConstraints.NONE,
-				// 窗格之间的距离
-				new Insets(0, 0, 0, 0),
-				// 增加组件的首选宽度和高度
-				0, 0
-		);
-		GridBagConstraints grid3 = new GridBagConstraints(
-				// 第(0,0)个格子
-				1, 1,
-				// 占3列,占1行
-				1, 1,
-				//横向占100%长度,纵向占100%长度
-				2, 2,
-				//居中,组件小的话就两边铺满窗格
-				GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-				// 窗格之间的距离
-				new Insets(0, 0, 0, 0),
-				// 增加组件的首选宽度和高度
-				0, 0
-		);
-		GridBagConstraints grid4 = new GridBagConstraints(
-				// 第(0,0)个格子
-				2, 0,
-				// 占3列,占1行
-				1, 1,
-				//横向占100%长度,纵向占100%长度
-				100, 2,
-				//居中,组件小的话就两边铺满窗格
-				GridBagConstraints.SOUTHWEST, GridBagConstraints.NONE,
-				// 窗格之间的距离
-				new Insets(0, 0, 0, 0),
-				// 增加组件的首选宽度和高度
-				0, 0
-		);
-		GridBagConstraints grid5 = new GridBagConstraints(
-				// 第(0,0)个格子
-				2, 1,
-				// 占3列,占1行
-				1, 1,
-				//横向占100%长度,纵向占100%长度
-				100, 2,
-				//居中,组件小的话就两边铺满窗格
-				GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
-				// 窗格之间的距离
-				new Insets(0, 0, 0, 0),
-				// 增加组件的首选宽度和高度
-				0, 0
-		);
+    public HistoryLine(List<LocationBO> list, Color color, Long gameId) {
 
-		add(championIcon, grid1);
-		add(spellIcon1, grid2);
-		add(spellIcon2, grid3);
-		add(new JLabel("测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1测试1"), grid4);
-		add(new JLabel("测试2测试2测试2测试2测试2测试2测试2测试2测试2测试2测试2"), grid5);
+        //设置不可编辑
+        this.setOpaque(true);
+        //设置背景颜色
+        this.setBackground(color);
+        //设置边框为黑色，宽度为5，圆角
+        this.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2, true));
+        //网格布局
+        GridBagLayout layout = new GridBagLayout();
+        this.setLayout(layout);
+        // 使用GridBagLayout布局管理器
+        for (LocationBO locationBO : list) {
+            add(locationBO.getJLabel(), locationBO.getGrid());
+        }
+        this.addMouseListener(new SelectDetailListener(gameId));
+    }
 
-/*        add(item0, grid4);
-        add(item1, grid4);
-        add(item2, grid4);
-        add(item3, grid4);
-        add(item4, grid4);
-        add(item5, grid4);
-        add(item6, grid4);
+    public static HistoryLine builder(ArrayList<Object> objects, Color color, Long gameId) {
+        List<LocationBO> list = new ArrayList<>();
+        for (int i = 0; i < objects.size(); i++) {
+            LocationBO locationBO = new LocationBO();
+            locationBO.setJLabel(getJLabel(objects.get(i)));
+            locationBO.setGrid(gridList.get(i));
+            list.add(locationBO);
+        }
 
-        add(new JLabel("测试"), grid5);
-        add(new JLabel("测试"), grid5);
-        add(new JLabel("测试"), grid5);
-        add(new JLabel("测试"), grid5);
-        add(new JLabel("测试"), grid5);
-        add(new JLabel("测试"), grid5);
-        add(new JLabel("测试"), grid5);*/
+        return new HistoryLine(list, color, gameId);
+    }
 
-	}
+    private static JLabel getJLabel(Object obj) {
+        JLabel jLabel = new JLabel();
+        if (obj instanceof ImageIcon) {
+            jLabel.setIcon((ImageIcon) obj);
+        } else if (obj instanceof String) {
+            jLabel.setText((String) obj);
+        }
+        return jLabel;
+    }
 
-	public void setImageIcons(ImageIcon championIcon, ArrayList<ImageIcon> spell) {
-		this.championIcon.setIcon(championIcon);
-		this.spellIcon1.setIcon(spell.get(0));
-		this.spellIcon2.setIcon(spell.get(1));
-	}
+    /**
+     * 每个组件的布局 需要与{@link MatchPanel#createMatchHistoryBO(GameData)}方法对应
+     */
+    private static ArrayList<GridBagConstraints> getGridBagConstraints() {
+        ArrayList<GridBagConstraints> arrayList = new ArrayList<>();
+        //第一行
+        arrayList.add(new GridBagConstraints(
+                // 第(0,0)个格子
+                0, 0,
+                // 占2列,占2行
+                2, 1,
+                //横向占100%长度,纵向占100%长度
+                0, 0,
+                //居中,组件小的话就两边铺满窗格
+                GridBagConstraints.WEST, GridBagConstraints.WEST,
+                // 窗格之间的距离
+                new Insets(0, 10, 0, 10),
+                // 增加组件的首选宽度和高度
+                0, 0
+        ));
+        //英雄头像
+        arrayList.add(new GridBagConstraints(
+                // 第(0,0)个格子
+                2, 0,
+                // 占2列,占2行
+                2, 2,
+                //横向占100%长度,纵向占100%长度
+                0, 0,
+                //居中,组件小的话就两边铺满窗格
+                GridBagConstraints.WEST, GridBagConstraints.NONE,
+                // 窗格之间的距离
+                new Insets(0, 10, 0, 10),
+                // 增加组件的首选宽度和高度
+                0, 0
+        ));
+        //召唤师技能
+        arrayList.add(new GridBagConstraints(
+                // 第(0,0)个格子
+                4, 0,
+                // 占2列,占2行
+                1, 1,
+                //横向占100%长度,纵向占100%长度
+                0, 0,
+                //居中,组件小的话就两边铺满窗格
+                GridBagConstraints.WEST, GridBagConstraints.NONE,
+                // 窗格之间的距离
+                new Insets(0, 1, 0, 1),
+                // 增加组件的首选宽度和高度
+                0, 0
+        ));
+        //基石符文
+        arrayList.add(new GridBagConstraints(
+                // 第(0,0)个格子
+                5, 0,
+                // 占2列,占2行
+                1, 1,
+                //横向占100%长度,纵向占100%长度
+                0, 0,
+                //居中,组件小的话就两边铺满窗格
+                GridBagConstraints.WEST, GridBagConstraints.NONE,
+                // 窗格之间的距离
+                new Insets(0, 1, 0, 1),
+                // 增加组件的首选宽度和高度
+                0, 0
+        ));
+        //KDA
+        arrayList.add(new GridBagConstraints(
+                // 第(0,0)个格子
+                6, 0,
+                // 占2列,占2行
+                4, 1,
+                //横向占100%长度,纵向占100%长度
+                0, 0,
+                //居中,组件小的话就两边铺满窗格
+                GridBagConstraints.WEST, GridBagConstraints.NONE,
+                // 窗格之间的距离
+                new Insets(0, 5, 0, 5),
+                // 增加组件的首选宽度和高度
+                0, 0
+        ));
 
-	public void setText(String text) {
-		textLabel.setText(text);
-	}
+        arrayList.add(new GridBagConstraints(
+                // 第(0,0)个格子
+                9, 0,
+                // 占2列,占2行
+                4, 1,
+                //横向占100%长度,纵向占100%长度
+                0, 0,
+                //居中,组件小的话就两边铺满窗格
+                GridBagConstraints.WEST, GridBagConstraints.NONE,
+                // 窗格之间的距离
+                new Insets(0, 20, 0, 20),
+                // 增加组件的首选宽度和高度
+                0, 0
+        ));
 
-	@Override
-	public Dimension getMaximumSize() {
-		Dimension pref = getPreferredSize();
-		return new Dimension(Integer.MAX_VALUE, pref.height);
-	}
+        arrayList.add(new GridBagConstraints(
+                // 第(0,0)个格子
+                13, 0,
+                // 占2列,占2行
+                2, 2,
+                //横向占100%长度,纵向占100%长度
+                0, 0,
+                //居中,组件小的话就两边铺满窗格
+                GridBagConstraints.WEST, GridBagConstraints.NONE,
+                // 窗格之间的距离
+                new Insets(0, 20, 0, 20),
+                // 增加组件的首选宽度和高度
+                0, 0
+        ));
+        arrayList.add(new GridBagConstraints(
+                // 第(0,0)个格子
+                15, 0,
+                // 占2列,占2行
+                3, 2,
+                //横向占100%长度,纵向占100%长度
+                100, 0,
+                //居中,组件小的话就两边铺满窗格
+                GridBagConstraints.WEST, GridBagConstraints.NONE,
+                // 窗格之间的距离
+                new Insets(0, 20, 0, 5),
+                // 增加组件的首选宽度和高度
+                0, 0
+        ));
 
-	public void setItemIcons(ArrayList<ImageIcon> itemsIcon) {
-		this.item0.setIcon(itemsIcon.get(0));
-		this.item1.setIcon(itemsIcon.get(1));
-		this.item2.setIcon(itemsIcon.get(2));
-		this.item3.setIcon(itemsIcon.get(3));
-		this.item4.setIcon(itemsIcon.get(4));
-		this.item5.setIcon(itemsIcon.get(5));
-		this.item6.setIcon(itemsIcon.get(6));
-	}
+        //第二行
+        arrayList.add(new GridBagConstraints(
+                // 第(0,0)个格子
+                0, 1,
+                // 占2列,占2行
+                2, 1,
+                //横向占100%长度,纵向占100%长度
+                0, 0,
+                //居中,组件小的话就两边铺满窗格
+                GridBagConstraints.WEST, GridBagConstraints.WEST,
+                // 窗格之间的距离
+                new Insets(0, 10, 0, 10),
+                // 增加组件的首选宽度和高度
+                0, 0
+        ));
+        //技能
+        arrayList.add(new GridBagConstraints(
+                // 第(0,0)个格子
+                4, 1,
+                // 占2列,占2行
+                1, 1,
+                //横向占100%长度,纵向占100%长度
+                0, 0,
+                //居中,组件小的话就两边铺满窗格
+                GridBagConstraints.WEST, GridBagConstraints.NONE,
+                // 窗格之间的距离
+                new Insets(0, 1, 0, 1),
+                // 增加组件的首选宽度和高度
+                0, 0
+        ));
+        //天赋
+        arrayList.add(new GridBagConstraints(
+                // 第(0,0)个格子
+                5, 1,
+                // 占2列,占2行
+                1, 1,
+                //横向占100%长度,纵向占100%长度
+                0, 0,
+                //居中,组件小的话就两边铺满窗格
+                GridBagConstraints.WEST, GridBagConstraints.NONE,
+                // 窗格之间的距离
+                new Insets(0, 1, 0, 1),
+                // 增加组件的首选宽度和高度
+                0, 0
+        ));
+
+        //装备
+        arrayList.add(new GridBagConstraints(
+                // 第(0,0)个格子
+                6, 1,
+                // 占2列,占2行
+                1, 1,
+                //横向占100%长度,纵向占100%长度
+                0, 0,
+                //居中,组件小的话就两边铺满窗格
+                GridBagConstraints.WEST, GridBagConstraints.NONE,
+                // 窗格之间的距离
+                new Insets(5, 10, 5, 5),
+                // 增加组件的首选宽度和高度
+                0, 0
+        ));
+        arrayList.add(new GridBagConstraints(
+                // 第(0,0)个格子
+                7, 1,
+                // 占2列,占2行
+                1, 1,
+                //横向占100%长度,纵向占100%长度
+                0, 0,
+                //居中,组件小的话就两边铺满窗格
+                GridBagConstraints.WEST, GridBagConstraints.NONE,
+                // 窗格之间的距离
+                new Insets(0, 3, 0, 3),
+                // 增加组件的首选宽度和高度
+                0, 0
+        ));
+        arrayList.add(new GridBagConstraints(
+                // 第(0,0)个格子
+                8, 1,
+                // 占2列,占2行
+                1, 1,
+                //横向占100%长度,纵向占100%长度
+                0, 0,
+                //居中,组件小的话就两边铺满窗格
+                GridBagConstraints.WEST, GridBagConstraints.NONE,
+                // 窗格之间的距离
+                new Insets(0, 3, 0, 3),
+                // 增加组件的首选宽度和高度
+                0, 0
+        ));
+        arrayList.add(new GridBagConstraints(
+                // 第(0,0)个格子
+                9, 1,
+                // 占2列,占2行
+                1, 1,
+                //横向占100%长度,纵向占100%长度
+                0, 0,
+                //居中,组件小的话就两边铺满窗格
+                GridBagConstraints.WEST, GridBagConstraints.NONE,
+                // 窗格之间的距离
+                new Insets(0, 3, 0, 3),
+                // 增加组件的首选宽度和高度
+                0, 0
+        ));
+        arrayList.add(new GridBagConstraints(
+                // 第(0,0)个格子
+                10, 1,
+                // 占2列,占2行
+                1, 1,
+                //横向占100%长度,纵向占100%长度
+                0, 0,
+                //居中,组件小的话就两边铺满窗格
+                GridBagConstraints.WEST, GridBagConstraints.NONE,
+                // 窗格之间的距离
+                new Insets(0, 3, 0, 3),
+                // 增加组件的首选宽度和高度
+                0, 0
+        ));
+        arrayList.add(new GridBagConstraints(
+                // 第(0,0)个格子
+                11, 1,
+                // 占2列,占2行
+                1, 1,
+                //横向占100%长度,纵向占100%长度
+                0, 0,
+                //居中,组件小的话就两边铺满窗格
+                GridBagConstraints.WEST, GridBagConstraints.NONE,
+                // 窗格之间的距离
+                new Insets(0, 3, 0, 3),
+                // 增加组件的首选宽度和高度
+                0, 0
+        ));
+        arrayList.add(new GridBagConstraints(
+                // 第(0,0)个格子
+                12, 1,
+                // 占2列,占2行
+                1, 1,
+                //横向占100%长度,纵向占100%长度
+                0, 0,
+                //居中,组件小的话就两边铺满窗格
+                GridBagConstraints.WEST, GridBagConstraints.NONE,
+                // 窗格之间的距离
+                new Insets(0, 3, 0, 3),
+                // 增加组件的首选宽度和高度
+                0, 0
+        ));
+        return arrayList;
+    }
+
 }

@@ -1,12 +1,13 @@
-package yalong.site.json;
+package yalong.site.json.entity.match;
 
 import lombok.Data;
-import yalong.site.json.entity.match.ParticipantIdentities;
-import yalong.site.json.entity.match.Participants;
 
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 单局的比赛记录
+ */
 @Data
 public class GameData {
 	private String endOfGameResult;

@@ -1,7 +1,7 @@
 package yalong.site.bo;
 
 import lombok.Data;
-import yalong.site.json.Games;
+import yalong.site.json.entity.match.Games;
 
 /**
  * 单个玩家的战绩
