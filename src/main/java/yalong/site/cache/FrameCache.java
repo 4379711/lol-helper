@@ -15,6 +15,10 @@ public class FrameCache {
 
 	public static boolean autoPlayAgain = false;
 
+	public static boolean autoChampion = false;
+
+	public static String autoChampionName = null;
+
 	public static Integer pickChampionId = null;
 
 	public static Integer banChampionId = null;
