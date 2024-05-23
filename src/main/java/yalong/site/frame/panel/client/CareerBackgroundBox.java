@@ -1,8 +1,6 @@
 package yalong.site.frame.panel.client;
 
-import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
-import yalong.site.bo.ChampionBO;
 import yalong.site.bo.SkinBO;
 import yalong.site.cache.AppCache;
 import yalong.site.cache.FrameCache;
@@ -11,14 +9,10 @@ import yalong.site.frame.bo.ComponentBO;
 import yalong.site.frame.bo.ItemBO;
 import yalong.site.frame.panel.base.BaseComboBox;
 
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author chengshuangxiong
@@ -28,10 +22,8 @@ public class CareerBackgroundBox extends BaseComboBox<ItemBO> {
 
     public CareerBackgroundBox() {
         this.addItem(new ItemBO(null, "选择生涯背景英雄"));
-        this.setEditable(true);
+        this.setEditable(false);
         this.addItemListener(listener());
-        JTextField editorComponent = (JTextField) this.getEditor().getEditorComponent();
-        editorComponent.getDocument().addDocumentListener(documentListener());
     }
 
     /**
@@ -84,52 +76,4 @@ public class CareerBackgroundBox extends BaseComboBox<ItemBO> {
         };
     }
 
-    private DocumentListener documentListener(){
-        CareerBackgroundBox box = this;
-        return new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                // 当文档内容增加时触发
-                // 获取当前弹框的内容
-                String name = box.getEditor().getItem().toString();
-                searchChampion(name);
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                // 当文档内容减少时触发
-                // 获取当前弹框的内容
-                String name = box.getEditor().getItem().toString();
-                searchChampion(name);
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                // 一般不触发，除非使用 StyledDocument
-            }
-        };
-    }
-
-    private void searchChampion(String name){
-        // 确保 UI 更新不会立即触发新的文档事件
-        SwingUtilities.invokeLater(() -> {
-            if("选择生涯背景英雄".contains(name)){
-                return;
-            }
-            // 先清空所有英雄
-            FrameInnerCache.careerBackgroundBox.removeAllItems();
-            if (!StrUtil.isBlank(name)){
-                // 搜索英雄
-                for (ChampionBO bo : AppCache.api.getChampionByName(name)) {
-                    FrameCache.autoChampion = true;
-                    FrameInnerCache.careerBackgroundBox.addItem(new ItemBO(String.valueOf(bo.getId()), bo.getName()));
-                }
-                FrameInnerCache.careerBackgroundBox.setPopupVisible(true);
-            }else {
-                for (ChampionBO bo : AppCache.allChampion) {
-                    FrameInnerCache.careerBackgroundBox.addItem(new ItemBO(String.valueOf(bo.getId()), bo.getName()));
-                }
-            }
-        });
-    }
 }
