@@ -15,29 +15,18 @@ import java.awt.event.KeyEvent;
  */
 @Slf4j
 public class KeyEventUtil {
-	public static final Robot ROBOT;
-	private static final User32 USER32 = User32.INSTANCE;
 	private static final int KEY_DELAY = 100;
 
-	static {
-		try {
-			ROBOT = new Robot();
-		} catch (AWTException e) {
-			log.error("注册Robot失败", e);
-			throw new RuntimeException(e);
-		}
-	}
-
 	public static void sendMsg(String s) {
-		ROBOT.keyPress(KeyEvent.VK_ENTER);
-		ROBOT.delay(KEY_DELAY);
-		ROBOT.keyRelease(KeyEvent.VK_ENTER);
-		ROBOT.delay(KEY_DELAY);
+		RobotUtil.ROBOT.keyPress(KeyEvent.VK_ENTER);
+		RobotUtil.ROBOT.delay(KEY_DELAY);
+		RobotUtil.ROBOT.keyRelease(KeyEvent.VK_ENTER);
+		RobotUtil.ROBOT.delay(KEY_DELAY);
 		KeyEventUtil.sendString(s);
-		ROBOT.keyPress(KeyEvent.VK_ENTER);
-		ROBOT.delay(KEY_DELAY);
-		ROBOT.keyRelease(KeyEvent.VK_ENTER);
-		ROBOT.delay(KEY_DELAY);
+		RobotUtil.ROBOT.keyPress(KeyEvent.VK_ENTER);
+		RobotUtil.ROBOT.delay(KEY_DELAY);
+		RobotUtil.ROBOT.keyRelease(KeyEvent.VK_ENTER);
+		RobotUtil.ROBOT.delay(KEY_DELAY);
 	}
 
 	/**
@@ -48,12 +37,12 @@ public class KeyEventUtil {
 	 * @return 进程的pid
 	 */
 	public static int findPid(String lpClassName, String lpWindowName) {
-		WinDef.HWND hwnd = USER32.FindWindow(lpClassName, lpWindowName);
+		WinDef.HWND hwnd = User32.INSTANCE.FindWindow(lpClassName, lpWindowName);
 		if (hwnd == null) {
 			throw new RuntimeException("未找到窗口");
 		}
 		IntByReference pidRef = new IntByReference();
-		USER32.GetWindowThreadProcessId(hwnd, pidRef);
+		User32.INSTANCE.GetWindowThreadProcessId(hwnd, pidRef);
 		return pidRef.getValue();
 	}
 
@@ -74,7 +63,7 @@ public class KeyEventUtil {
 		ip.input.ki.wScan = new WinDef.WORD(0);
 		ip.input.ki.wVk = new WinDef.WORD(keyCode);
 		ip.input.ki.dwFlags = new WinDef.DWORD(0);
-		USER32.SendInput(new WinDef.DWORD(1), new WinUser.INPUT[]{ip}, ip.size());
+		User32.INSTANCE.SendInput(new WinDef.DWORD(1), new WinUser.INPUT[]{ip}, ip.size());
 	}
 
 	/**
@@ -85,7 +74,7 @@ public class KeyEventUtil {
 		ip.input.ki.wScan = new WinDef.WORD(0);
 		ip.input.ki.wVk = new WinDef.WORD(keyCode);
 		ip.input.ki.dwFlags = new WinDef.DWORD(2);
-		USER32.SendInput(new WinDef.DWORD(1), new WinUser.INPUT[]{ip}, ip.size());
+		User32.INSTANCE.SendInput(new WinDef.DWORD(1), new WinUser.INPUT[]{ip}, ip.size());
 	}
 
 	/**
@@ -131,7 +120,7 @@ public class KeyEventUtil {
 
 		Pointer pointer = copyDataStruct.getPointer();
 		long peer = Pointer.nativeValue(pointer);
-		USER32.SendMessage(hWnd, WinUser.WM_COPYDATA, new WinDef.WPARAM(0), new WinDef.LPARAM(peer));
+		User32.INSTANCE.SendMessage(hWnd, WinUser.WM_COPYDATA, new WinDef.WPARAM(0), new WinDef.LPARAM(peer));
 		// 手动释放内存
 		Native.free(meer);
 		Native.free(peer);
@@ -160,7 +149,7 @@ public class KeyEventUtil {
 			inputs[1].input.ki.wScan = new WinDef.WORD(aChar);
 			inputs[1].input.ki.wVk = new WinDef.WORD(0);
 			inputs[1].input.ki.dwFlags = new WinDef.DWORD(WinUser.KEYBDINPUT.KEYEVENTF_KEYUP | WinUser.KEYBDINPUT.KEYEVENTF_UNICODE);
-			USER32.SendInput(new WinDef.DWORD(2), inputs, inputs[0].size());
+			User32.INSTANCE.SendInput(new WinDef.DWORD(2), inputs, inputs[0].size());
 		}
 
 	}

@@ -10,7 +10,7 @@ import yalong.site.bo.RankBO;
 public class FrameCache {
 	public static boolean autoAccept = true;
 
-	public static boolean autoReconnect = true;
+	public static boolean autoReconnect = false;
 
 	public static boolean autoPlayAgain = false;
 
@@ -26,7 +26,7 @@ public class FrameCache {
 
 	public static boolean communicate = true;
 
-	public static boolean moyan = false;
+	public static boolean autoKey = false;
 
 	public static RankBO currentRankBO = new RankBO("RANKED_SOLO_5x5", "UNRANKED", "I");
 

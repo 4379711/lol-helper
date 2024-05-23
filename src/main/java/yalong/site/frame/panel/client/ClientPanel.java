@@ -36,7 +36,7 @@ public class ClientPanel extends BasePanel {
 		clientPanel.add(gameStatusBox.getComp(), gameStatusBox.getConstraints());
 		ComponentBO leaveBox = CommunicateCheckBox.builder();
 		clientPanel.add(leaveBox.getComp(), leaveBox.getConstraints());
-		ComponentBO moyanBox = MoyanCheckBox.builder();
+		ComponentBO moyanBox = AutoKeyCheckBox.builder();
 		clientPanel.add(moyanBox.getComp(), moyanBox.getConstraints());
 		ComponentBO playAgainBox = AutoPlayAgainCheckBox.builder();
 		clientPanel.add(playAgainBox.getComp(), playAgainBox.getConstraints());
@@ -50,6 +50,12 @@ public class ClientPanel extends BasePanel {
 		clientPanel.add(careerBox.getComp(), careerBox.getConstraints());
 		ComponentBO careerSkinBox = CareerBackgroundSkinBox.builder();
 		clientPanel.add(careerSkinBox.getComp(), careerSkinBox.getConstraints());
+
+		//以下俩是空盒子,为了布局
+		ComponentBO bottomEmpty = BottomEmptyBox.builder();
+		clientPanel.add(bottomEmpty.getComp(), bottomEmpty.getConstraints());
+		ComponentBO rightEmpty = RightEmptyBox.builder();
+		clientPanel.add(rightEmpty.getComp(), rightEmpty.getConstraints());
 		return clientPanel;
 
 	}

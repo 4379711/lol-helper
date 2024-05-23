@@ -19,13 +19,6 @@ public class SendScoreCheckBox extends BaseCheckBox {
 		this.setText("发送战绩");
 		this.setSelected(FrameCache.sendScore);
 		this.addItemListener(listener());
-		this.addActionListener(i -> {
-			SendScoreCheckBox source = (SendScoreCheckBox) i.getSource();
-			//选中状态下弹框提示
-			if (source.getSelectedObjects() != null) {
-				JOptionPane.showMessageDialog(null, "按F2发送战绩");
-			}
-		});
 	}
 
 	/**
@@ -39,7 +32,7 @@ public class SendScoreCheckBox extends BaseCheckBox {
 				// 占1列,占1行
 				1, 1,
 				//横向占100%长度,纵向占100%长度
-				100, 100,
+				2, 2,
 				//居中,组件小的话就两边铺满窗格
 				GridBagConstraints.CENTER, GridBagConstraints.NONE,
 				// 窗格之间的距离

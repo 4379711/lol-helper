@@ -30,11 +30,11 @@ public class PickSkinBox extends BaseComboBox<ItemBO> {
 		FrameInnerCache.pickSkinBox = box;
 		GridBagConstraints grid = new GridBagConstraints(
 				// 第(0,4)个格子
-				0, 4,
+				2, 4,
 				// 占3列,占1行
-				3, 1,
+				1, 1,
 				//横向占100%长度,纵向占100%长度
-				100, 100,
+				2, 2,
 				//居中,组件小的话就两边铺满窗格
 				GridBagConstraints.CENTER, GridBagConstraints.NONE,
 				// 窗格之间的距离
@@ -52,7 +52,7 @@ public class PickSkinBox extends BaseComboBox<ItemBO> {
 				if (item.getValue() == null) {
 					GameDataCache.skinId = null;
 				} else {
-					GameDataCache.skinId  = Integer.parseInt(item.getValue());
+					GameDataCache.skinId = Integer.parseInt(item.getValue());
 				}
 
 			}

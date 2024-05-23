@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import yalong.site.bo.LeagueClientBO;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -116,13 +116,24 @@ public class RequestLcuUtil {
 		this.defaultHeaders = headers;
 	}
 
+	public String callString(Request request) throws IOException {
+		try (Response response = client.newCall(request).execute(); ResponseBody body = response.body()) {
+			return body.string();
+		}
+	}
+
+	public byte[] callStream(Request request) throws IOException {
+		try (Response response = client.newCall(request).execute(); ResponseBody body = response.body()) {
+			return body.bytes();
+		}
+	}
+
 	public String doGet(String endpoint) throws IOException {
 		Request request = new Request.Builder()
 				.url(defaultUrl + endpoint)
 				.get()
 				.build();
-		Response response = client.newCall(request).execute();
-		return response.body().string();
+		return this.callString(request);
 	}
 
 	public String doPut(String endpoint, String bodyStr) throws IOException {
@@ -131,8 +142,7 @@ public class RequestLcuUtil {
 				.url(defaultUrl + endpoint)
 				.put(body)
 				.build();
-		Response response = client.newCall(request).execute();
-		return response.body().string();
+		return this.callString(request);
 	}
 
 	public String doPost(String endpoint, String bodyStr) throws IOException {
@@ -141,18 +151,30 @@ public class RequestLcuUtil {
 				.url(defaultUrl + endpoint)
 				.post(body)
 				.build();
-		Response response = client.newCall(request).execute();
-		return response.body().string();
+		return this.callString(request);
 	}
 
-	public String doPatch(String endpoint, String bodyStr) throws IOException {
-		RequestBody body = RequestBody.create(bodyStr, JSON);
-		Request request = new Request.Builder()
-				.url(defaultUrl + endpoint)
-				.patch(body)
-				.build();
-		Response response = client.newCall(request).execute();
-		return response.body().string();
-	}
+    public String doPatch(String endpoint, String bodyStr) throws IOException {
+        RequestBody body = RequestBody.create(bodyStr, JSON);
+        Request request = new Request.Builder()
+                .url(defaultUrl + endpoint)
+                .patch(body)
+                .build();
+        return this.callString(request);
+    }
 
+    /**
+     * 下载图片资源
+     * 本地没有则按照地址请求后缓存到本地 有则直接去读本地
+     *
+     * @param endpoint 资源请求路径
+     * @return InputStream
+     */
+    public byte[] download(String endpoint) throws IOException {
+        Request request = new Request.Builder()
+                .url(defaultUrl + endpoint)
+                .get()
+                .build();
+        return this.callStream(request);
+    }
 }

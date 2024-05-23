@@ -13,7 +13,7 @@ public class CaiHongPiConsumer implements HotKeyConsumer {
 	@Override
 	public Consumer<Integer> build() {
 		return i -> {
-			if(FrameCache.communicate){
+			if (FrameCache.communicate) {
 				String s = RequestCaihongpiWord.requestCaiHongPiText();
 				if (s != null && !"".equals(s)) {
 					KeyEventUtil.sendMsg(s);

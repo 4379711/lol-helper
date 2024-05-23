@@ -1,6 +1,7 @@
 package yalong.site.http;
 
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
 
@@ -40,6 +41,7 @@ public class HttpClient {
 				.hostnameVerifier(getHostnameVerifier())
 				.retryOnConnectionFailure(Boolean.TRUE)
 				.connectTimeout(30, TimeUnit.SECONDS)
+				.connectionPool(new ConnectionPool(10, 10, TimeUnit.SECONDS))
 				.readTimeout(30, TimeUnit.SECONDS)
 				.writeTimeout(30, TimeUnit.SECONDS)
 				.protocols(Arrays.asList(Protocol.HTTP_1_1, Protocol.HTTP_2))

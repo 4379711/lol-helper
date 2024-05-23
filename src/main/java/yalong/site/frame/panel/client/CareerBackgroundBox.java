@@ -1,20 +1,16 @@
 package yalong.site.frame.panel.client;
 
 import lombok.extern.slf4j.Slf4j;
-import yalong.site.bo.LeagueClientBO;
 import yalong.site.bo.SkinBO;
+import yalong.site.cache.AppCache;
 import yalong.site.cache.FrameCache;
 import yalong.site.cache.FrameInnerCache;
 import yalong.site.frame.bo.ComponentBO;
 import yalong.site.frame.bo.ItemBO;
 import yalong.site.frame.panel.base.BaseComboBox;
-import yalong.site.http.RequestLcuUtil;
-import yalong.site.services.lcu.LinkLeagueClientApi;
-import yalong.site.utils.ProcessUtil;
 
 import java.awt.*;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.*;
 import java.io.IOException;
 import java.util.List;
 
@@ -25,7 +21,8 @@ import java.util.List;
 public class CareerBackgroundBox extends BaseComboBox<ItemBO> {
 
     public CareerBackgroundBox() {
-        this.addItem(new ItemBO(null, "选择生涯背景"));
+        this.addItem(new ItemBO(null, "选择生涯背景英雄"));
+        this.setEditable(false);
         this.addItemListener(listener());
     }
 
@@ -37,11 +34,11 @@ public class CareerBackgroundBox extends BaseComboBox<ItemBO> {
         FrameInnerCache.careerBackgroundBox = box;
         GridBagConstraints grid = new GridBagConstraints(
                 // 第(0,5)个格子
-                0, 5,
+                0, 4,
                 // 占1列,占1行
                 1, 1,
                 //横向占100%长度,纵向占100%长度
-                100, 100,
+                2, 2,
                 //居中,组件小的话就两边铺满窗格
                 GridBagConstraints.CENTER, GridBagConstraints.NONE,
                 // 窗格之间的距离
@@ -66,15 +63,12 @@ public class CareerBackgroundBox extends BaseComboBox<ItemBO> {
                             FrameInnerCache.careerBackgroundSkinBox.removeItemAt(i);
                         }
                         // 根据所选英雄获取皮肤
-                        LeagueClientBO leagueClientBO = ProcessUtil.getClientProcess();
-                        RequestLcuUtil requestUtil = new RequestLcuUtil(leagueClientBO);
-                        LinkLeagueClientApi api = new LinkLeagueClientApi(requestUtil);
-                        List<SkinBO> skin = api.getSkinByChampionId(FrameCache.careerChampionId);
+                        List<SkinBO> skin = AppCache.api.getSkinByChampionId(FrameCache.careerChampionId);
                         for (SkinBO bo : skin) {
                             FrameInnerCache.careerBackgroundSkinBox.addItem(new ItemBO(String.valueOf(bo.getId()), bo.getName()));
                         }
                     } catch (IOException ex) {
-                        ex.printStackTrace();
+                        log.error("选择生涯背景接口错误", ex);
                     }
                 }
 

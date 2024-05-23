@@ -28,9 +28,9 @@ public class ChampSelectStrategy implements GameStatusStrategy {
 	}
 
 	private void setSkin() throws IOException {
-		if(CollectionUtil.isEmpty(GameDataCache.currentChampionSkins)){
+		if (CollectionUtil.isEmpty(GameDataCache.currentChampionSkins)) {
 			List<SkinBO> currentChampionSkins = api.getCurrentChampionSkins();
-			if(CollectionUtil.isEmpty(currentChampionSkins)){
+			if (CollectionUtil.isEmpty(currentChampionSkins)) {
 				return;
 			}
 			GameDataCache.currentChampionSkins = currentChampionSkins;
@@ -38,7 +38,7 @@ public class ChampSelectStrategy implements GameStatusStrategy {
 				FrameInnerCache.pickSkinBox.addItem(new ItemBO(String.valueOf(bo.getId()), bo.getName()));
 			}
 		}
-		if(GameDataCache.skinId!=null){
+		if (GameDataCache.skinId != null) {
 			api.setCurrentChampionSkins(GameDataCache.skinId);
 			//设置皮肤完成后,清空缓存
 			GameDataCache.resetPickSkinBoxData();
@@ -47,7 +47,7 @@ public class ChampSelectStrategy implements GameStatusStrategy {
 
 	private void autoBanPick() throws IOException {
 		// todo 有些游戏模式会让选择多次,暂未发现什么标记能够分辨是预选和确认选择,所以目前的方式让程序一直发起pick请求
-		if (FrameCache.pickChampionId != null ||FrameCache.banChampionId != null) {
+		if (FrameCache.pickChampionId != null || FrameCache.banChampionId != null) {
 			String roomGameInfo = api.getChampSelectInfo();
 			JSONObject jsonObject = JSONObject.parseObject(roomGameInfo);
 			int localPlayerCellId = jsonObject.getIntValue("localPlayerCellId");
@@ -62,7 +62,7 @@ public class ChampSelectStrategy implements GameStatusStrategy {
 						if ("pick".equals(type)) {
 							//报错处理? {"errorCode":"RPC_ERROR","httpStatus":500,"implementationDetails":{},"message":"Error response for PATCH /lol-lobby-team-builder/champ-select/v1/session/actions/2: Unable to process action change: Received status Error: INVALID_STATE instead of expected status of OK from request to teambuilder-draft:updateActionV1"}
 							api.banPick("pick", actionId, FrameCache.pickChampionId);
-						}else {
+						} else {
 							api.banPick("ban", actionId, FrameCache.banChampionId);
 						}
 					}
