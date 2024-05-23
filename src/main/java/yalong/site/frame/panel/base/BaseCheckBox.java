@@ -11,7 +11,7 @@ public class BaseCheckBox extends JCheckBox {
 	public BaseCheckBox() {
 		this.setSelected(true);
 		this.setFocusPainted(false);
-		Dimension dimension = new Dimension(200,25);
+		Dimension dimension = new Dimension(200, 25);
 		this.setOpaque(false);
 		this.setBorder(null);
 		this.setSize(dimension);

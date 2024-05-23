@@ -97,7 +97,7 @@ public class CalculateScore {
 	 */
 	public ArrayList<String> dealScore2Msg(List<String> puuidList) {
 		ArrayList<String> result = new ArrayList<>();
-		if(puuidList.isEmpty()){
+		if (puuidList.isEmpty()) {
 			return result;
 		}
 		int gameNum = 3;
@@ -107,7 +107,7 @@ public class CalculateScore {
 		} catch (Exception e) {
 			log.error("查询战绩错误", e);
 		}
-		if(scoreByPuuidList.isEmpty()){
+		if (scoreByPuuidList.isEmpty()) {
 			return result;
 		}
 		TreeMap<Float, SummonerScoreBO> treeMap = calcScore2treeMap(scoreByPuuidList);

@@ -1,7 +1,6 @@
 package yalong.site.cache;
 
 import yalong.site.bo.RankBO;
-import yalong.site.frame.MainFrame;
 
 /**
  * 配置全局属性
@@ -31,7 +30,7 @@ public class FrameCache {
 
 	public static boolean communicate = true;
 
-	public static boolean moyan = false;
+	public static boolean autoKey = false;
 
 	public static RankBO currentRankBO = new RankBO("RANKED_SOLO_5x5", "UNRANKED", "I");
 

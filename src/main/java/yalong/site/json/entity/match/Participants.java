@@ -9,13 +9,13 @@ import lombok.Data;
  */
 @Data
 public class Participants {
-    private Integer championId;
-    private String highestAchievedSeasonTier;
-    private String participantId;
-    private Integer spell1Id;
-    private Integer spell2Id;
-    private Integer teamId;
-    private Stats stats;
-    private Timeline timeline;
+	private Integer championId;
+	private String highestAchievedSeasonTier;
+	private String participantId;
+	private Integer spell1Id;
+	private Integer spell2Id;
+	private Integer teamId;
+	private Stats stats;
+	private Timeline timeline;
 }
 

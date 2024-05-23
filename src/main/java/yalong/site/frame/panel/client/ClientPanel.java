@@ -36,7 +36,7 @@ public class ClientPanel extends BasePanel {
 		clientPanel.add(gameStatusBox.getComp(), gameStatusBox.getConstraints());
 		ComponentBO leaveBox = CommunicateCheckBox.builder();
 		clientPanel.add(leaveBox.getComp(), leaveBox.getConstraints());
-		ComponentBO moyanBox = MoyanCheckBox.builder();
+		ComponentBO moyanBox = AutoKeyCheckBox.builder();
 		clientPanel.add(moyanBox.getComp(), moyanBox.getConstraints());
 		ComponentBO playAgainBox = AutoPlayAgainCheckBox.builder();
 		clientPanel.add(playAgainBox.getComp(), playAgainBox.getConstraints());

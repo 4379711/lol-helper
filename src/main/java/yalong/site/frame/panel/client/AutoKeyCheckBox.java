@@ -12,11 +12,11 @@ import java.awt.event.ItemListener;
  * @author yaLong
  * @date 2022/2/11
  */
-public class MoyanCheckBox extends BaseCheckBox {
+public class AutoKeyCheckBox extends BaseCheckBox {
 
-	public MoyanCheckBox() {
-		this.setText("光速摸眼");
-		this.setSelected(FrameCache.moyan);
+	public AutoKeyCheckBox() {
+		this.setText("一键连招");
+		this.setSelected(FrameCache.autoKey);
 		this.addItemListener(listener());
 	}
 
@@ -24,7 +24,7 @@ public class MoyanCheckBox extends BaseCheckBox {
 	 * @return 带布局的盒子
 	 */
 	public static ComponentBO builder() {
-		MoyanCheckBox box = new MoyanCheckBox();
+		AutoKeyCheckBox box = new AutoKeyCheckBox();
 		GridBagConstraints grid = new GridBagConstraints(
 				// 第(2,2)个格子
 				2, 2,
@@ -42,7 +42,7 @@ public class MoyanCheckBox extends BaseCheckBox {
 	}
 
 	private ItemListener listener() {
-		return e -> FrameCache.moyan = e.getStateChange() == ItemEvent.SELECTED;
+		return e -> FrameCache.autoKey = e.getStateChange() == ItemEvent.SELECTED;
 	}
 
 }

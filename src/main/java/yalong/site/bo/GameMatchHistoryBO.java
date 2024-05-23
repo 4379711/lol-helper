@@ -25,5 +25,11 @@ public class GameMatchHistoryBO {
     private String gameType;
     private List<ParticipantIdentities> participantIdentities;
     private List<Participants> participants;
+    /**
+     * 游戏类型ID 使用该类型区分游戏类型
+     * 在{@link yalong.site.frame.constant.GameConstant#GAME_TYPE}和{@link yalong.site.enums.GameTypeEnum}
+     * 进行映射和判断是否能进行对局详情展示
+     */
+    private Integer queueId;
 
 }

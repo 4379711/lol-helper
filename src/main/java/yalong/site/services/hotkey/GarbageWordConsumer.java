@@ -10,18 +10,18 @@ import java.util.function.Consumer;
  * @author yalong
  */
 public class GarbageWordConsumer implements HotKeyConsumer {
-    private static int nextLineNo = 0;
+	private static int nextLineNo = 0;
 
-    @Override
-    public Consumer<Integer> build() {
-        return i -> {
-            if (FrameCache.communicate) {
-                String s = AppCache.garbageWordList.get(nextLineNo);
-                KeyEventUtil.sendMsg(s);
-                int size = AppCache.garbageWordList.size();
-                nextLineNo = (nextLineNo + 1) % size;
-                AppCache.lastGarbageWord = s;
-            }
-        };
-    }
+	@Override
+	public Consumer<Integer> build() {
+		return i -> {
+			if (FrameCache.communicate) {
+				String s = AppCache.garbageWordList.get(nextLineNo);
+				KeyEventUtil.sendMsg(s);
+				int size = AppCache.garbageWordList.size();
+				nextLineNo = (nextLineNo + 1) % size;
+				AppCache.lastGarbageWord = s;
+			}
+		};
+	}
 }

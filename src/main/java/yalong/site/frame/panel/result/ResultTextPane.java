@@ -29,7 +29,6 @@ public class ResultTextPane extends JTextPane {
 		return new ResultTextPane();
 	}
 
-
 	private MouseListener clear() {
 		return new MouseListener() {
 			@Override

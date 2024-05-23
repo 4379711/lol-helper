@@ -2,8 +2,6 @@ package yalong.site.frame.panel.client;
 
 import lombok.extern.slf4j.Slf4j;
 import yalong.site.frame.bo.ComponentBO;
-import yalong.site.frame.bo.ItemBO;
-import yalong.site.frame.panel.base.BaseComboBox;
 import yalong.site.frame.panel.base.BasePanel;
 
 import java.awt.*;

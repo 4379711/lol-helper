@@ -52,7 +52,7 @@ public class PickSkinBox extends BaseComboBox<ItemBO> {
 				if (item.getValue() == null) {
 					GameDataCache.skinId = null;
 				} else {
-					GameDataCache.skinId  = Integer.parseInt(item.getValue());
+					GameDataCache.skinId = Integer.parseInt(item.getValue());
 				}
 
 			}

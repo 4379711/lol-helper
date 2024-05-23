@@ -33,6 +33,7 @@ public class GameDataCache {
 		otherTeamScore = new ArrayList<>();
 		myTeamScore = new ArrayList<>();
 	}
+
 	public static void resetPickSkinBoxData() {
 		skinId = null;
 		currentChampionSkins = new ArrayList<>();

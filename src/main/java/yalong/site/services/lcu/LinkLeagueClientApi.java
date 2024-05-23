@@ -1,5 +1,6 @@
 package yalong.site.services.lcu;
 
+import cn.hutool.core.io.FileUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
@@ -8,9 +9,12 @@ import yalong.site.bo.*;
 import yalong.site.cache.AppCache;
 import yalong.site.enums.GameStatusEnum;
 import yalong.site.http.RequestLcuUtil;
+import yalong.site.json.entity.match.Rank;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +52,7 @@ public class LinkLeagueClientApi {
      * value="SILVER">不屈白银
      * value="GOLD">荣耀黄金
      * value="PLATINUM">华贵铂金
+     * value="EMERALD">流光翡翠
      * value="DIAMOND">璀璨钻石
      * value="MASTER">超凡大师
      * value="GRANDMASTER">傲世宗师
@@ -245,8 +250,10 @@ public class LinkLeagueClientApi {
     /**
      * 段位查询
      */
-    public String getRank(String puuid) throws IOException {
-        return requestLcuUtil.doGet("/lol-ranked/v1/ranked-stats/" + puuid);
+    public Rank getRank(String puuid) throws IOException {
+        String resp = requestLcuUtil.doGet("/lol-ranked/v1/ranked-stats/" + puuid);
+        System.out.println(resp);
+        return JSON.parseObject(resp, Rank.class);
     }
 
     /**
@@ -335,7 +342,6 @@ public class LinkLeagueClientApi {
      * 通过玩家游戏名,查询多个玩家的信息
      *
      * @param nameList 玩家们的游戏名
-     * @since 7.3
      */
     public List<SummonerInfoBO> getV2InfoByNameList(List<String> nameList) throws IOException {
         JSONArray jsonArray = new JSONArray();
@@ -351,7 +357,6 @@ public class LinkLeagueClientApi {
      * @param id       玩家信息中的puuid
      * @param begIndex 起始局数
      * @param endIndex 结尾局数
-     * @since 7.3
      */
     public ProductsMatchHistoryBO getProductsMatchHistoryByPuuid(String id, int begIndex, int endIndex) throws IOException {
         String endpoint = "/lol-match-history/v1/products/lol/" + id + "/matches?begIndex=" + begIndex + "&endIndex=" + endIndex;
@@ -364,12 +369,12 @@ public class LinkLeagueClientApi {
      * 通过游戏gameId查询详细战绩
      *
      * @param gameId 战绩的游戏ID
-     * @since 7.3
      */
     public GameMatchHistoryBO getGameMatchHistoryByGameId(Long gameId) throws IOException {
         String endpoint = "/lol-match-history/v1/games/" + gameId;
         String resp = requestLcuUtil.doGet(endpoint);
         JSONObject jsonObject = JSON.parseObject(resp);
+        System.out.println(resp);
         return jsonObject.toJavaObject(GameMatchHistoryBO.class);
     }
 
@@ -377,18 +382,22 @@ public class LinkLeagueClientApi {
      * 通过英雄ID查询英雄头像
      *
      * @param championId 英雄ID
-     * @since 7.3
      */
     public Image getChampionIcons(Integer championId) throws IOException {
         String endpoint = "/lol-game-data/assets/v1/champion-icons/" + championId + ".png ";
-        return ImageIO.read(requestLcuUtil.download(endpoint));
-
+        String url;
+        url = endpoint.substring(1);
+        boolean exist = FileUtil.exist(new File(url));
+        if (exist) {
+            return ImageIO.read(FileUtil.getInputStream(new File(url)));
+        } else {
+            File file = FileUtil.writeBytes(requestLcuUtil.download(endpoint), new File(url));
+            return ImageIO.read(FileUtil.getInputStream(file));
+        }
     }
 
     /**
      * 获取召唤师技能对应JSON文件
-     *
-     * @since 7.3
      */
     public ArrayList<SummonerSpellsBO> getAllSummonerSpells() throws IOException {
         String endpoint = "/lol-game-data/assets/v1/summoner-spells.json";
@@ -402,29 +411,36 @@ public class LinkLeagueClientApi {
      * 通过传入地址获取图标
      *
      * @param iconsPath 图标或图像地址
-     * @since 7.3
      */
     public Image geImageByPath(String iconsPath) throws IOException {
-        return ImageIO.read(requestLcuUtil.download(iconsPath));
+        String url;
+        if (iconsPath.charAt(0) == '/') {
+            url = iconsPath.substring(1);
+        } else {
+            url = iconsPath.replace("/", "\\");
+        }
+        boolean exist = FileUtil.exist(new File(url));
+        if (exist) {
+            return ImageIO.read(new FileInputStream(url));
+        } else {
+            File file = FileUtil.writeBytes(requestLcuUtil.download(iconsPath), new File(url));
+            return ImageIO.read(FileUtil.getInputStream(file));
+        }
 
     }
 
     /**
      * 获取召唤师天赋对应JSON文件
-     *
-     * @since 7.3
      */
     public ArrayList<PerkBO> getAllPerk() throws IOException {
         String endpoint = "/lol-game-data/assets/v1/perks.json";
         String resp = requestLcuUtil.doGet(endpoint);
-        System.out.println(resp);
-        return null;
+        return JSON.parseObject(resp, new TypeReference<ArrayList<PerkBO>>() {
+        });
     }
 
     /**
      * 获取装备信息
-     *
-     * @since 7.3
      */
     public ArrayList<LOLItemBO> getAllItems() throws IOException {
         String endpoint = "/lol-game-data/assets/v1/items.json";
@@ -440,5 +456,16 @@ public class LinkLeagueClientApi {
      */
     public List<ChampionBO> getChampionByName(String name){
         return AppCache.allChampion.stream().toList().stream().filter(e-> e.getName().contains(name)).collect(Collectors.toList());
+    }
+
+    /**
+     * 获取召唤师天赋对应JSON文件
+     */
+    public ArrayList<PerkStyleBO> getAllPerkStyleBO() throws IOException {
+        String endpoint = "/lol-game-data/assets/v1/perkstyles.json";
+        String resp = requestLcuUtil.doGet(endpoint);
+        JSONObject jsonObject = JSON.parseObject(resp);
+        return JSON.parseObject(jsonObject.get("styles").toString(), new TypeReference<ArrayList<PerkStyleBO>>() {
+        });
     }
 }

@@ -19,13 +19,6 @@ public class SendScoreCheckBox extends BaseCheckBox {
 		this.setText("发送战绩");
 		this.setSelected(FrameCache.sendScore);
 		this.addItemListener(listener());
-		this.addActionListener(i -> {
-			SendScoreCheckBox source = (SendScoreCheckBox) i.getSource();
-			//选中状态下弹框提示
-			if (source.getSelectedObjects() != null) {
-				JOptionPane.showMessageDialog(null, "按F2发送战绩");
-			}
-		});
 	}
 
 	/**

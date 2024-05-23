@@ -85,4 +85,4 @@ buildNumber.properties
 .svn
 *.bak
 test/
-words.txt
+*.txt

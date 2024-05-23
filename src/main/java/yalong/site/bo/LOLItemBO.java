@@ -9,7 +9,7 @@ import lombok.Data;
  */
 @Data
 public class LOLItemBO {
-    private Integer id;
-    private String name;
-    private String iconPath;
+	private Integer id;
+	private String name;
+	private String iconPath;
 }
