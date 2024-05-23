@@ -5,9 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import yalong.site.cache.AppCache;
 import yalong.site.cache.FrameCache;
 import yalong.site.services.hotkey.HotKeyConsumer;
-import yalong.site.utils.KeyEventUtil;
+import yalong.site.utils.RobotUtil;
 
-import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
@@ -26,7 +25,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class DiyKeyUtil {
 	private static final String HOT_KEY_FILE = "hotkey.txt";
-	private final static Robot robot = KeyEventUtil.ROBOT;
 
 	public static void loadDefaultFile() {
 		try {
@@ -96,10 +94,10 @@ public class DiyKeyUtil {
 								if (FrameCache.autoKey) {
 									int keyCode = Integer.parseInt(line[i]);
 									if (keyCode >= 0) {
-										robot.keyPress(keyCode);
-										robot.keyRelease(keyCode);
+										RobotUtil.ROBOT.keyPress(keyCode);
+										RobotUtil.ROBOT.keyRelease(keyCode);
 									} else {
-										robot.delay(Math.abs(keyCode));
+										RobotUtil.ROBOT.delay(Math.abs(keyCode));
 									}
 								}
 							}
