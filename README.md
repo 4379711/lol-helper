@@ -10,7 +10,7 @@
 
 ## 功能说明
 - 修改段位(此功能所有好友可见修改后的段位)
-- 修改生涯背景图(更换后永久生效,提供了接口服务,但没提供操作界面)
+- 修改生涯背景图(即使没有皮肤也可更换,更换后永久生效)
 - 修改游戏在线状态(游戏内如果改变状态,会覆盖本工具修改的状态)
 - 自动秒选英雄,指定英雄后自动生效,取消指定后失效
 - 自动禁用英雄,指定英雄后自动生效,取消指定后失效
@@ -24,6 +24,7 @@
 - **游戏内一键喊话,对喷**
 - **游戏内一键鼓励队友,彩虹屁**
 - **设置炫彩皮肤(没有原皮肤但有炫彩皮肤的情况下,此功能可以突破游戏限制)**
+- 战绩查询(即使设置了隐藏生涯,可以查询)
 
 ## 软件截图
 ![安装后的图标](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/logo.jpg)
@@ -42,7 +43,7 @@
   - 发送战绩有时候会失效,大概率是因为玩家名字和数字**被游戏屏蔽**,小概率是因为某些词汇被屏蔽,例如`牛马`现已被屏蔽
   - 使用模拟按键的方式实现的几个功能,说不定哪天游戏官方会认为**违规**,目前来看,本人使用两年多无任何负面影响
   - 可自行制作windows安装程序,在releases页面下载最新的`lol-helper.jar`,使用jdk17+,命令:
-    ```jpackage -i ./ -n lol-helper --type "msi" --app-version "7.1" --icon icon.ico --vendor "YaLong" --description "lol小助手" --copyright "yalong" --win-per-user-install --win-menu --verbose --win-dir-chooser --win-shortcut --main-jar lol-helper.jar```
+    ```jpackage -i ./ -n lol-helper --type "msi" --app-version "1.0" --icon icon.ico --vendor "YaLong" --description "lol小助手" --copyright "yalong" --win-per-user-install --win-menu --verbose --win-dir-chooser --win-shortcut --main-jar lol-helper.jar```
   - 功能失效可能是**未以管理员身份运行程序**
     - 方式一: 对着图标右键 -> 以管理员身份运行
     - 方式二(推荐): 对着图标右键 -> 属性 -> 以管理员身份运行此程序  -> 确定 -> 以后直接双击图标启动程序即可
@@ -50,7 +51,7 @@
 ##### 快捷键说明
   - F1:发送队友最近三局战绩和得分到聊天框,可在选择英雄界面使用
   - F2:发送对方最近三局战绩和得分到聊天框,只能在游戏内使用,因为选英雄界面看不到对面玩家
-  - T:瞎子光速`眼闪W`(即自动按4DW)
+  - T(或者自定义按键):瞎子光速`眼闪W`(即自动按4DW)
   - HOME(问候家人,所以用了home):发送垃圾话(如果修改了垃圾话文件,可以取消勾选,再打开勾选,即可重新加载垃圾话)
   - END:发送鼓励的话,自动从网络上获取彩虹屁,并自动发送到聊天框
   - DELETE:发送垃圾话时可能会被系统屏蔽,此时标记后会把这个垃圾话打印到结果面板里,方便后续对照修改

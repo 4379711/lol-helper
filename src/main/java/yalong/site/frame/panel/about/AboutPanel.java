@@ -19,7 +19,8 @@ public class AboutPanel extends BasePanel {
 		AboutPanel aboutPanel = new AboutPanel();
 		BaseTextArea textArea = new BaseTextArea();
 		textArea.setOpaque(false);
-		textArea.setText("本软件永久免费,\n\n"
+		textArea.setText(
+				"本软件永久免费\n"
 				+ "qq群:882050965"
 		);
 		textArea.setEditable(false);
