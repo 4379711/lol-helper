@@ -7,6 +7,7 @@ import yalong.site.cache.AppCache;
 import yalong.site.cache.FrameInnerCache;
 import yalong.site.cache.FrameSetting;
 import yalong.site.frame.constant.GameConstant;
+import yalong.site.frame.panel.match.listener.SearchListener;
 import yalong.site.frame.utils.MatchHistoryUtil;
 import yalong.site.json.entity.match.GameData;
 import yalong.site.json.entity.match.Participants;
@@ -24,7 +25,7 @@ import java.util.ArrayList;
  * @author WuYi
  */
 @Slf4j
-public class MatchPanel extends JScrollPane {
+public class MatchPanel extends JPanel {
     /**
      * 战绩数据容器
      */
@@ -32,12 +33,18 @@ public class MatchPanel extends JScrollPane {
     /**
      * 翻页容器
      */
+    private JPanel panelIndex = new JPanel();
     private Label labelIndex = new Label();
     private JButton buttonPrevious = new JButton();
     private JButton buttonNext = new JButton();
-    private JPanel panelIndex = new JPanel();
     private int index = 1;
     private static String currentId;
+    /**
+     * 搜索容器
+     */
+    private JPanel searchPanel = new JPanel();
+    private SearchTextField searchText = new SearchTextField(40);
+
 
     public MatchPanel() {
         this.setName("查询战绩");
@@ -45,17 +52,17 @@ public class MatchPanel extends JScrollPane {
         // 设置透明
         this.setOpaque(false);
         this.setBorder(null);
-        this.getViewport().setOpaque(false);
         this.setAutoscrolls(true);
         this.setMaximumSize(new Dimension(FrameSetting.WIDTH, FrameSetting.HEIGHT));
-        //设置双缓冲测试无用
-        //this.getViewport().setDoubleBuffered(true);
+        this.searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.X_AXIS));
+        this.searchPanel.add(this.searchText);
+        this.searchText.addActionListener(new SearchListener());
+        this.add(searchPanel);
         this.panelContainer.setLayout(new BoxLayout(panelContainer, BoxLayout.Y_AXIS));
         this.panelIndex.setLayout(new BoxLayout(panelIndex, BoxLayout.X_AXIS));
         this.buttonPrevious.setText("上一页");
         this.labelIndex.setText(Integer.toString(index));
         this.buttonNext.setText("下一页");
-        this.getVerticalScrollBar().setUnitIncrement(30);
         //上一页鼠标事件
         this.buttonPrevious.addMouseListener(new MouseAdapter() {
             @Override
@@ -66,7 +73,7 @@ public class MatchPanel extends JScrollPane {
                         ProductsMatchHistoryBO pmh = AppCache.api.getProductsMatchHistoryByPuuid(currentId, (index - 1) * FrameSetting.PAGE_SIZE, index * FrameSetting.PAGE_SIZE - 1);
                         setData(pmh, currentId);
                     } catch (IOException ex) {
-                        clear();
+                        resetIndex();
                         log.error("查询战绩错误" + ex.getMessage());
                     }
                 }
@@ -82,7 +89,7 @@ public class MatchPanel extends JScrollPane {
                         ProductsMatchHistoryBO pmh = AppCache.api.getProductsMatchHistoryByPuuid(currentId, (index - 1) * FrameSetting.PAGE_SIZE, index * FrameSetting.PAGE_SIZE - 1);
                         setData(pmh, currentId);
                     } catch (IOException ex) {
-                        clear();
+                        resetIndex();
                         log.error("查询战绩错误" + ex.getMessage());
                     }
                 }
@@ -102,7 +109,7 @@ public class MatchPanel extends JScrollPane {
     /**
      * 设置页数
      */
-    public void clear() {
+    public void resetIndex() {
         this.index = 1;
     }
 
@@ -125,9 +132,10 @@ public class MatchPanel extends JScrollPane {
             }
             this.labelIndex.setText(Integer.toString(index));
             panelContainer.add(this.panelIndex);
-            this.setViewportView(panelContainer);
+            //this.setViewportView(panelContainer);
             panelContainer.revalidate();
             panelContainer.repaint();
+            this.add(panelContainer);
         } else {
             log.error("玩家数据为空");
         }

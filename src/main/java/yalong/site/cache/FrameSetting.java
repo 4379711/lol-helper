@@ -17,7 +17,7 @@ public class FrameSetting {
     /**
      * 战绩分页大小
      */
-	public static final int PAGE_SIZE = 7;
+	public static final int PAGE_SIZE = 8;
 	/**
 	 * 战绩最多数据
 	 */

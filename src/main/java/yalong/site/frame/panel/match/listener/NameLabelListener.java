@@ -44,7 +44,7 @@ public class NameLabelListener extends MouseAdapter {
                 List<SummonerInfoBO> summonerInfoBOList = AppCache.api.getV2InfoByNameList(list);
                 String puuid = summonerInfoBOList.get(0).getPuuid();
                 ProductsMatchHistoryBO pmh = AppCache.api.getProductsMatchHistoryByPuuid(puuid, 0, FrameSetting.PAGE_SIZE - 1);
-                FrameInnerCache.matchPanel.clear();
+                FrameInnerCache.matchPanel.resetIndex();
                 FrameInnerCache.matchPanel.setData(pmh, puuid);
                 FrameInnerCache.matchPanel.showAllComponent();
             } catch (IOException ex) {
