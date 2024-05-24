@@ -10,7 +10,7 @@ import yalong.site.bo.RankBO;
 public class FrameCache {
 	public static boolean autoAccept = true;
 
-	public static boolean autoReconnect = true;
+	public static boolean autoReconnect = false;
 
 	public static boolean autoPlayAgain = false;
 

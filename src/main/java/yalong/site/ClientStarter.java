@@ -34,10 +34,6 @@ public class ClientStarter {
 	}
 
 	public void cacheData() {
-		// 加载垃圾话
-		AppCache.garbageWordList = LoadGarbageWord.loadWord();
-		log.info("垃圾话加载完成");
-
         try {
             AppCache.perkList = api.getAllPerk();
             AppCache.itemList = api.getAllItems();
@@ -47,7 +43,6 @@ public class ClientStarter {
         } catch (Exception e) {
             log.error("获取资源文件失败");
         }
-
 
 		// 缓存登录人的信息
 		try {
@@ -79,7 +74,6 @@ public class ClientStarter {
 
 	@SuppressWarnings("InfiniteLoopStatement")
 	public void listenGameStatus() throws InterruptedException, IOException {
-		int currentStatus = 0;
 		while (true) {
 			TimeUnit.MILLISECONDS.sleep(500);
 			GameStatusContext gameStatusContext = new GameStatusContext();
