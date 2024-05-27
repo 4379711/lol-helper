@@ -276,20 +276,7 @@ public class LinkLeagueClientApi {
 	}
 
 	/**
-	 * 查看游戏当前状态
-	 * 游戏大厅:None
-	 * 房间内:Lobby
-	 * 匹配中:Matchmaking
-	 * 游戏开始:GameStart
-	 * 重新连接:Reconnect
-	 * 观战中:WatchInProgress
-	 * 找到对局,等待接受:ReadyCheck
-	 * 选英雄中:ChampSelect
-	 * 游戏中:InProgress
-	 * 游戏即将结束:PreEndOfGame
-	 * 等待结算页面:WaitingForStats
-	 * 游戏结束:EndOfGame
-	 * 等待重新连接:Reconnect
+	 * 获取游戏状态
 	 */
 	public GameStatusEnum getGameStatus() throws IOException {
 		String s = requestLcuUtil.doGet("/lol-gameflow/v1/gameflow-phase");
@@ -323,32 +310,8 @@ public class LinkLeagueClientApi {
 	 */
 	public String honor() throws IOException {
 		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("gameId", 0);
 		jsonObject.put("honorCategory", "");
-		jsonObject.put("summonerId", 0);
 		return requestLcuUtil.doPost("/lol-honor-v2/v1/honor-player", jsonObject.toJSONString());
-	}
-
-	/**
-	 * 查看可点赞的队友
-	 */
-	public String getHonorBallot() throws IOException {
-        /*响应
-        * {
-    "eligiblePlayers": [
-	    {
-	      "championId": 0,
-	      "skinIndex": 0,
-	      "skinName": "string",
-	      "summonerId": 0,
-	      "summonerName": "string"
-	    }
-        ],
-    "gameId": 0
-	}
-        * */
-
-		return requestLcuUtil.doGet("/lol-honor-v2/v1/ballot");
 	}
 
 	/**
