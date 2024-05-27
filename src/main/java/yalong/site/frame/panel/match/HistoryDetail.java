@@ -21,8 +21,6 @@ import java.util.ArrayList;
  */
 
 public class HistoryDetail extends JPanel {
-    private JPanel detailPanelTeam1 = new JPanel();
-    private JPanel detailPanelTeam2 = new JPanel();
 
     public HistoryDetail(GameMatchHistoryBO bo) throws IOException {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -35,7 +33,7 @@ public class HistoryDetail extends JPanel {
                 index++;
             }
         }
-        this.add(buildTeam2Title());
+        //this.add(buildTeam2Title());
         for (int i = index; i < bo.getParticipantIdentities().size(); i++) {
             if (bo.getParticipantIdentities().get(i) != null && bo.getParticipants().get(i) != null && bo.getParticipants().get(i).getTeamId().equals(GameConstant.TEAM_TWO)) {
                 this.add(buildTeamData(bo.getParticipantIdentities().get(i), bo.getParticipants().get(i), scoreLevelList.get(i)));
@@ -54,7 +52,7 @@ public class HistoryDetail extends JPanel {
         jPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1, true));
         jPanel.setBackground(Color.GRAY);
         ArrayList<GridBagConstraints> grid = titleGridList();
-        jPanel.add(new JLabel("红色方"), grid.get(0));
+        jPanel.add(new JLabel("红蓝方"), grid.get(0));
         jPanel.add(new JLabel("评分"), grid.get(1));
         jPanel.add(new JLabel("KDA"), grid.get(2));
         jPanel.add(new JLabel("伤害"), grid.get(3));

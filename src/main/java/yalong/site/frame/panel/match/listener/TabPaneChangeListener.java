@@ -29,8 +29,9 @@ public class TabPaneChangeListener implements ChangeListener {
                 FrameInnerCache.frame.setSize(FrameSetting.WIDTH, FrameSetting.HEIGHT);
                 try {
                     ProductsMatchHistoryBO pmh = AppCache.api.getProductsMatchHistoryByPuuid(GameDataCache.me.getPuuid(), 0, FrameSetting.PAGE_SIZE - 1);
-                    FrameInnerCache.matchPanel.clear();
                     FrameInnerCache.matchPanel.setData(pmh, GameDataCache.me.getPuuid());
+                    FrameInnerCache.matchPanel.resetIndex();
+                    FrameInnerCache.matchPanel.showAllComponent();
 
                 } catch (IOException ex) {
                     log.error("查询战绩错误" + ex.getMessage());

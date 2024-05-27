@@ -69,9 +69,12 @@ public class CalculateScore {
 		//整理成字符串
 		ArrayList<String> result = new ArrayList<>();
 		StringBuilder stringBuilder = new StringBuilder();
+		List<ScoreBO> stupidScoreBOList = stupid.getScoreBOList();
+		int gameNum = stupidScoreBOList.size();
 		stringBuilder.append(type);
 		stringBuilder.append("是:【");
 		stringBuilder.append(stupid.getSummonerInfo().getDisplayName());
+		stringBuilder.append(String.format("】,KDA: 【%.2f】 ", entry.getKey() / gameNum));
 		result.add(stringBuilder.toString());
 		return result;
 	}

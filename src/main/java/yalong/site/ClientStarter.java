@@ -84,7 +84,6 @@ public class ClientStarter {
 				case None:
 				case Lobby:
 				case Matchmaking:
-				case PreEndOfGame:
 				case WaitingForStats: {
 					gameStatusContext.setStrategy(new OtherStatusStrategy());
 					GameDataCache.reset();
@@ -100,6 +99,10 @@ public class ClientStarter {
 				}
 				case InProgress: {
 					gameStatusContext.setStrategy(new InProgressStrategy(api, calculateScore));
+					break;
+				}
+				case PreEndOfGame:{
+					gameStatusContext.setStrategy(new PreEndOfGameStrategy(api));
 					break;
 				}
 				case EndOfGame: {
