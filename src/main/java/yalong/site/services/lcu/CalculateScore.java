@@ -75,19 +75,6 @@ public class CalculateScore {
 		stringBuilder.append("是:【");
 		stringBuilder.append(stupid.getSummonerInfo().getDisplayName());
 		stringBuilder.append(String.format("】,KDA: 【%.2f】 ", entry.getKey() / gameNum));
-		stringBuilder.append("近");
-		stringBuilder.append(gameNum);
-		stringBuilder.append("场战绩为：");
-		for (ScoreBO scoreBO : stupidScoreBOList) {
-			stringBuilder.append(scoreBO.getKills());
-			stringBuilder.append("-");
-			stringBuilder.append(scoreBO.getDeaths());
-			stringBuilder.append("-");
-			stringBuilder.append(scoreBO.getAssists());
-			stringBuilder.append("(");
-			stringBuilder.append(scoreBO.getWin() ? "赢" : "输");
-			stringBuilder.append(") ");
-		}
 		result.add(stringBuilder.toString());
 		return result;
 	}
