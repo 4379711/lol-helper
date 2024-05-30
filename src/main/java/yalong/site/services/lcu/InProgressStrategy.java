@@ -2,7 +2,7 @@ package yalong.site.services.lcu;
 
 import lombok.extern.slf4j.Slf4j;
 import yalong.site.bo.TeamPuuidBO;
-import yalong.site.cache.FrameCache;
+import yalong.site.cache.FrameUserSettingPersistence;
 import yalong.site.cache.GameDataCache;
 
 import java.io.IOException;
@@ -38,7 +38,7 @@ public class InProgressStrategy implements GameStatusStrategy {
 
 	@Override
 	public void doThis() {
-		if (FrameCache.sendScore && GameDataCache.otherTeamScore.isEmpty()) {
+		if (FrameUserSettingPersistence.sendScore && GameDataCache.otherTeamScore.isEmpty()) {
 			try {
 				List<String> otherPuuid = getOtherPuuid();
 				if (!otherPuuid.contains(null)) {

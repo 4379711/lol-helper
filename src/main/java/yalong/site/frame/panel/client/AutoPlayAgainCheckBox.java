@@ -1,6 +1,6 @@
 package yalong.site.frame.panel.client;
 
-import yalong.site.cache.FrameCache;
+import yalong.site.cache.FrameUserSettingPersistence;
 import yalong.site.frame.bo.ComponentBO;
 import yalong.site.frame.panel.base.BaseCheckBox;
 
@@ -15,7 +15,7 @@ import java.awt.event.ItemListener;
 public class AutoPlayAgainCheckBox extends BaseCheckBox {
 	public AutoPlayAgainCheckBox() {
 		this.setText("自动再来一局");
-		this.setSelected(FrameCache.autoPlayAgain);
+		this.setSelected(FrameUserSettingPersistence.autoPlayAgain);
 		this.addItemListener(listener());
 	}
 
@@ -30,7 +30,7 @@ public class AutoPlayAgainCheckBox extends BaseCheckBox {
 				// 占1列,占1行
 				1, 1,
 				//横向占100%长度,纵向占100%长度
-				2, 2,
+				1, 1,
 				//居中,组件小的话就两边铺满窗格
 				GridBagConstraints.CENTER, GridBagConstraints.NONE,
 				// 窗格之间的距离
@@ -42,7 +42,7 @@ public class AutoPlayAgainCheckBox extends BaseCheckBox {
 	}
 
 	private ItemListener listener() {
-		return e -> FrameCache.autoPlayAgain = e.getStateChange() == ItemEvent.SELECTED;
+		return e -> FrameUserSettingPersistence.autoPlayAgain = e.getStateChange() == ItemEvent.SELECTED;
 	}
 
 }

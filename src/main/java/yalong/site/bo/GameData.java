@@ -1,4 +1,4 @@
-package yalong.site.json.entity.match;
+package yalong.site.bo;
 
 import lombok.Data;
 

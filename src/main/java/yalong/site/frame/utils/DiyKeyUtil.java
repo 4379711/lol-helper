@@ -3,7 +3,7 @@ package yalong.site.frame.utils;
 import cn.hutool.core.io.FileUtil;
 import lombok.extern.slf4j.Slf4j;
 import yalong.site.cache.AppCache;
-import yalong.site.cache.FrameCache;
+import yalong.site.cache.FrameUserSettingPersistence;
 import yalong.site.services.hotkey.HotKeyConsumer;
 import yalong.site.utils.RobotUtil;
 
@@ -91,7 +91,7 @@ public class DiyKeyUtil {
 						i -> Integer.parseInt(i[0]),
 						line -> () -> keyCodeParam -> {
 							for (int i = 1; i < line.length; i++) {
-								if (FrameCache.autoKey) {
+								if (FrameUserSettingPersistence.autoKey) {
 									int keyCode = Integer.parseInt(line[i]);
 									if (keyCode >= 0) {
 										RobotUtil.ROBOT.keyPress(keyCode);

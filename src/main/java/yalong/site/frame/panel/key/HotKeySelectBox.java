@@ -28,7 +28,7 @@ public class HotKeySelectBox extends BaseComboBox<ItemBO> {
 	}
 
 	public void setItems() {
-		this.addItem(new ItemBO(null, "选择连招快捷键"));
+		this.addItem(new ItemBO(null, "快捷键"));
 		Field[] fields = NativeKeyEvent.class.getFields();
 		for (Field field : fields) {
 			if (Modifier.isStatic(field.getModifiers()) && field.getType() == int.class) {

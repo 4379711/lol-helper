@@ -10,7 +10,7 @@ import yalong.site.http.HttpClient;
  * @author yalong
  */
 @Slf4j
-public class RequestCaihongpiWord {
+public class CaihongpiWord {
 	public static String requestCaiHongPiText() {
 		log.info("开始请求彩虹屁接口");
 		Request request = new Request.Builder()

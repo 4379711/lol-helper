@@ -17,13 +17,13 @@ import java.util.ArrayList;
  * @date 2023/6/2
  */
 @Slf4j
-public class LoadGarbageWord {
+public class GarbageWord {
 	private static final String USER_FILE = "words.txt";
 
 	public static void loadDefaultFile() {
 		//读取默认文件到指定路径
 		try {
-			InputStream inputStream = LoadGarbageWord.class.getResourceAsStream("/fuck.txt");
+			InputStream inputStream = GarbageWord.class.getResourceAsStream("/fuck.txt");
 			//复制默认文件
 			FileUtil.writeFromStream(inputStream, new File(USER_FILE));
 		} catch (Exception e) {
@@ -52,6 +52,10 @@ public class LoadGarbageWord {
 			log.error("垃圾话读取失败", e);
 		}
 		return strings;
+	}
+
+	public static void saveFile(String text) {
+		FileUtil.writeUtf8String(text.strip(), new File(USER_FILE));
 	}
 
 }

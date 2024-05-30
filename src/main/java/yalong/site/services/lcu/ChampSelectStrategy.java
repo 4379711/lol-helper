@@ -1,18 +1,14 @@
 package yalong.site.services.lcu;
 
-import cn.hutool.core.collection.CollectionUtil;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
-import yalong.site.bo.SkinBO;
-import yalong.site.cache.FrameCache;
-import yalong.site.cache.FrameInnerCache;
+import yalong.site.cache.FrameUserSetting;
+import yalong.site.cache.FrameUserSettingPersistence;
 import yalong.site.cache.GameDataCache;
-import yalong.site.frame.bo.ItemBO;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author yalong
@@ -27,27 +23,9 @@ public class ChampSelectStrategy implements GameStatusStrategy {
 		this.calculateScore = calculateScore;
 	}
 
-	private void setSkin() throws IOException {
-		if (CollectionUtil.isEmpty(GameDataCache.currentChampionSkins)) {
-			List<SkinBO> currentChampionSkins = api.getCurrentChampionSkins();
-			if (CollectionUtil.isEmpty(currentChampionSkins)) {
-				return;
-			}
-			GameDataCache.currentChampionSkins = currentChampionSkins;
-			for (SkinBO bo : GameDataCache.currentChampionSkins) {
-				FrameInnerCache.pickSkinBox.addItem(new ItemBO(String.valueOf(bo.getId()), bo.getName()));
-			}
-		}
-		if (GameDataCache.skinId != null) {
-			api.setCurrentChampionSkins(GameDataCache.skinId);
-			//设置皮肤完成后,清空缓存
-			GameDataCache.resetPickSkinBoxData();
-		}
-	}
-
 	private void autoBanPick() throws IOException {
 		// todo 有些游戏模式会让选择多次,暂未发现什么标记能够分辨是预选和确认选择,所以目前的方式让程序一直发起pick请求
-		if (FrameCache.pickChampionId != null || FrameCache.banChampionId != null) {
+		if ((FrameUserSetting.pickChampionId != null && FrameUserSetting.pickChampionId != 0) || (FrameUserSetting.banChampionId != null && FrameUserSetting.banChampionId != 0)) {
 			String roomGameInfo = api.getChampSelectInfo();
 			JSONObject jsonObject = JSONObject.parseObject(roomGameInfo);
 			int localPlayerCellId = jsonObject.getIntValue("localPlayerCellId");
@@ -61,9 +39,9 @@ public class ChampSelectStrategy implements GameStatusStrategy {
 						String type = actionElement.getString("type");
 						if ("pick".equals(type)) {
 							//报错处理? {"errorCode":"RPC_ERROR","httpStatus":500,"implementationDetails":{},"message":"Error response for PATCH /lol-lobby-team-builder/champ-select/v1/session/actions/2: Unable to process action change: Received status Error: INVALID_STATE instead of expected status of OK from request to teambuilder-draft:updateActionV1"}
-							api.banPick("pick", actionId, FrameCache.pickChampionId);
+							api.banPick("pick", actionId, FrameUserSetting.pickChampionId);
 						} else {
-							api.banPick("ban", actionId, FrameCache.banChampionId);
+							api.banPick("ban", actionId, FrameUserSetting.banChampionId);
 						}
 					}
 				}
@@ -73,7 +51,7 @@ public class ChampSelectStrategy implements GameStatusStrategy {
 	}
 
 	private void selectScore() throws IOException {
-		if (FrameCache.sendScore && GameDataCache.myTeamScore.isEmpty()) {
+		if (FrameUserSettingPersistence.sendScore && GameDataCache.myTeamScore.isEmpty()) {
 			String roomGameInfo = api.getChampSelectInfo();
 			JSONObject jsonObject = JSONObject.parseObject(roomGameInfo);
 			JSONArray myTeam = jsonObject.getJSONArray("myTeam");
@@ -106,12 +84,6 @@ public class ChampSelectStrategy implements GameStatusStrategy {
 			selectScore();
 		} catch (Exception e) {
 			log.error("sendScore错误", e);
-		}
-
-		try {
-			setSkin();
-		} catch (Exception e) {
-			log.error("设置皮肤错误", e);
 		}
 	}
 }

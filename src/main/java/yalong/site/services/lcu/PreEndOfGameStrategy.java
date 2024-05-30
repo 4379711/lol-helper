@@ -1,7 +1,7 @@
 package yalong.site.services.lcu;
 
 import lombok.extern.slf4j.Slf4j;
-import yalong.site.cache.FrameCache;
+import yalong.site.cache.FrameUserSettingPersistence;
 
 /**
  * @author yalong
@@ -16,7 +16,7 @@ public class PreEndOfGameStrategy implements GameStatusStrategy {
 
 	@Override
 	public void doThis() {
-		if (FrameCache.autoPlayAgain) {
+		if (FrameUserSettingPersistence.autoPlayAgain) {
 			//点赞
 			try {
 				String s = api.honor();

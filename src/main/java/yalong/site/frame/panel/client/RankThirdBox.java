@@ -1,11 +1,11 @@
 package yalong.site.frame.panel.client;
 
 import lombok.extern.slf4j.Slf4j;
-import yalong.site.cache.FrameCache;
+import yalong.site.cache.AppCache;
+import yalong.site.cache.FrameUserSetting;
 import yalong.site.frame.bo.ComponentBO;
 import yalong.site.frame.bo.ItemBO;
 import yalong.site.frame.panel.base.BaseComboBox;
-import yalong.site.frame.panel.client.listener.RankBoxItemListener;
 
 import java.awt.*;
 import java.awt.event.ItemEvent;
@@ -19,7 +19,6 @@ public class RankThirdBox extends BaseComboBox<ItemBO> {
 
 	public RankThirdBox() {
 		this.setItems();
-		this.addItemListener(new RankBoxItemListener());
 		this.addItemListener(listener());
 	}
 
@@ -34,7 +33,7 @@ public class RankThirdBox extends BaseComboBox<ItemBO> {
 				// 占1列,占1行
 				1, 1,
 				//横向占100%长度,纵向占100%长度
-				2, 2,
+				1, 1,
 				//居中,组件小的话就两边铺满窗格
 				GridBagConstraints.CENTER, GridBagConstraints.NONE,
 				// 窗格之间的距离
@@ -54,9 +53,16 @@ public class RankThirdBox extends BaseComboBox<ItemBO> {
 
 	private ItemListener listener() {
 		return e -> {
-			if (e.getStateChange() == ItemEvent.SELECTED) {
+			if (e.getStateChange() == ItemEvent.SELECTED && AppCache.api != null) {
 				ItemBO item = (ItemBO) e.getItem();
-				FrameCache.currentRankBO.setThirdRank(item.getValue());
+				FrameUserSetting.currentRankBO.setThirdRank(item.getValue());
+				if (!FrameUserSetting.currentRankBO.isNull()) {
+					try {
+						AppCache.api.setRank(FrameUserSetting.currentRankBO);
+					} catch (Exception ex) {
+						log.error("设置rank错误", ex);
+					}
+				}
 			}
 		};
 	}

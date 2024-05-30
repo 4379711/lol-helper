@@ -1,25 +1,26 @@
 package yalong.site.frame.panel.client;
 
 import lombok.extern.slf4j.Slf4j;
-import yalong.site.cache.FrameCache;
-import yalong.site.cache.FrameInnerCache;
+import yalong.site.bo.ChampionBO;
+import yalong.site.cache.FrameUserSetting;
+import yalong.site.cache.GameDataCache;
 import yalong.site.frame.bo.ComponentBO;
-import yalong.site.frame.bo.ItemBO;
-import yalong.site.frame.panel.base.BaseComboBox;
+import yalong.site.frame.panel.base.BaseButton;
 
 import java.awt.*;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.ActionListener;
 
 /**
  * @author yaLong
  */
 @Slf4j
-public class PickBox extends BaseComboBox<ItemBO> {
+public class PickBox extends BaseButton {
+	private final PickBox pickBox;
 
 	public PickBox() {
-		this.addItem(new ItemBO(null, "秒选英雄"));
-		this.addItemListener(listener());
+		pickBox = this;
+		this.setText("秒选英雄");
+		this.addActionListener(actionListener());
 	}
 
 	/**
@@ -27,14 +28,13 @@ public class PickBox extends BaseComboBox<ItemBO> {
 	 */
 	public static ComponentBO builder() {
 		PickBox box = new PickBox();
-		FrameInnerCache.pickBox = box;
 		GridBagConstraints grid = new GridBagConstraints(
 				// 第(1,3)个格子
-				1, 3,
+				0, 4,
 				// 占1列,占1行
 				1, 1,
 				//横向占100%长度,纵向占100%长度
-				2, 2,
+				1, 1,
 				//居中,组件小的话就两边铺满窗格
 				GridBagConstraints.CENTER, GridBagConstraints.NONE,
 				// 窗格之间的距离
@@ -45,17 +45,14 @@ public class PickBox extends BaseComboBox<ItemBO> {
 		return new ComponentBO(box, grid);
 	}
 
-	private ItemListener listener() {
+	private ActionListener actionListener() {
 		return e -> {
-			if (e.getStateChange() == ItemEvent.SELECTED) {
-				ItemBO item = (ItemBO) e.getItem();
-				if (item.getValue() == null) {
-					FrameCache.pickChampionId = null;
-				} else {
-					FrameCache.pickChampionId = Integer.parseInt(item.getValue());
-				}
-
-			}
+			ChampionSelectFrame selectFrame = new ChampionSelectFrame("选择英雄", (name) -> {
+				ChampionBO championBO = GameDataCache.allChampion.stream().filter(i -> name.equals(i.getName())).findFirst().get();
+				FrameUserSetting.pickChampionId = championBO.getId();
+				pickBox.setText("秒选(" + name + ")");
+			});
+			selectFrame.setVisible(true);
 		};
 	}
 

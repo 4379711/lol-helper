@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import yalong.site.bo.LeagueClientBO;
 
-import java.io.*;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -154,27 +154,27 @@ public class RequestLcuUtil {
 		return this.callString(request);
 	}
 
-    public String doPatch(String endpoint, String bodyStr) throws IOException {
-        RequestBody body = RequestBody.create(bodyStr, JSON);
-        Request request = new Request.Builder()
-                .url(defaultUrl + endpoint)
-                .patch(body)
-                .build();
-        return this.callString(request);
-    }
+	public String doPatch(String endpoint, String bodyStr) throws IOException {
+		RequestBody body = RequestBody.create(bodyStr, JSON);
+		Request request = new Request.Builder()
+				.url(defaultUrl + endpoint)
+				.patch(body)
+				.build();
+		return this.callString(request);
+	}
 
-    /**
-     * 下载图片资源
-     * 本地没有则按照地址请求后缓存到本地 有则直接去读本地
-     *
-     * @param endpoint 资源请求路径
-     * @return InputStream
-     */
-    public byte[] download(String endpoint) throws IOException {
-        Request request = new Request.Builder()
-                .url(defaultUrl + endpoint)
-                .get()
-                .build();
-        return this.callStream(request);
-    }
+	/**
+	 * 下载图片资源
+	 * 本地没有则按照地址请求后缓存到本地 有则直接去读本地
+	 *
+	 * @param endpoint 资源请求路径
+	 * @return InputStream
+	 */
+	public byte[] download(String endpoint) throws IOException {
+		Request request = new Request.Builder()
+				.url(defaultUrl + endpoint)
+				.get()
+				.build();
+		return this.callStream(request);
+	}
 }

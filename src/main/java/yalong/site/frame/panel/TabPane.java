@@ -2,9 +2,8 @@ package yalong.site.frame.panel;
 
 import yalong.site.frame.panel.about.AboutPanel;
 import yalong.site.frame.panel.client.ClientPanel;
+import yalong.site.frame.panel.fuckword.FuckPanel;
 import yalong.site.frame.panel.key.KeyPanel;
-import yalong.site.frame.panel.match.MatchPanel;
-import yalong.site.frame.panel.match.listener.TabPaneChangeListener;
 import yalong.site.frame.panel.result.ResultPanel;
 import yalong.site.frame.ui.MyTabbedPaneUI;
 
@@ -27,14 +26,13 @@ public class TabPane extends JTabbedPane {
 	public TabPane() {
 		super(JTabbedPane.LEFT);
 		this.setUI(new MyTabbedPaneUI());
-		this.addChangeListener(new TabPaneChangeListener());
 	}
 
 	public static TabPane builder() {
 		TabPane tabPane = new TabPane();
 		tabPane.add(ClientPanel.builder());
 		tabPane.add(KeyPanel.builder());
-		tabPane.add(MatchPanel.builder());
+		tabPane.add(FuckPanel.builder());
 		tabPane.add(ResultPanel.builder());
 		tabPane.add(AboutPanel.builder());
 		return tabPane;

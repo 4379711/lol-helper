@@ -20,8 +20,6 @@ public class LeagueClientHelper {
 			try {
 				ClientStarter clientStarter = new ClientStarter();
 				clientStarter.initLcu();
-				clientStarter.cacheData();
-				clientStarter.loadFrameData();
 				MainFrame.showFrame();
 				HotKeyService.start();
 				clientStarter.listenGameStatus();

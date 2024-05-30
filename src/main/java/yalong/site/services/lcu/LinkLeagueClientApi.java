@@ -7,9 +7,9 @@ import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.TypeReference;
 import yalong.site.bo.*;
 import yalong.site.cache.AppCache;
+import yalong.site.cache.GameDataCache;
 import yalong.site.enums.GameStatusEnum;
 import yalong.site.http.RequestLcuUtil;
-import yalong.site.json.entity.match.Rank;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -454,7 +454,7 @@ public class LinkLeagueClientApi {
 	 * @since 7.3
 	 */
 	public List<ChampionBO> getChampionByName(String name) {
-		return AppCache.allChampion.stream().toList().stream().filter(e -> e.getName().contains(name)).collect(Collectors.toList());
+		return GameDataCache.allChampion.stream().toList().stream().filter(e -> e.getName().contains(name)).collect(Collectors.toList());
 	}
 
 	/**

@@ -21,10 +21,8 @@ public class KeyPanel extends BasePanel {
 		KeyPanel keyPanel = new KeyPanel();
 		BoxLayout layout = new BoxLayout(keyPanel, BoxLayout.Y_AXIS);
 		keyPanel.setLayout(layout);
-		keyPanel.add(HotKeySelectBox.builder());
-		keyPanel.add(KeySelectBox.builder());
+		keyPanel.add(SelectPanel.builder());
 		keyPanel.add(KeyTextPane.builder());
-		keyPanel.add(KeySaveBox.builder());
 		return keyPanel;
 	}
 
