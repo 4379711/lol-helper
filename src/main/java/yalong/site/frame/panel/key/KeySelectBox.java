@@ -28,7 +28,7 @@ public class KeySelectBox extends BaseComboBox<ItemBO> {
 	}
 
 	public void setItems() {
-		this.addItem(new ItemBO(null, "选择连招技能按键"));
+		this.addItem(new ItemBO(null, "连招技能键"));
 		Field[] fields = KeyEvent.class.getFields();
 		for (Field field : fields) {
 			if (Modifier.isStatic(field.getModifiers()) && field.getType() == int.class) {

@@ -10,6 +10,7 @@ import java.awt.*;
 @Slf4j
 public class RobotUtil {
 	public static final Robot ROBOT;
+
 	static {
 		try {
 			ROBOT = new Robot();

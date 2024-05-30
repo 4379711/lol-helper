@@ -2,12 +2,11 @@ package yalong.site.frame;
 
 import lombok.extern.slf4j.Slf4j;
 import yalong.site.cache.AppCache;
-import yalong.site.cache.FrameInnerCache;
 import yalong.site.cache.FrameSetting;
 import yalong.site.frame.panel.TabPane;
 import yalong.site.frame.utils.FrameMsgUtil;
 import yalong.site.frame.utils.SaveFrameConfig;
-import yalong.site.services.word.LoadGarbageWord;
+import yalong.site.services.word.GarbageWord;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,7 +35,7 @@ public class MainFrame extends JFrame {
 		//退出直接关闭程序
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//固定大小
-		this.setResizable(false);
+//		this.setResizable(false);
 		this.setSize(FrameSetting.WIDTH, FrameSetting.HEIGHT);
 		//窗口居中
 		this.setLocationRelativeTo(null);
@@ -45,13 +44,13 @@ public class MainFrame extends JFrame {
 		this.addWindowListener(listener());
 	}
 
-	public WindowListener listener(){
+	public WindowListener listener() {
 		return new WindowListener() {
 			@Override
 			public void windowOpened(WindowEvent e) {
 				log.info("配置加载完成");
 				// 加载垃圾话
-				AppCache.garbageWordList = LoadGarbageWord.loadWord();
+				AppCache.garbageWordList = GarbageWord.loadWord();
 				log.info("垃圾话加载完成");
 			}
 
@@ -93,7 +92,6 @@ public class MainFrame extends JFrame {
 		frame.add(tabPane);
 		frame.setVisible(false);
 		FrameMsgUtil.helpMsg();
-		FrameInnerCache.frame = frame;
 	}
 
 	public static void showFrame() {

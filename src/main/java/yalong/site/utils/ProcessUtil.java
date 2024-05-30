@@ -23,7 +23,7 @@ public class ProcessUtil {
 	 * 通过进程名查询出进程的启动命令,解析出需要的客户端token和端口
 	 */
 	public static LeagueClientBO getClientProcess() throws IOException {
-		String cmd = "WMIC PROCESS WHERE name=\"LeagueClientUx.exe\" GET commandline";
+		String cmd = "WMIC PROCESS WHERE \"name='LeagueClientUx.exe'\" GET commandline";
 		BufferedReader reader = null;
 		Process process = null;
 		LeagueClientBO leagueClientBO = new LeagueClientBO();

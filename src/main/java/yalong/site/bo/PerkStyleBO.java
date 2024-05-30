@@ -9,8 +9,8 @@ import lombok.Data;
  */
 @Data
 public class PerkStyleBO {
-    private Integer id;
-    private String name;
-    private String tooltip;
-    private String iconPath;
+	private Integer id;
+	private String name;
+	private String tooltip;
+	private String iconPath;
 }

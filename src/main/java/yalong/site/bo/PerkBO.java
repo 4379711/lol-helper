@@ -9,11 +9,11 @@ import lombok.Data;
  */
 @Data
 public class PerkBO {
-    private Integer id;
-    private String name;
-    private String shortDesc;
-    private String recommendationDescriptor;
-    private String iconPath;
-    private String[] endOfGameStatDescs;
+	private Integer id;
+	private String name;
+	private String shortDesc;
+	private String recommendationDescriptor;
+	private String iconPath;
+	private String[] endOfGameStatDescs;
 
 }

@@ -1,79 +1,59 @@
 package yalong.site.frame.panel.client;
 
 import lombok.extern.slf4j.Slf4j;
-import yalong.site.bo.SkinBO;
-import yalong.site.cache.AppCache;
-import yalong.site.cache.FrameCache;
-import yalong.site.cache.FrameInnerCache;
+import yalong.site.bo.ChampionBO;
+import yalong.site.cache.FrameUserSetting;
+import yalong.site.cache.GameDataCache;
 import yalong.site.frame.bo.ComponentBO;
-import yalong.site.frame.bo.ItemBO;
-import yalong.site.frame.panel.base.BaseComboBox;
+import yalong.site.frame.panel.base.BaseButton;
 
 import java.awt.*;
-import java.awt.event.*;
-import java.io.IOException;
-import java.util.List;
+import java.awt.event.ActionListener;
 
 /**
  * @author chengshuangxiong
  */
 @Slf4j
-public class CareerBackgroundBox extends BaseComboBox<ItemBO> {
+public class CareerBackgroundBox extends BaseButton {
 
-    public CareerBackgroundBox() {
-        this.addItem(new ItemBO(null, "选择生涯背景英雄"));
-        this.setEditable(false);
-        this.addItemListener(listener());
-    }
+	public CareerBackgroundBox() {
+		this.setText("选择生涯背景英雄");
+		this.addActionListener(actionListener());
+	}
 
-    /**
-     * @return 带布局的盒子
-     */
-    public static ComponentBO builder() {
-        CareerBackgroundBox box = new CareerBackgroundBox();
-        FrameInnerCache.careerBackgroundBox = box;
-        GridBagConstraints grid = new GridBagConstraints(
-                // 第(0,5)个格子
-                0, 4,
-                // 占1列,占1行
-                1, 1,
-                //横向占100%长度,纵向占100%长度
-                2, 2,
-                //居中,组件小的话就两边铺满窗格
-                GridBagConstraints.CENTER, GridBagConstraints.NONE,
-                // 窗格之间的距离
-                new Insets(0, 0, 0, 0),
-                // 增加组件的首选宽度和高度
-                0, 0
-        );
-        return new ComponentBO(box, grid);
-    }
+	/**
+	 * @return 带布局的盒子
+	 */
+	public static ComponentBO builder() {
+		CareerBackgroundBox box = new CareerBackgroundBox();
+		GridBagConstraints grid = new GridBagConstraints(
+				// 第(0,5)个格子
+				1, 3,
+				// 占1列,占1行
+				1, 1,
+				//横向占100%长度,纵向占100%长度
+				1, 1,
+				//居中,组件小的话就两边铺满窗格
+				GridBagConstraints.CENTER, GridBagConstraints.NONE,
+				// 窗格之间的距离
+				new Insets(0, 0, 0, 0),
+				// 增加组件的首选宽度和高度
+				0, 0
+		);
+		return new ComponentBO(box, grid);
+	}
 
-    private ItemListener listener() {
-        return e -> {
-            if (e.getStateChange() == ItemEvent.SELECTED) {
-                ItemBO item = (ItemBO) e.getItem();
-                if (item.getValue() == null) {
-                    FrameCache.careerChampionId = null;
-                } else {
-                    FrameCache.careerChampionId = Integer.parseInt(item.getValue());
-                    try {
-                        // 先清空上一个英雄的皮肤
-                        for (int i = FrameInnerCache.careerBackgroundSkinBox.getItemCount() - 1; i >= 1; i--) {
-                            FrameInnerCache.careerBackgroundSkinBox.removeItemAt(i);
-                        }
-                        // 根据所选英雄获取皮肤
-                        List<SkinBO> skin = AppCache.api.getSkinByChampionId(FrameCache.careerChampionId);
-                        for (SkinBO bo : skin) {
-                            FrameInnerCache.careerBackgroundSkinBox.addItem(new ItemBO(String.valueOf(bo.getId()), bo.getName()));
-                        }
-                    } catch (IOException ex) {
-                        log.error("选择生涯背景接口错误", ex);
-                    }
-                }
+	private ActionListener actionListener() {
+		return e -> {
+			ChampionSelectFrame selectFrame = new ChampionSelectFrame("选择生涯背景英雄", (name) -> {
+				if (!GameDataCache.allChampion.isEmpty()) {
+					ChampionBO championBO = GameDataCache.allChampion.stream().filter(i -> name.equals(i.getName())).findFirst().get();
+					FrameUserSetting.careerChampionId = championBO.getId();
+				}
 
-            }
-        };
-    }
+			});
+			selectFrame.setVisible(true);
+		};
+	}
 
 }

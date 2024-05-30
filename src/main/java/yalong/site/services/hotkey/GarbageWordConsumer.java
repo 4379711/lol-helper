@@ -1,7 +1,7 @@
 package yalong.site.services.hotkey;
 
 import yalong.site.cache.AppCache;
-import yalong.site.cache.FrameCache;
+import yalong.site.cache.FrameUserSettingPersistence;
 import yalong.site.utils.KeyEventUtil;
 
 import java.util.function.Consumer;
@@ -15,7 +15,7 @@ public class GarbageWordConsumer implements HotKeyConsumer {
 	@Override
 	public Consumer<Integer> build() {
 		return i -> {
-			if (FrameCache.communicate) {
+			if (FrameUserSettingPersistence.communicate) {
 				String s = AppCache.garbageWordList.get(nextLineNo);
 				KeyEventUtil.sendMsg(s);
 				int size = AppCache.garbageWordList.size();

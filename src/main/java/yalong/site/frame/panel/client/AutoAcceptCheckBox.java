@@ -1,6 +1,6 @@
 package yalong.site.frame.panel.client;
 
-import yalong.site.cache.FrameCache;
+import yalong.site.cache.FrameUserSettingPersistence;
 import yalong.site.frame.bo.ComponentBO;
 import yalong.site.frame.panel.base.BaseCheckBox;
 
@@ -15,7 +15,7 @@ import java.awt.event.ItemListener;
 public class AutoAcceptCheckBox extends BaseCheckBox {
 	public AutoAcceptCheckBox() {
 		this.setText("自动接受对局");
-		this.setSelected(FrameCache.autoAccept);
+		this.setSelected(FrameUserSettingPersistence.autoAccept);
 		this.addItemListener(listener());
 	}
 
@@ -30,7 +30,7 @@ public class AutoAcceptCheckBox extends BaseCheckBox {
 				// 占1列,占1行
 				1, 1,
 				//横向占100%长度,纵向占100%长度
-				2, 2,
+				1, 1,
 				//居中,组件小的话就两边铺满窗格
 				GridBagConstraints.CENTER, GridBagConstraints.NONE,
 				// 窗格之间的距离
@@ -41,7 +41,7 @@ public class AutoAcceptCheckBox extends BaseCheckBox {
 	}
 
 	private ItemListener listener() {
-		return e -> FrameCache.autoAccept = e.getStateChange() == ItemEvent.SELECTED;
+		return e -> FrameUserSettingPersistence.autoAccept = e.getStateChange() == ItemEvent.SELECTED;
 	}
 
 }

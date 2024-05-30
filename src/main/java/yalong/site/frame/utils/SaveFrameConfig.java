@@ -3,8 +3,7 @@ package yalong.site.frame.utils;
 import cn.hutool.core.io.FileUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
-import yalong.site.bo.RankBO;
-import yalong.site.cache.FrameCache;
+import yalong.site.cache.FrameUserSettingPersistence;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -25,7 +24,7 @@ public class SaveFrameConfig {
 
 	public static void save() {
 		HashMap<String, Object> map = new HashMap<>();
-		for (Field field : FrameCache.class.getFields()) {
+		for (Field field : FrameUserSettingPersistence.class.getFields()) {
 			String name = field.getName();
 			try {
 				Object o = field.get(name);
@@ -48,11 +47,12 @@ public class SaveFrameConfig {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
 			String jsonString = reader.readLine();
 			Map map1 = JSONObject.parseObject(jsonString, Map.class);
-			for (Field field : FrameCache.class.getFields()) {
+			for (Field field : FrameUserSettingPersistence.class.getFields()) {
 				String name = field.getName();
 				Object o = map1.get(name);
 				if (o instanceof com.alibaba.fastjson2.JSONObject) {
-					o = ((JSONObject) o).toJavaObject(RankBO.class);
+					//对象类型暂时不缓存到文件
+					continue;
 				}
 				field.set(name, o);
 			}

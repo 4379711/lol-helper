@@ -1,12 +1,13 @@
 package yalong.site.frame.panel.client;
 
 import lombok.extern.slf4j.Slf4j;
+import yalong.site.cache.AppCache;
 import yalong.site.frame.bo.ComponentBO;
 import yalong.site.frame.bo.ItemBO;
 import yalong.site.frame.panel.base.BaseComboBox;
-import yalong.site.frame.panel.client.listener.GameStatusBoxItemListener;
 
 import java.awt.*;
+import java.awt.event.ItemListener;
 
 /**
  * @author yaLong
@@ -16,7 +17,22 @@ public class GameStatusBox extends BaseComboBox<ItemBO> {
 
 	public GameStatusBox() {
 		this.setItems();
-		this.addItemListener(new GameStatusBoxItemListener());
+		this.addItemListener(itemListener());
+	}
+
+	private ItemListener itemListener() {
+		return e -> {
+			int stateChange = e.getStateChange();
+			//选中返回1
+			if (stateChange == 1 && AppCache.api != null) {
+				ItemBO item = (ItemBO) e.getItem();
+				try {
+					AppCache.api.changeStatus(item.getValue());
+				} catch (Exception ex) {
+					log.error("改变游戏状态错误", ex);
+				}
+			}
+		};
 	}
 
 	/**
@@ -30,7 +46,7 @@ public class GameStatusBox extends BaseComboBox<ItemBO> {
 				// 占1列,占1行
 				1, 1,
 				//横向占100%长度,纵向占100%长度
-				2, 2,
+				1, 1,
 				//居中,组件小的话就两边铺满窗格
 				GridBagConstraints.CENTER, GridBagConstraints.NONE,
 				// 窗格之间的距离

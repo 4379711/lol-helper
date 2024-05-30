@@ -10,6 +10,6 @@ import java.awt.*;
  */
 @Data
 public class LocationBO {
-    private JLabel jLabel;
-    private GridBagConstraints grid;
+	private JLabel jLabel;
+	private GridBagConstraints grid;
 }
