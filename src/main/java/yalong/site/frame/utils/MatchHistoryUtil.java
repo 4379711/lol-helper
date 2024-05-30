@@ -249,7 +249,6 @@ public class MatchHistoryUtil {
 		} catch (IOException e) {
 			log.error("获取段位错误");
 		}
-		System.out.println("段位" + rank);
 		return GameConstant.RANK.get(rank);
 	}
 

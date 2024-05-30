@@ -4,11 +4,12 @@ import cn.hutool.core.date.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import yalong.site.bo.GameData;
 import yalong.site.bo.Participants;
+import yalong.site.bo.Player;
 import yalong.site.bo.ProductsMatchHistoryBO;
-import yalong.site.bo.SummonerInfoBO;
 import yalong.site.cache.AppCache;
 import yalong.site.cache.FrameInnerCache;
 import yalong.site.cache.FrameSetting;
+import yalong.site.cache.GameDataCache;
 import yalong.site.frame.constant.GameConstant;
 import yalong.site.frame.panel.base.SearchTextField;
 import yalong.site.frame.utils.MatchHistoryUtil;
@@ -20,6 +21,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * 战绩查询的容器需要一条一条生成数据
@@ -191,29 +193,27 @@ public class MatchPanel extends JPanel {
 		return e -> {
 			if (e.getSource() instanceof SearchTextField search) {
 				String input = search.getText();
-				SummonerInfoBO summonerInfo = null;
+				Player summonerInfo = null;
 				if (input.isEmpty() && input.isBlank()) {
-					JOptionPane.showMessageDialog(null, "输入为空", "提示", JOptionPane.INFORMATION_MESSAGE);
-				} else {
-					try {
-						summonerInfo = AppCache.api.getV2InfoByNameList(new ArrayList<>() {{
-							add(input);
-						}}).get(0);
-					} catch (IOException ex) {
-						JOptionPane.showMessageDialog(null, "未查询到召唤师：" + input, "提示", JOptionPane.INFORMATION_MESSAGE);
-						log.error("未查询到召唤师");
-					}
-					try {
-						if (summonerInfo != null) {
-							FrameInnerCache.matchPanel.setData(AppCache.api.getProductsMatchHistoryByPuuid(summonerInfo.getPuuid(), 0, FrameSetting.PAGE_SIZE - 1), summonerInfo.getPuuid());
-							FrameInnerCache.matchPanel.showAllComponent();
-							FrameInnerCache.matchPanel.resetIndex();
-
-						}
-					} catch (IOException ex) {
-						log.error("查询战绩错误");
-					}
+					input = GameDataCache.me.getGameName()+"#"+GameDataCache.me.getTagLine();
 				}
+				try {
+					summonerInfo = AppCache.api.getV2InfoByNameList(Collections.singletonList(input)).get(0);
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(null, "未查询到召唤师：" + input, "提示", JOptionPane.INFORMATION_MESSAGE);
+					log.error("未查询到召唤师");
+				}
+				try {
+					if (summonerInfo != null) {
+						FrameInnerCache.matchPanel.setData(AppCache.api.getProductsMatchHistoryByPuuid(summonerInfo.getPuuid(), 0, FrameSetting.PAGE_SIZE - 1), summonerInfo.getPuuid());
+						FrameInnerCache.matchPanel.showAllComponent();
+						FrameInnerCache.matchPanel.resetIndex();
+
+					}
+				} catch (IOException ex) {
+					log.error("查询战绩错误");
+				}
+
 
 			}
 		};

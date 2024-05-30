@@ -4,7 +4,7 @@ package yalong.site.cache;
  * @author yalong
  */
 public class FrameSetting {
-	public static final int WIDTH = 700;
+	public static final int WIDTH = 800;
 	public static final int HEIGHT = 400;
 	public static final int MATCH_WIDTH = 1000;
 	public static final int MATCH_HEIGHT = 800;

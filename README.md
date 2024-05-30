@@ -32,7 +32,7 @@
 ![自动接受对局](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/02.jpg)
 ![房间内发送文字](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/03.jpg)
 ![游戏内发送文字](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/04.jpg)
-![喷人语录](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/05.jpg)
+![喷人语录](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/05.png)
 ![炫彩皮肤](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/6.png)
 
 ## 使用说明

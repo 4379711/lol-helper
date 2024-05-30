@@ -13,6 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 public class SummonerScoreBO {
-	private SummonerInfoBO summonerInfo;
+	private Player summonerInfo;
 	private List<ScoreBO> scoreBOList;
 }

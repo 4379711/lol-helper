@@ -12,7 +12,6 @@ public class BaseButton extends JButton {
 		this.setFocusPainted(false);
 		Dimension dimension = new Dimension(200, 25);
 		this.setOpaque(false);
-		this.setBorder(null);
 		this.setSize(dimension);
 		this.setMinimumSize(dimension);
 		this.setMaximumSize(dimension);
