@@ -1,8 +1,8 @@
 package yalong.site.services.lcu;
 
 import lombok.extern.slf4j.Slf4j;
+import yalong.site.bo.Player;
 import yalong.site.bo.ScoreBO;
-import yalong.site.bo.SummonerInfoBO;
 import yalong.site.bo.SummonerScoreBO;
 import yalong.site.cache.GameDataCache;
 
@@ -28,7 +28,7 @@ public class CalculateScore {
 		//根据puuid查最近几次的战绩
 		for (String puuid : puuidList) {
 			//查看玩家名称
-			SummonerInfoBO summonerInfo = api.getInfoByPuuId(puuid);
+			Player summonerInfo = api.getInfoByPuuId(puuid);
 			//查询战绩
 			List<ScoreBO> scoreBOList = api.getScoreById(puuid, gameNum - 1);
 			SummonerScoreBO summonerScoreBO = new SummonerScoreBO(summonerInfo, scoreBOList);
@@ -73,7 +73,7 @@ public class CalculateScore {
 		int gameNum = stupidScoreBOList.size();
 		stringBuilder.append(type);
 		stringBuilder.append("是:【");
-		stringBuilder.append(stupid.getSummonerInfo().getDisplayName());
+		stringBuilder.append(stupid.getSummonerInfo().getGameName());
 		stringBuilder.append(String.format("】,KDA: 【%.2f】 ", entry.getKey() / gameNum));
 		result.add(stringBuilder.toString());
 		return result;

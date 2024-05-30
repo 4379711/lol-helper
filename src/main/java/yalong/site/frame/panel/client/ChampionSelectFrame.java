@@ -46,7 +46,7 @@ public class ChampionSelectFrame extends JFrame {
 		championPanel.setPreferredSize(new Dimension(FrameSetting.CHAMPION_SELECT_WIDTH, FrameSetting.CHAMPION_SELECT_HEIGHT - 50));
 		allPanel.add(championPanel);
 		this.add(allPanel);
-		championPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 2, 2));
+		championPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 2));
 
 		this.addWindowListener(listener());
 	}
@@ -70,7 +70,7 @@ public class ChampionSelectFrame extends JFrame {
 							}
 					);
 				}
-				button.setPreferredSize(new Dimension(150, 30));
+				button.setPreferredSize(new Dimension(100, 30));
 				group.add(button);
 				championPanel.add(button);
 			}

@@ -5,9 +5,11 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.TypeReference;
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import yalong.site.bo.*;
 import yalong.site.cache.AppCache;
-import yalong.site.cache.GameDataCache;
 import yalong.site.enums.GameStatusEnum;
 import yalong.site.http.RequestLcuUtil;
 
@@ -36,11 +38,22 @@ public class LinkLeagueClientApi {
 	}
 
 	/**
+	 * 获取当前这局游戏数据
+	 */
+	public String getOnlineData() throws IOException {
+		Request request = new Request.Builder()
+				.url("https://127.0.0.1:2999/liveclientdata/allgamedata")
+				.get()
+				.build();
+		return requestLcuUtil.callString(request);
+	}
+
+	/**
 	 * 获取登录用户信息
 	 */
-	public SummonerInfoBO getCurrentSummoner() throws IOException {
+	public Player getCurrentSummoner() throws IOException {
 		String resp = requestLcuUtil.doGet("/lol-summoner/v1/current-summoner");
-		return JSON.parseObject(resp, SummonerInfoBO.class);
+		return JSON.parseObject(resp, Player.class);
 	}
 
 	/**
@@ -167,6 +180,9 @@ public class LinkLeagueClientApi {
 		return arrayList.stream().distinct().collect(Collectors.toList());
 	}
 
+	/**
+	 * 设置生涯背景
+	 */
 	public String setCurrentChampionSkins(int skinId) throws IOException {
 		JSONObject body = new JSONObject(3);
 		body.put("selectedSkinId", skinId);
@@ -217,24 +233,13 @@ public class LinkLeagueClientApi {
 	}
 
 	/**
-	 * 通过玩家游戏名,查他的信息
-	 *
-	 * @param name 玩家游戏名
-	 */
-	public SummonerInfoBO getInfoByName(String name) throws IOException {
-		String resp = requestLcuUtil.doGet("/lol-summoner/v1/summoners?name=" + name);
-		System.out.println(resp);
-		return JSON.parseObject(resp, SummonerInfoBO.class);
-	}
-
-	/**
 	 * 通过玩家id查玩家信息
 	 *
 	 * @param summonerId 玩家游戏id
 	 */
-	public SummonerInfoBO getInfoBySummonerId(String summonerId) throws IOException {
+	public Player getInfoBySummonerId(String summonerId) throws IOException {
 		String resp = requestLcuUtil.doGet("/lol-summoner/v1/summoners/" + summonerId);
-		return JSON.parseObject(resp, SummonerInfoBO.class);
+		return JSON.parseObject(resp, Player.class);
 	}
 
 	/**
@@ -242,9 +247,9 @@ public class LinkLeagueClientApi {
 	 *
 	 * @param puuId 玩家puuid
 	 */
-	public SummonerInfoBO getInfoByPuuId(String puuId) throws IOException {
+	public Player getInfoByPuuId(String puuId) throws IOException {
 		String resp = requestLcuUtil.doGet("/lol-summoner/v2/summoners/puuid/" + puuId);
-		return JSON.parseObject(resp, SummonerInfoBO.class);
+		return JSON.parseObject(resp, Player.class);
 	}
 
 	/**
@@ -252,7 +257,6 @@ public class LinkLeagueClientApi {
 	 */
 	public Rank getRank(String puuid) throws IOException {
 		String resp = requestLcuUtil.doGet("/lol-ranked/v1/ranked-stats/" + puuid);
-		System.out.println(resp);
 		return JSON.parseObject(resp, Rank.class);
 	}
 
@@ -342,12 +346,11 @@ public class LinkLeagueClientApi {
 	 *
 	 * @param nameList 玩家们的游戏名
 	 */
-	public List<SummonerInfoBO> getV2InfoByNameList(List<String> nameList) throws IOException {
+	public List<Player> getV2InfoByNameList(List<String> nameList) throws IOException {
 		JSONArray jsonArray = new JSONArray();
 		jsonArray.addAll(nameList);
 		String resp = requestLcuUtil.doPost("/lol-summoner/v2/summoners/names", jsonArray.toString());
-		System.out.println(resp);
-		return JSON.parseArray(resp, SummonerInfoBO.class);
+		return JSON.parseArray(resp, Player.class);
 	}
 
 	/**
@@ -360,7 +363,6 @@ public class LinkLeagueClientApi {
 	public ProductsMatchHistoryBO getProductsMatchHistoryByPuuid(String id, int begIndex, int endIndex) throws IOException {
 		String endpoint = "/lol-match-history/v1/products/lol/" + id + "/matches?begIndex=" + begIndex + "&endIndex=" + endIndex;
 		String resp = requestLcuUtil.doGet(endpoint);
-		System.out.println(resp);
 		return JSONObject.parseObject(resp, ProductsMatchHistoryBO.class);
 	}
 
@@ -373,7 +375,6 @@ public class LinkLeagueClientApi {
 		String endpoint = "/lol-match-history/v1/games/" + gameId;
 		String resp = requestLcuUtil.doGet(endpoint);
 		JSONObject jsonObject = JSON.parseObject(resp);
-		System.out.println(resp);
 		return jsonObject.toJavaObject(GameMatchHistoryBO.class);
 	}
 
@@ -446,15 +447,6 @@ public class LinkLeagueClientApi {
 		String resp = requestLcuUtil.doGet(endpoint);
 		return JSON.parseObject(resp, new TypeReference<ArrayList<LOLItemBO>>() {
 		});
-	}
-
-	/**
-	 * 根据英雄名称搜索英雄
-	 *
-	 * @since 7.3
-	 */
-	public List<ChampionBO> getChampionByName(String name) {
-		return GameDataCache.allChampion.stream().toList().stream().filter(e -> e.getName().contains(name)).collect(Collectors.toList());
 	}
 
 	/**

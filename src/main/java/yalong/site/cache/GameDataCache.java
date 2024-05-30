@@ -13,7 +13,7 @@ import java.util.ArrayList;
 @Slf4j
 public class GameDataCache {
 
-	public static SummonerInfoBO me;
+	public static Player me;
 	public static ArrayList<String> otherTeamScore = new ArrayList<>();
 	public static ArrayList<String> myTeamScore = new ArrayList<>();
 	public static ArrayList<ChampionBO> allChampion = new ArrayList<>();

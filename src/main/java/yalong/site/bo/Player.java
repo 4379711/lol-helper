@@ -20,4 +20,6 @@ public class Player {
 	private Long summonerId;
 	private String summonerName;
 	private String tagLine;
+	private String privacy;
+	private int summonerLevel;
 }

@@ -7,15 +7,12 @@ import yalong.site.cache.FrameInnerCache;
 import yalong.site.cache.FrameSetting;
 import yalong.site.frame.bo.ScoreLevelBO;
 import yalong.site.frame.constant.GameConstant;
-import yalong.site.frame.panel.base.SearchTextField;
 import yalong.site.frame.utils.MatchHistoryUtil;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -69,23 +66,6 @@ public class HistoryDetail extends JPanel {
 		return jPanel;
 	}
 
-	private JPanel buildTeam2Title() {
-		JPanel jPanel = new JPanel();
-		GridBagLayout layout = new GridBagLayout();
-		jPanel.setLayout(layout);
-		jPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1, true));
-		jPanel.setBackground(Color.GRAY);
-		ArrayList<GridBagConstraints> grid = titleGridList();
-		jPanel.add(new JLabel("蓝色方"), grid.get(0));
-		jPanel.add(new JLabel("评分"), grid.get(1));
-		jPanel.add(new JLabel("KDA"), grid.get(2));
-		jPanel.add(new JLabel("伤害"), grid.get(3));
-		jPanel.add(new JLabel("眼"), grid.get(4));
-		jPanel.add(new JLabel("补兵数"), grid.get(5));
-		jPanel.add(new JLabel("装备"), grid.get(6));
-		return jPanel;
-	}
-
 	/**
 	 * 管局玩家数据构建布局
 	 *
@@ -129,7 +109,6 @@ public class HistoryDetail extends JPanel {
 		jPanel.add(name, gridList.get(5));
 		//段位
 		jPanel.add(new JLabel(MatchHistoryUtil.getRanked(playInfo.getPlayer().getPuuid())), gridList.get(6));
-		System.out.println(AppCache.api.getRank(playInfo.getPlayer().getPuuid()));
 		//评分
 		DecimalFormat df = new DecimalFormat("#.0");
 		JLabel score = new JLabel(df.format(scoreLevel.getScore()));
@@ -603,42 +582,6 @@ public class HistoryDetail extends JPanel {
 				0, 0));
 		return arrayList;
 	}
-
-	private ActionListener actionListener() {
-		return new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (e.getSource() instanceof SearchTextField search) {
-					String input = search.getText();
-					SummonerInfoBO summonerInfo = null;
-					if (input.isEmpty() && input.isBlank()) {
-						JOptionPane.showMessageDialog(null, "输入为空", "提示", JOptionPane.INFORMATION_MESSAGE);
-					} else {
-						try {
-							summonerInfo = AppCache.api.getV2InfoByNameList(new ArrayList<>() {{
-								add(input);
-							}}).get(0);
-						} catch (IOException ex) {
-							JOptionPane.showMessageDialog(null, "未查询到召唤师：" + input, "提示", JOptionPane.INFORMATION_MESSAGE);
-							log.error("未查询到召唤师");
-						}
-						try {
-							if (summonerInfo != null) {
-								FrameInnerCache.matchPanel.setData(AppCache.api.getProductsMatchHistoryByPuuid(summonerInfo.getPuuid(), 0, FrameSetting.PAGE_SIZE - 1), summonerInfo.getPuuid());
-								FrameInnerCache.matchPanel.showAllComponent();
-								FrameInnerCache.matchPanel.resetIndex();
-
-							}
-						} catch (IOException ex) {
-							log.error("查询战绩错误");
-						}
-					}
-
-				}
-			}
-		};
-	}
-
 }
 
 @Slf4j
@@ -660,7 +603,7 @@ class NameLabelListener extends MouseAdapter {
 			try {
 				java.util.List<String> list = new ArrayList<String>();
 				list.add(jLabel.getText());
-				List<SummonerInfoBO> summonerInfoBOList = AppCache.api.getV2InfoByNameList(list);
+				List<Player> summonerInfoBOList = AppCache.api.getV2InfoByNameList(list);
 				String puuid = summonerInfoBOList.get(0).getPuuid();
 				ProductsMatchHistoryBO pmh = AppCache.api.getProductsMatchHistoryByPuuid(puuid, 0, FrameSetting.PAGE_SIZE - 1);
 				FrameInnerCache.matchPanel.resetIndex();

@@ -29,9 +29,7 @@ public class PickSkinBox extends BaseComboBox<ItemBO> {
 		this.addPopupMenuListener(popupMenuListener());
 	}
 
-	private void initItems() {
-		box.removeAllItems();
-		box.addItem(new ItemBO(null, "选择炫彩皮肤"));
+	private void loadItems(){
 		try {
 			if (AppCache.api != null) {
 				List<SkinBO> currentChampionSkins = AppCache.api.getCurrentChampionSkins();
@@ -43,7 +41,11 @@ public class PickSkinBox extends BaseComboBox<ItemBO> {
 		} catch (IOException ex) {
 			log.error("获取炫彩皮肤接口错误", ex);
 		}
+	}
 
+	private void initItems() {
+		box.removeAllItems();
+		box.addItem(new ItemBO(null, "选择炫彩皮肤"));
 	}
 
 	private PopupMenuListener popupMenuListener() {
@@ -52,6 +54,7 @@ public class PickSkinBox extends BaseComboBox<ItemBO> {
 			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
 				//重新加载皮肤数据
 				initItems();
+				loadItems();
 			}
 
 			@Override
@@ -61,7 +64,7 @@ public class PickSkinBox extends BaseComboBox<ItemBO> {
 
 			@Override
 			public void popupMenuCanceled(PopupMenuEvent e) {
-
+				initItems();
 			}
 		};
 	}
@@ -99,9 +102,7 @@ public class PickSkinBox extends BaseComboBox<ItemBO> {
 					} catch (IOException ex) {
 						log.error("设置炫彩皮肤接口错误", ex);
 					}
-
 				}
-
 			}
 		};
 	}

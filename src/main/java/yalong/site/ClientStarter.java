@@ -26,6 +26,7 @@ public class ClientStarter {
 		}
 		RequestLcuUtil requestUtil = new RequestLcuUtil(leagueClientBO);
 		api = new LinkLeagueClientApi(requestUtil);
+		GameDataCache.cacheLcuMe();
 	}
 
 	@SuppressWarnings("InfiniteLoopStatement")
