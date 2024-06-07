@@ -53,7 +53,6 @@ public class ClientPanel extends BasePanel {
 		for (int i = 0; i < list.size(); i++) {
 			int y = i / 3;
 			int x = i % 3;
-			System.out.println("("+x+","+y+") ");
 			GridBagConstraints grid = new GridBagConstraints(
 					// 第(0,0)个格子
 					x, y,
