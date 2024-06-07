@@ -2,6 +2,7 @@ package yalong.site.services.hotkey;
 
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
+import yalong.site.cache.AppCache;
 
 /**
  * @author yaLong
@@ -16,7 +17,10 @@ public class HotKeyListener implements NativeKeyListener {
 	public void nativeKeyReleased(NativeKeyEvent e) {
 		HotKeyConsumer hotKeyConsumer = HotKeyFactory.getHotKeyConsumer(e.getKeyCode());
 		if (hotKeyConsumer != null) {
-			hotKeyConsumer.build().accept(e.getKeyCode());
+			//屏蔽按键
+			if (!AppCache.stopAuto || e.getKeyCode() == NativeKeyEvent.VC_PAUSE) {
+				hotKeyConsumer.build().accept(e.getKeyCode());
+			}
 		}
 	}
 

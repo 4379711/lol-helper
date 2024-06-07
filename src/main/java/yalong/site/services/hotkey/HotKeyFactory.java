@@ -19,6 +19,7 @@ public class HotKeyFactory {
 		HOT_KEY_MAP.put(NativeKeyEvent.VC_END, new CaiHongPiConsumer());
 		HOT_KEY_MAP.put(NativeKeyEvent.VC_HOME, new GarbageWordConsumer());
 		HOT_KEY_MAP.put(NativeKeyEvent.VC_DELETE, new MarkWordDeleteConsumer());
+		HOT_KEY_MAP.put(NativeKeyEvent.VC_PAUSE, new ControlAutoFuncConsumer());
 	}
 
 	public static HotKeyConsumer getHotKeyConsumer(int keyCode) {

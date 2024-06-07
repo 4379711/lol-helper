@@ -6,6 +6,12 @@ package yalong.site.cache;
  * @author yaLong
  */
 public class FrameUserSettingPersistence {
+
+	/**
+	 * 自动寻找对局
+	 */
+	public static boolean autoSearch = true;
+
 	/**
 	 * 自动接受对局
 	 */

@@ -5,8 +5,6 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.TypeReference;
-import okhttp3.Call;
-import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import yalong.site.bo.*;
 import yalong.site.cache.AppCache;
@@ -307,6 +305,13 @@ public class LinkLeagueClientApi {
 	 */
 	public String playAgain() throws IOException {
 		return requestLcuUtil.doPost("/lol-lobby/v2/play-again", "");
+	}
+
+	/**
+	 * 寻找对局
+	 */
+	public String search() throws IOException {
+		return requestLcuUtil.doPost("/lol-lobby/v2/lobby/matchmaking/search", "");
 	}
 
 	/**

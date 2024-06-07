@@ -4,13 +4,11 @@ import lombok.extern.slf4j.Slf4j;
 import yalong.site.bo.SkinBO;
 import yalong.site.cache.AppCache;
 import yalong.site.cache.FrameUserSetting;
-import yalong.site.frame.bo.ComponentBO;
 import yalong.site.frame.bo.ItemBO;
 import yalong.site.frame.panel.base.BaseComboBox;
 
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
-import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.IOException;
@@ -46,28 +44,6 @@ public class CareerBackgroundSkinBox extends BaseComboBox<ItemBO> {
 	private void initItems() {
 		box.removeAllItems();
 		box.addItem(new ItemBO(null, "选择生涯背景皮肤"));
-	}
-
-	/**
-	 * @return 带布局的盒子
-	 */
-	public static ComponentBO builder() {
-		CareerBackgroundSkinBox box = new CareerBackgroundSkinBox();
-		GridBagConstraints grid = new GridBagConstraints(
-				// 第(1,5)个格子
-				2, 3,
-				// 占1列,占1行
-				1, 1,
-				//横向占100%长度,纵向占100%长度
-				1, 1,
-				//居中,组件小的话就两边铺满窗格
-				GridBagConstraints.CENTER, GridBagConstraints.NONE,
-				// 窗格之间的距离
-				new Insets(0, 0, 0, 0),
-				// 增加组件的首选宽度和高度
-				0, 0
-		);
-		return new ComponentBO(box, grid);
 	}
 
 	private PopupMenuListener popupMenuListener() {

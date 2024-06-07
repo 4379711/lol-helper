@@ -16,5 +16,6 @@ public class AppCache {
 	public static ArrayList<String> resultPanelMsgList = new ArrayList<>();
 	public static Set<Integer> hotKeyCode = new HashSet<>();
 	public static Set<Integer> commonKeyCode = new HashSet<>();
+	public static boolean stopAuto = false;
 
 }

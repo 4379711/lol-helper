@@ -50,7 +50,7 @@ public class SaveFrameConfig {
 			for (Field field : FrameUserSettingPersistence.class.getFields()) {
 				String name = field.getName();
 				Object o = map1.get(name);
-				if (o instanceof com.alibaba.fastjson2.JSONObject) {
+				if (o==null || o instanceof com.alibaba.fastjson2.JSONObject) {
 					//对象类型暂时不缓存到文件
 					continue;
 				}
