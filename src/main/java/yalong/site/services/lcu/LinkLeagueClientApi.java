@@ -310,6 +310,13 @@ public class LinkLeagueClientApi {
 	}
 
 	/**
+	 * 寻找对局
+	 */
+	public String search() throws IOException {
+		return requestLcuUtil.doPost("/lol-lobby/v2/lobby/matchmaking/search", "");
+	}
+
+	/**
 	 * 游戏结束后点赞队友
 	 */
 	public String honor() throws IOException {

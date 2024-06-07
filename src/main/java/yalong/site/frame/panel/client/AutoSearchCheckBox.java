@@ -8,17 +8,16 @@ import java.awt.event.ItemListener;
 
 /**
  * @author yaLong
- * @date 2022/2/11
  */
-public class CommunicateCheckBox extends BaseCheckBox {
-	public CommunicateCheckBox() {
-		this.setText("互动模式");
-		this.setSelected(FrameUserSettingPersistence.communicate);
+public class AutoSearchCheckBox extends BaseCheckBox {
+	public AutoSearchCheckBox() {
+		this.setText("自动寻找对局");
+		this.setSelected(FrameUserSettingPersistence.autoSearch);
 		this.addItemListener(listener());
 	}
 
 	private ItemListener listener() {
-		return e -> FrameUserSettingPersistence.communicate = e.getStateChange() == ItemEvent.SELECTED;
+		return e -> FrameUserSettingPersistence.autoSearch = e.getStateChange() == ItemEvent.SELECTED;
 	}
 
 }

@@ -2,6 +2,7 @@ package yalong.site;
 
 import lombok.extern.slf4j.Slf4j;
 import yalong.site.bo.LeagueClientBO;
+import yalong.site.cache.AppCache;
 import yalong.site.cache.GameDataCache;
 import yalong.site.enums.GameStatusEnum;
 import yalong.site.exception.NoProcessException;
@@ -33,17 +34,23 @@ public class ClientStarter {
 	public void listenGameStatus() throws InterruptedException, IOException {
 		while (true) {
 			TimeUnit.MILLISECONDS.sleep(500);
+			if(AppCache.stopAuto){
+				continue;
+			}
 			GameStatusContext gameStatusContext = new GameStatusContext();
 			CalculateScore calculateScore = new CalculateScore(api);
 			//监听游戏状态
 			GameStatusEnum gameStatus = api.getGameStatus();
 			switch (gameStatus) {
 				case None:
-				case Lobby:
 				case Matchmaking:
 				case WaitingForStats: {
 					gameStatusContext.setStrategy(new OtherStatusStrategy());
 					GameDataCache.reset();
+					break;
+				}
+				case Lobby:{
+					gameStatusContext.setStrategy(new LobbyStrategy(api));
 					break;
 				}
 				case ReadyCheck: {
