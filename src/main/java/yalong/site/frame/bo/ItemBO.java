@@ -1,33 +1,36 @@
 package yalong.site.frame.bo;
 
-import lombok.Getter;
+import lombok.Data;
 
 /**
  * @author yaLong
  */
-@Getter
+@Data
 public class ItemBO {
 	/**
 	 * 实际用到的值
 	 */
-	private final String value;
+	private String value;
 	/**
 	 * 显示的值
 	 */
-	private final String displayValue;
+	private String displayValue;
 	/**
 	 * 序号
 	 */
-	private final Integer index;
+	private Integer index;
 
-	public ItemBO(String value, String displayValue) {
-		this(value, displayValue, null);
+	/**
+	 * 其他信息
+	 */
+	private Object other;
+
+	public ItemBO() {
 	}
 
-	public ItemBO(String value, String displayValue, Integer index) {
+	public ItemBO(String value, String displayValue) {
 		this.value = value;
 		this.displayValue = displayValue;
-		this.index = index;
 	}
 
 	@Override
