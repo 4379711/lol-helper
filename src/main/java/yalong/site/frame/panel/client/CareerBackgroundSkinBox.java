@@ -1,5 +1,6 @@
 package yalong.site.frame.panel.client;
 
+import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import yalong.site.bo.SkinBO;
 import yalong.site.cache.AppCache;
@@ -34,7 +35,9 @@ public class CareerBackgroundSkinBox extends BaseComboBox<ItemBO> {
 				// 根据所选英雄获取皮肤
 				List<SkinBO> skin = AppCache.api.getSkinByChampionId(FrameUserSetting.careerChampionId);
 				for (SkinBO bo : skin) {
-					box.addItem(new ItemBO(String.valueOf(bo.getId()), bo.getName()));
+					ItemBO itemBO = new ItemBO(String.valueOf(bo.getId()), bo.getName());
+					itemBO.setOther(bo.getContentId());
+					box.addItem(itemBO);
 				}
 			}
 		} catch (IOException ex) {
@@ -73,9 +76,18 @@ public class CareerBackgroundSkinBox extends BaseComboBox<ItemBO> {
 				ItemBO item = (ItemBO) e.getItem();
 				if (item.getValue() != null) {
 					try {
-						int skinId = Integer.parseInt(item.getValue());
+						String skinId = item.getValue();
 						// 设置生涯背景
-						AppCache.api.setBackgroundSkin(skinId);
+						JSONObject body = new JSONObject(2);
+						body.put("key", "backgroundSkinId");
+						body.put("value", skinId);
+						AppCache.api.setBackgroundSkin(body.toJSONString());
+						//皮肤增强
+						if(item.getOther()!=null){
+							body.put("key", "backgroundSkinAugments");
+							body.put("value", item.getOther());
+							AppCache.api.setBackgroundSkin(body.toJSONString());
+						}
 					} catch (Exception exception) {
 						log.error("设置生涯背景接口错误", exception);
 					}

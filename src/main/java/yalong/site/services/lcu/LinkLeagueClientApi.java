@@ -93,15 +93,15 @@ public class LinkLeagueClientApi {
 	/**
 	 * 生涯设置背景皮肤
 	 *
-	 * @param skinId 皮肤id,长度5位
-	 *               比如:其中 13006，这个ID分为两部分 13 和 006,
-	 *               13是英雄id,6是皮肤id(不足3位,前面补0)
+	 * @param body 皮肤数据
 	 */
-	public void setBackgroundSkin(int skinId) throws IOException {
-		JSONObject body = new JSONObject(1);
-		body.put("key", "backgroundSkinId");
-		body.put("value", skinId);
-		requestLcuUtil.doPost("/lol-summoner/v1/current-summoner/summoner-profile", body.toJSONString());
+	public void setBackgroundSkin(String body) throws IOException {
+//		JSONObject body = new JSONObject(2);
+//		body.put("key", "backgroundSkinId");
+//		body.put("value", skinId)
+// 		增强皮肤(带签名),参数用这个,分两次调用
+//		body.put("key", "backgroundSkinAugments");
+		requestLcuUtil.doPost("/lol-summoner/v1/current-summoner/summoner-profile", body);
 	}
 
 	/**
@@ -174,12 +174,38 @@ public class LinkLeagueClientApi {
 			Integer id = jsonObject.getInteger("id");
 			String name = jsonObject.getString("name");
 			arrayList.add(new SkinBO(id, name));
+			//有签名的皮肤
+			JSONObject questSkinInfo = jsonObject.getJSONObject("questSkinInfo");
+			if(questSkinInfo!=null){
+				JSONArray tiers = questSkinInfo.getJSONArray("tiers");
+				if(tiers!=null){
+					for (int k = 0; k < tiers.size(); k++) {
+						JSONObject jsonObject_ = tiers.getJSONObject(k);
+						Integer id_ = jsonObject_.getInteger("id");
+						String name_ = jsonObject_.getString("name");
+						//加强版皮肤
+						JSONObject skinAugments = jsonObject_.getJSONObject("skinAugments");
+						if(skinAugments!=null){
+							JSONArray augments = skinAugments.getJSONArray("augments");
+							if (augments!=null){
+								for (int l = 0; l < augments.size(); l++) {
+                                    String contentId = augments.getJSONObject(l).getString("contentId");
+                                    arrayList.add(new SkinBO(id_, name_,contentId));
+                                }
+							}
+						}else {
+                            arrayList.add(new SkinBO(id_, name_));
+                        }
+
+					}
+				}
+			}
 		}
 		return arrayList.stream().distinct().collect(Collectors.toList());
 	}
 
 	/**
-	 * 设置生涯背景
+	 * 设置炫彩皮肤
 	 */
 	public String setCurrentChampionSkins(int skinId) throws IOException {
 		JSONObject body = new JSONObject(3);
