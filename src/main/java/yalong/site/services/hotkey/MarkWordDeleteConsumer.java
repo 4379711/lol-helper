@@ -13,7 +13,7 @@ public class MarkWordDeleteConsumer implements HotKeyConsumer {
 	public Consumer<Integer> build() {
 		return i -> {
 			String lastCommunicateWord = AppCache.lastGarbageWord;
-			if (lastCommunicateWord != null && !"".equals(lastCommunicateWord)) {
+			if (lastCommunicateWord != null && !lastCommunicateWord.isEmpty()) {
 				FrameMsgUtil.sendLine("[屏蔽]:" + lastCommunicateWord);
 			}
 		};

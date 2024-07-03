@@ -15,7 +15,7 @@ public class CaiHongPiConsumer implements HotKeyConsumer {
 		return i -> {
 			if (FrameUserSettingPersistence.communicate) {
 				String s = CaihongpiWord.requestCaiHongPiText();
-				if (s != null && !"".equals(s)) {
+				if (s != null && !s.isEmpty()) {
 					KeyEventUtil.sendMsg(s);
 				}
 			}
