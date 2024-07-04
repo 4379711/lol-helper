@@ -15,8 +15,8 @@ public class LeagueClientHelper {
 
 	public static void main(String[] args) {
 		MainFrame.start();
+		String msg = "";
 		while (true) {
-			String msg = "";
 			try {
 				ClientStarter clientStarter = new ClientStarter();
 				clientStarter.initLcu();

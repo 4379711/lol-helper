@@ -32,7 +32,6 @@ public class HttpClient {
 			}
 		}
 		return instance;
-
 	}
 
 	private static OkHttpClient myHttpClient() {
