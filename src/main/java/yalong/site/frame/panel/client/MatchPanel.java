@@ -10,7 +10,7 @@ import yalong.site.cache.AppCache;
 import yalong.site.cache.FrameInnerCache;
 import yalong.site.cache.FrameSetting;
 import yalong.site.cache.GameDataCache;
-import yalong.site.frame.constant.GameConstant;
+import yalong.site.enums.ImageEnum;
 import yalong.site.frame.panel.base.SearchTextField;
 import yalong.site.frame.utils.MatchHistoryUtil;
 
@@ -157,8 +157,8 @@ public class MatchPanel extends JPanel {
 	private ArrayList<Object> createMatchHistoryBO(GameData data) {
 		Participants me = data.getParticipants().get(0);
 		ArrayList<Object> list = new ArrayList<>();
-		list.add("<html><body>" + GameConstant.GAME_TYPE.get(data.getQueueId()) + "<hr>" + DateUtil.format(data.getGameCreationDate(), "MM-dd HH:mm") + "</body></html>");
-		list.add(MatchHistoryUtil.getChampionIcon(me.getChampionId(), FrameSetting.CHAMPION_ICON_SIZE, FrameSetting.CHAMPION_ICON_SIZE));
+ 		list.add("<html><body>" + GameDataCache.gameQueuesList.get(data.getQueueId()).getName() + "<hr>" + DateUtil.format(data.getGameCreationDate(), "MM-dd HH:mm") + "</body></html>");
+		list.add(MatchHistoryUtil.getChampionIcon(me.getChampionId(), FrameSetting.CHAMPION_ICON_SIZE, FrameSetting.CHAMPION_ICON_SIZE, ImageEnum.ROUND));
 		list.add(MatchHistoryUtil.getSummonerSpellImageIcon(me.getSpell1Id(), FrameSetting.ITEM_ICON_SIZE, FrameSetting.ITEM_ICON_SIZE));
 		list.add(MatchHistoryUtil.getPerkStyleImageIcon(me.getStats().getPerkPrimaryStyle(), FrameSetting.ITEM_ICON_SIZE, FrameSetting.ITEM_ICON_SIZE));
 		//召唤师名

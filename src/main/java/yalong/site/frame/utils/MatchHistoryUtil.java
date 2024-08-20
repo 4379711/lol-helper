@@ -8,8 +8,10 @@ import yalong.site.bo.Teams;
 import yalong.site.cache.AppCache;
 import yalong.site.cache.GameDataCache;
 import yalong.site.enums.GameTypeEnum;
+import yalong.site.enums.ImageEnum;
 import yalong.site.frame.bo.ScoreLevelBO;
 import yalong.site.frame.constant.GameConstant;
+import yalong.site.utils.ImageUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -195,15 +197,24 @@ public class MatchHistoryUtil {
 	 * @param id                 英雄ID
 	 * @param championIconWidth  英雄图标高
 	 * @param championIconHeight 英雄图标宽
+	 * @param imageEnum        图片新装
 	 * @return 图片
 	 */
 
-	public static ImageIcon getChampionIcon(Integer id, Integer championIconWidth, Integer championIconHeight) {
+	public static ImageIcon getChampionIcon(Integer id, Integer championIconWidth, Integer championIconHeight, ImageEnum imageEnum) {
 		if (id != 0) {
-			try {
-				return new ImageIcon(AppCache.api.getChampionIcons(id).getScaledInstance(championIconWidth, championIconHeight, Image.SCALE_DEFAULT));
-			} catch (IOException e) {
-				return new ImageIcon(new BufferedImage(championIconWidth, championIconHeight, BufferedImage.TYPE_INT_ARGB));
+			if (imageEnum == ImageEnum.ROUND) {
+				try {
+					return new ImageIcon(ImageUtil.makeRoundedCorner(AppCache.api.getChampionIcons(id).getScaledInstance(championIconWidth, championIconHeight, Image.SCALE_REPLICATE)));
+				} catch (IOException e) {
+					return new ImageIcon(new BufferedImage(championIconWidth, championIconHeight, BufferedImage.TYPE_INT_ARGB));
+				}
+			} else if (imageEnum == ImageEnum.SQUARE) {
+				try {
+					return new ImageIcon(AppCache.api.getChampionIcons(id).getScaledInstance(championIconWidth, championIconHeight, Image.SCALE_REPLICATE));
+				} catch (IOException e) {
+					return new ImageIcon(new BufferedImage(championIconWidth, championIconHeight, BufferedImage.TYPE_INT_ARGB));
+				}
 			}
 		}
 
@@ -216,10 +227,10 @@ public class MatchHistoryUtil {
 	public static Color getBackGroundColor(boolean win) {
 		if (win) {
 			//半透明绿色
-			return new Color(0, 255, 0, 31);
+			return new Color(103, 194, 58, 63);
 		} else {
 			//半透明红色
-			return new Color(255, 0, 0, 31);
+			return new Color(245, 108, 108, 63);
 		}
 	}
 
@@ -335,6 +346,28 @@ public class MatchHistoryUtil {
 		}
 
 		return scoreLevelList;
+	}
+
+	/**
+	 * 获取召唤师头像
+	 *
+	 * @param profileIconId 头像id
+	 * @param iconWidth     图标宽度
+	 * @param iconHeight    图标高度
+	 */
+
+	public static ImageIcon getSummonerIcon(Integer profileIconId, Integer iconWidth, Integer iconHeight) {
+		if (profileIconId != null) {
+			try {
+				Image imageSrc = ImageUtil.makeRoundedCorner(AppCache.api.getProfileIcon(profileIconId)).getScaledInstance(iconWidth, iconHeight, Image.SCALE_DEFAULT);
+				return new ImageIcon(imageSrc);
+
+			} catch (IOException e) {
+				log.error("未检测到图像");
+				new ImageIcon(new BufferedImage(iconWidth, iconHeight, BufferedImage.TYPE_INT_ARGB));
+			}
+		}
+		return new ImageIcon(new BufferedImage(iconWidth, iconHeight, BufferedImage.TYPE_INT_ARGB));
 	}
 
 }

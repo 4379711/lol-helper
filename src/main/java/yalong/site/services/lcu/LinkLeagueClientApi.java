@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -489,5 +490,56 @@ public class LinkLeagueClientApi {
 		JSONObject jsonObject = JSON.parseObject(resp);
 		return JSON.parseObject(jsonObject.get("styles").toString(), new TypeReference<ArrayList<PerkStyleBO>>() {
 		});
+	}
+
+	/**
+	 * 获取玩家头像
+	 *
+	 * @param profileIconId 头像ID
+	 */
+	public Image getProfileIcon(Integer profileIconId) throws IOException {
+		String endpoint = "/lol-game-data/assets/v1/profile-icons/" + profileIconId + ".jpg ";
+		String url;
+		url = endpoint.substring(1);
+		boolean exist = FileUtil.exist(new File(url));
+		if (exist) {
+			return ImageIO.read(FileUtil.getInputStream(new File(url)));
+		} else {
+			File file = FileUtil.writeBytes(requestLcuUtil.download(endpoint), new File(url));
+			return ImageIO.read(FileUtil.getInputStream(file));
+		}
+	}
+
+	/**
+	 * 获取SGP接口accessToken
+	 */
+	public String getSgpAccessToken() throws IOException {
+		String endpoint = "/entitlements/v1/token";
+		String resp = requestLcuUtil.doGet(endpoint);
+		return JSON.parseObject(resp).get("accessToken").toString();
+
+	}
+
+	/**
+	 * 获取全部模式地图信息
+	 */
+	public Map<Integer, GameQueue> getAllQueue() throws IOException {
+		String endpoint = "/lol-game-queues/v1/queues";
+		String resp = requestLcuUtil.doGet(endpoint);
+		ArrayList<GameQueue> gameQueues = JSON.parseObject(resp, new TypeReference<ArrayList<GameQueue>>() {
+		});
+		Map<Integer, GameQueue> data = new HashMap<>();
+		for (GameQueue gameQueue : gameQueues) {
+			data.put(gameQueue.getId(), gameQueue);
+		}
+		return data;
+	}
+
+	/**
+	 * 获取游戏模式加描述资源
+	 */
+	public String getMaps() throws IOException {
+		String endpoint = "/lol-maps/v1/maps";
+		return requestLcuUtil.doGet(endpoint);
 	}
 }

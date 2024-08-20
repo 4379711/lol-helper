@@ -32,7 +32,7 @@ public class ClientPanel extends BasePanel {
 
 		list.add(new AutoReconnectCheckBox());
 		list.add(new PickSkinBox());
-		list.add(new JPanel());
+		list.add(new ShowTeamBox());
 
 		list.add(new GameStatusBox());
 		list.add(new CareerBackgroundBox());

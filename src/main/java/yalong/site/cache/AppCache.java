@@ -1,6 +1,7 @@
 package yalong.site.cache;
 
 import yalong.site.services.lcu.LinkLeagueClientApi;
+import yalong.site.services.sgp.RegionSgpApi;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -17,5 +18,6 @@ public class AppCache {
 	public static Set<Integer> hotKeyCode = new HashSet<>();
 	public static Set<Integer> commonKeyCode = new HashSet<>();
 	public static boolean stopAuto = false;
+	public static RegionSgpApi sgpApi;
 
 }

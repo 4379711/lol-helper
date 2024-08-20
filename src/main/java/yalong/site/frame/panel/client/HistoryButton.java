@@ -28,7 +28,6 @@ public class HistoryButton extends BaseButton {
 		return new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				GameDataCache.cacheLcuAll();
 				if (FrameInnerCache.matchPanel == null && FrameInnerCache.matchFrame == null) {
 					JFrame jFrame = new JFrame("战绩查询");
 					FrameInnerCache.matchFrame = jFrame;

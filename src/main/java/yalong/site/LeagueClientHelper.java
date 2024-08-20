@@ -1,6 +1,7 @@
 package yalong.site;
 
 import lombok.extern.slf4j.Slf4j;
+import yalong.site.cache.GameDataCache;
 import yalong.site.exception.NoProcessException;
 import yalong.site.frame.MainFrame;
 import yalong.site.services.hotkey.HotKeyService;
@@ -20,6 +21,8 @@ public class LeagueClientHelper {
 			try {
 				ClientStarter clientStarter = new ClientStarter();
 				clientStarter.initLcu();
+				clientStarter.initSgp();
+				GameDataCache.cacheLcuAll();
 				MainFrame.showFrame();
 				HotKeyService.start();
 				clientStarter.listenGameStatus();
