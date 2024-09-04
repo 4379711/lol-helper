@@ -3,7 +3,7 @@ package yalong.site.cache;
 import lombok.extern.slf4j.Slf4j;
 import yalong.site.bo.*;
 
-import java.util.ArrayList;
+import java.util.*;
 
 /**
  * 每一局游戏的数据缓存
@@ -33,6 +33,14 @@ public class GameDataCache {
 	 * 基石符文信息
 	 */
 	public static ArrayList<PerkStyleBO> perkStyleList = new ArrayList<>();
+	/**
+	 * 游戏地图模式信息
+	 */
+	public static Map<Integer, GameQueue> gameQueuesList = new HashMap<>();
+	/**
+	 * 队友战绩缓存
+	 */
+	public static List<TeamSummonerBO> myTeamMatchHistory = new ArrayList<>();
 
 	public static void reset() {
 		resetScore();
@@ -72,6 +80,7 @@ public class GameDataCache {
 				itemList = AppCache.api.getAllItems();
 				perkStyleList = AppCache.api.getAllPerkStyleBO();
 				summonerSpellsList = AppCache.api.getAllSummonerSpells();
+				gameQueuesList = AppCache.api.getAllQueue();
 				log.error("获取资源文件成功");
 			} catch (Exception err) {
 				log.error("获取资源文件失败", err);

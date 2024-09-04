@@ -21,7 +21,9 @@ public class AboutPanel extends BasePanel {
 		textArea.setOpaque(false);
 		textArea.setText(
 				"本软件永久免费\n"
-				+ "qq群:882050965"
+						+ "加入qq群获取最新版本\n"
+						+ "qq群号:882050965(已满加入2群)\n"
+						+ "qq2群号:1001245686"
 		);
 		textArea.setEditable(false);
 		textArea.setForeground(Color.red);

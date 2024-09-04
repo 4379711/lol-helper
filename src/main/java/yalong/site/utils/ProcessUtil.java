@@ -18,6 +18,7 @@ import java.util.regex.Pattern;
 public class ProcessUtil {
 	public static Pattern appPortPattern = Pattern.compile("--app-port=(\\d+)");
 	public static Pattern tokenPattern = Pattern.compile("--remoting-auth-token=([\\w-]+)");
+	public static Pattern reginPattern = Pattern.compile("--rso_platform_id=([\\w-]+)");
 
 	/**
 	 * 通过进程名查询出进程的启动命令,解析出需要的客户端token和端口
@@ -36,13 +37,16 @@ public class ProcessUtil {
 			while ((line = reader.readLine()) != null) {
 				Matcher appPortMatcher = appPortPattern.matcher(line);
 				Matcher tokenPatternMatcher = tokenPattern.matcher(line);
+				Matcher reginPatternMatcher = reginPattern.matcher(line);
 				if (tokenPatternMatcher.find()) {
 					leagueClientBO.setToken(tokenPatternMatcher.group(1));
 				}
 				if (appPortMatcher.find()) {
 					leagueClientBO.setPort(appPortMatcher.group(1));
 				}
-
+				if (reginPatternMatcher.find()) {
+					leagueClientBO.setRegion(reginPatternMatcher.group(1));
+				}
 			}
 			return leagueClientBO;
 		} finally {

@@ -18,4 +18,9 @@ public class LeagueClientBO {
 	 * 密钥
 	 */
 	private String token;
+
+	/**
+	 * 区域
+	 */
+	private String region;
 }

@@ -3,11 +3,15 @@ package yalong.site;
 import lombok.extern.slf4j.Slf4j;
 import yalong.site.bo.LeagueClientBO;
 import yalong.site.cache.AppCache;
+import yalong.site.cache.FrameInnerCache;
 import yalong.site.cache.GameDataCache;
 import yalong.site.enums.GameStatusEnum;
+import yalong.site.exception.NoLcuApiException;
 import yalong.site.exception.NoProcessException;
 import yalong.site.http.RequestLcuUtil;
+import yalong.site.http.RequestSgpUtil;
 import yalong.site.services.lcu.*;
+import yalong.site.services.sgp.RegionSgpApi;
 import yalong.site.utils.ProcessUtil;
 
 import java.io.IOException;
@@ -19,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class ClientStarter {
 	private LinkLeagueClientApi api;
+	private RegionSgpApi localSgpApi;
 
 	public void initLcu() throws Exception {
 		LeagueClientBO leagueClientBO = ProcessUtil.getClientProcess();
@@ -28,6 +33,18 @@ public class ClientStarter {
 		RequestLcuUtil requestUtil = new RequestLcuUtil(leagueClientBO);
 		api = new LinkLeagueClientApi(requestUtil);
 		GameDataCache.cacheLcuMe();
+	}
+
+	public void initSgp() throws Exception {
+		LeagueClientBO leagueClientBO = ProcessUtil.getClientProcess();
+		if (leagueClientBO.equals(new LeagueClientBO())) {
+			throw new NoProcessException();
+		}
+		if (AppCache.api == null) {
+			throw new NoLcuApiException();
+		}
+		RequestSgpUtil requestUtil = new RequestSgpUtil(AppCache.api.getSgpAccessToken(), leagueClientBO.getRegion().toLowerCase());
+		localSgpApi = new RegionSgpApi(requestUtil);
 	}
 
 	@SuppressWarnings("InfiniteLoopStatement")
@@ -41,6 +58,12 @@ public class ClientStarter {
 			CalculateScore calculateScore = new CalculateScore(api);
 			//监听游戏状态
 			GameStatusEnum gameStatus = api.getGameStatus();
+			if (!gameStatus.equals(GameStatusEnum.ChampSelect)) {
+				if (FrameInnerCache.myTeamMatchHistoryPanel != null) {
+					FrameInnerCache.myTeamMatchHistoryPanel.dispose();
+					FrameInnerCache.myTeamMatchHistoryPanel = null;
+				}
+			}
 			switch (gameStatus) {
 				case None:
 				case Matchmaking:
@@ -58,7 +81,7 @@ public class ClientStarter {
 					break;
 				}
 				case ChampSelect: {
-					gameStatusContext.setStrategy(new ChampSelectStrategy(api, calculateScore));
+					gameStatusContext.setStrategy(new ChampSelectStrategy(api, localSgpApi, calculateScore));
 					break;
 				}
 				case InProgress: {

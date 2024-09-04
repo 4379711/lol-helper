@@ -1,6 +1,7 @@
 package yalong.site.cache;
 
 import yalong.site.frame.panel.client.MatchPanel;
+import yalong.site.frame.panel.client.MyTeamMatchHistoryPanel;
 import yalong.site.frame.panel.key.KeyTextPane;
 import yalong.site.frame.panel.result.ResultTextPane;
 
@@ -16,5 +17,6 @@ public class FrameInnerCache {
 	public static MatchPanel matchPanel;
 	public static JFrame matchFrame;
 	public static KeyTextPane keyTextPane;
+	public static MyTeamMatchHistoryPanel myTeamMatchHistoryPanel;
 
 }

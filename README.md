@@ -1,5 +1,5 @@
 # lol-helper
-- 英雄联盟助手,主要使用LCU API,**未修改**客户端内容,**理论上不会封号!**,另外附上官方文档
+- 英雄联盟助手,主要使用LCU API和SGP API,**未修改**客户端内容,**理论上不会封号!**,另外附上官方文档
 - [拳头文档](https://developer.riotgames.com/docs/lol/)
 - [lcu](https://hextechdocs.dev/tag/lcu/)
 - [版本英雄游戏数据](https://developer.riotgames.com/docs/lol#data-dragon_champions)
@@ -24,8 +24,9 @@
 - 查看双方所有人的近期战绩,并计算得分,添加大神和牛马称谓,一键发送到聊天框
 - **游戏内一键喊话,对喷**
 - **游戏内一键鼓励队友,彩虹屁**
-- **设置炫彩皮肤(没有原皮肤但有炫彩皮肤的情况下,此功能可以突破游戏限制)**
+- ~~**设置炫彩皮肤(没有原皮肤但有炫彩皮肤的情况下,此功能可以突破游戏限制)(由于xx大厂已修复)**~~
 - 战绩查询(即使设置了隐藏生涯,可以查询)
+- 选择英雄时 队友战绩查看 左侧显示最近改20把胜率 点击队友头像查看详情数据
 
 ## 软件截图
 ![主界面](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/main.png)
@@ -35,6 +36,7 @@
 ![游戏内发送文字](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/04.jpg)
 ![喷人语录](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/05.png)
 ![炫彩皮肤](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/6.png)
+![队友战绩查看](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/07.png)
 
 ## 使用说明
 ##### 项目说明
@@ -70,5 +72,5 @@
 - 本项目仅供学习,未经许可,不得用作商业用途,不得用作违法行为!!!
 
 ## 联系
-> 加QQ群,群号882050965,或者用qq扫描下方二维码
+> 加QQ群,~~群号882050965~~已满 二群1001245686,或者用qq扫描下方二维码
 ![QQ群](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/QR-Code.jpg)

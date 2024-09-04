@@ -41,5 +41,9 @@ public class FrameUserSettingPersistence {
 	 * 一键连招
 	 */
 	public static boolean autoKey = false;
+	/**
+	 * 房间内显示战绩
+	 */
+	public static boolean showMatchHistory = true;
 
 }

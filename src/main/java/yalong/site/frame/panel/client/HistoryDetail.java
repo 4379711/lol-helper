@@ -5,6 +5,7 @@ import yalong.site.bo.*;
 import yalong.site.cache.AppCache;
 import yalong.site.cache.FrameInnerCache;
 import yalong.site.cache.FrameSetting;
+import yalong.site.enums.ImageEnum;
 import yalong.site.frame.bo.ScoreLevelBO;
 import yalong.site.frame.constant.GameConstant;
 import yalong.site.frame.utils.MatchHistoryUtil;
@@ -83,7 +84,7 @@ public class HistoryDetail extends JPanel {
 
 		//英雄头像s
 		JLabel ChampionIcon = new JLabel();
-		ChampionIcon.setIcon(MatchHistoryUtil.getChampionIcon(playGameInfo.getChampionId(), FrameSetting.DETAIL_CHAMPION_ICON_SIZE, FrameSetting.DETAIL_CHAMPION_ICON_SIZE));
+		ChampionIcon.setIcon(MatchHistoryUtil.getChampionIcon(playGameInfo.getChampionId(), FrameSetting.DETAIL_CHAMPION_ICON_SIZE, FrameSetting.DETAIL_CHAMPION_ICON_SIZE, ImageEnum.ROUND));
 
 		jPanel.add(ChampionIcon, gridList.get(0));
 		//召唤师技能

@@ -1,6 +1,8 @@
 package yalong.site.frame.constant;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -35,6 +37,18 @@ public class GameConstant {
 			put("MASTER", "超凡大师");
 			put("GRANDMASTER", "傲世宗师");
 			put("CHALLENGER", "最强王者");
+		}
+	};
+	public final static List<String> REGION = new ArrayList<String>() {
+		{
+			add("tj100");
+			add("hn1");
+			add("cq100");
+			add("gz100");
+			add("nj100");
+			add("hn10");
+			add("tj101");
+			add("bgp2");
 		}
 	};
 }
