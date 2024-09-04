@@ -27,7 +27,6 @@ public class MyTeamMatchHistoryLine extends JPanel {
     private JPanel panelThree;
     private JLabel hoverInfoLabel;
 
-    private JWindow hoverInfoWindow;
 
 
     public MyTeamMatchHistoryLine(TeamSummonerBO data, int width) {
@@ -58,29 +57,8 @@ public class MyTeamMatchHistoryLine extends JPanel {
 
 
         rankLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        // 初始化悬停信息窗口
-        hoverInfoWindow = new JWindow();
-        hoverInfoLabel = new JLabel("", SwingConstants.CENTER);
-        hoverInfoLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        hoverInfoLabel.setBackground(Color.LIGHT_GRAY);
-        hoverInfoLabel.setOpaque(true);
-        hoverInfoLabel.setFont(new Font("SimHei", Font.BOLD, 16));
-        hoverInfoLabel.setForeground(Color.WHITE);
-        hoverInfoWindow.add(hoverInfoLabel);
-        hoverInfoWindow.pack();
 
-        // 为iconLabel添加鼠标监听器
-        iconLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                showHoverInfo(e.getComponent(), "Level：" + data.getLevel()); // 假设有一个方法获取额外信息
-            }
 
-            @Override
-            public void mouseExited(MouseEvent e) {
-                hideHoverInfo();
-            }
-        });
         iconLabel.setIcon(data.getProfileIcon());
         rankLabel.setText(getRank(data.getRank()));
         nameLabel.setText((data.getName()));
@@ -128,6 +106,7 @@ public class MyTeamMatchHistoryLine extends JPanel {
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
+                    FrameInnerCache.matchPanel.resetIndex();
                     FrameInnerCache.matchPanel.setData(pmh, data.getPuuid());
 
                 }
@@ -152,22 +131,7 @@ public class MyTeamMatchHistoryLine extends JPanel {
         panelOne.add(winRateLabel);
         panelOne.add(panelThree);
 
-        for (ChampionWin championWin : data.getChampionWinList()) {
-            JLabel jLabel = new JLabel();
-            jLabel.setIcon(championWin.getIcon());
-            jLabel.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseEntered(MouseEvent e) {
-                    showHoverInfo(e.getComponent(), "胜率：" + championWin.getWinRate() + "最近场次：" + (championWin.getWins() + championWin.getFails())); // 假设有一个方法获取额外信息
-                }
 
-                @Override
-                public void mouseExited(MouseEvent e) {
-                    hideHoverInfo();
-                }
-            });
-            panelTwo.add(jLabel);
-        }
         this.add(panelOne);
         this.add(panelTwo);
     }
@@ -202,17 +166,5 @@ public class MyTeamMatchHistoryLine extends JPanel {
         g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 5, 5); // 绘制圆角矩形边框
     }
 
-    private void showHoverInfo(Component source, String info) {
-        Point location = source.getLocationOnScreen();
-        hoverInfoLabel.setText("<html>" + info.replaceAll("\n", "<br>") + "</html>"); // 支持多行文本
-        hoverInfoWindow.setLocation(location.x, location.y + source.getHeight());
-        hoverInfoWindow.setAlwaysOnTop(true);
-        hoverInfoWindow.pack(); // 重新调整窗口大小以适应文本
-        hoverInfoWindow.setVisible(true);
-    }
-
-    private void hideHoverInfo() {
-        hoverInfoWindow.dispose();
-    }
 
 }
