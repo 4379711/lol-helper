@@ -126,11 +126,11 @@ public class ChampSelectStrategy implements GameStatusStrategy {
 
 	@Override
 	public void doThis() {
-//		try {
-//			autoBanPick();
-//		} catch (Exception e) {
-//			log.error("ban/pick错误", e);
-//		}
+		try {
+			autoBanPick();
+		} catch (Exception e) {
+			log.error("ban/pick错误", e);
+		}
 
 		try {
 			showMatchHistory();
@@ -138,10 +138,10 @@ public class ChampSelectStrategy implements GameStatusStrategy {
 			log.error("显示队友数据错误", e);
 		}
 
-//		try {
-//			selectScore();
-//		} catch (Exception e) {
-//			log.error("sendScore错误", e);
-//		}
+		try {
+			selectScore();
+		} catch (Exception e) {
+			log.error("sendScore错误", e);
+		}
 	}
 }
