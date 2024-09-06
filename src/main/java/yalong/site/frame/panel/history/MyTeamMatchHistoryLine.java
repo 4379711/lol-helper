@@ -1,4 +1,4 @@
-package yalong.site.frame.panel.client;
+package yalong.site.frame.panel.history;
 
 import yalong.site.bo.ProductsMatchHistoryBO;
 import yalong.site.bo.SGPRank;
@@ -25,7 +25,6 @@ public class MyTeamMatchHistoryLine extends JPanel {
     private JPanel panelOne;
     private JPanel panelTwo;
     private JPanel panelThree;
-    private JLabel hoverInfoLabel;
 
 
 
@@ -131,6 +130,11 @@ public class MyTeamMatchHistoryLine extends JPanel {
         panelOne.add(winRateLabel);
         panelOne.add(panelThree);
 
+        for (ChampionWin championWin : data.getChampionWinList()) {
+            JLabel jLabel = new JLabel();
+            jLabel.setIcon(championWin.getIcon());
+            panelTwo.add(jLabel);
+        }
 
         this.add(panelOne);
         this.add(panelTwo);

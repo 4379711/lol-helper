@@ -59,9 +59,8 @@ public class ClientStarter {
 			//监听游戏状态
 			GameStatusEnum gameStatus = api.getGameStatus();
 			if (!gameStatus.equals(GameStatusEnum.ChampSelect)) {
-				if (FrameInnerCache.myTeamMatchHistoryPanel != null) {
-					FrameInnerCache.myTeamMatchHistoryPanel.dispose();
-					FrameInnerCache.myTeamMatchHistoryPanel = null;
+				if (FrameInnerCache.myTeamMatchHistoryPanel != null && FrameInnerCache.myTeamMatchHistoryPanel.isVisible()) {
+					FrameInnerCache.myTeamMatchHistoryPanel.setVisible(false);
 				}
 			}
 			switch (gameStatus) {

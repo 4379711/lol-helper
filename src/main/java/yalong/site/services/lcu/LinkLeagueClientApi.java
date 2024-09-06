@@ -16,10 +16,8 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -243,7 +241,8 @@ public class LinkLeagueClientApi {
 	 * 英雄选择界面信息
 	 */
 	public String getChampSelectInfo() throws IOException {
-		return requestLcuUtil.doGet("/lol-champ-select/v1/session");
+		String s = requestLcuUtil.doGet("/lol-champ-select/v1/session");
+		return s;
 	}
 
 	/**
@@ -530,9 +529,28 @@ public class LinkLeagueClientApi {
 		});
 		Map<Integer, GameQueue> data = new HashMap<>();
 		for (GameQueue gameQueue : gameQueues) {
-			data.put(gameQueue.getId(), gameQueue);
+			if (!gameQueue.getGameMode().equals("TFT")) {
+				data.put(gameQueue.getId(), gameQueue);
+			}
 		}
-		return data;
+		//添加自定义
+		GameQueue gameQueue = new GameQueue();
+		gameQueue.setId(0);
+		gameQueue.setName("自定义");
+		gameQueue.setGameMode("CUSTOM");
+		gameQueue.setIsVisible("true");
+		data.put(0, gameQueue);
+		LinkedHashMap<Integer, GameQueue> sortedMap = data.entrySet().stream()
+				.sorted(Map.Entry.comparingByKey())
+				.collect(
+						Collectors.toMap(
+								Map.Entry<Integer, GameQueue>::getKey,
+								Map.Entry<Integer, GameQueue>::getValue,
+								(oldVal, newVal) -> oldVal,
+								LinkedHashMap<Integer, GameQueue>::new
+						)
+				);
+		return sortedMap;
 	}
 
 	/**

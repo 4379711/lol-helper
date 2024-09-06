@@ -1,7 +1,7 @@
 package yalong.site.cache;
 
-import yalong.site.frame.panel.client.MatchPanel;
-import yalong.site.frame.panel.client.MyTeamMatchHistoryPanel;
+import yalong.site.frame.panel.history.MatchPanel;
+import yalong.site.frame.panel.history.MyTeamMatchHistoryPanel;
 import yalong.site.frame.panel.key.KeyTextPane;
 import yalong.site.frame.panel.result.ResultTextPane;
 
