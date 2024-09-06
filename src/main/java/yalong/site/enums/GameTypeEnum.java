@@ -11,6 +11,7 @@ import java.util.Map;
 public enum GameTypeEnum {
 	CUSTOM(0, "自定义"),
 	RANK_SOLO(420, "单双排位"),
+	NORMAL(430, "匹配模式"),
 	RANK_FLEX(440, "灵活排位"),
 	ARAM(450, "极地大乱斗"),
 	BOT_INTRO(870, "新·入门人机"),

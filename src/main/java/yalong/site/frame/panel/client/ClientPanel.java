@@ -1,6 +1,8 @@
 package yalong.site.frame.panel.client;
 
 import yalong.site.frame.panel.base.BasePanel;
+import yalong.site.frame.panel.history.GameModeBox;
+import yalong.site.frame.panel.history.HistoryButton;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,20 +29,16 @@ public class ClientPanel extends BasePanel {
 		list.add(new AutoPlayAgainCheckBox());
 
 		list.add(new AutoKeyCheckBox());
-		list.add(new SendScoreCheckBox());
 		list.add(new CommunicateCheckBox());
-
 		list.add(new AutoReconnectCheckBox());
-		list.add(new PickSkinBox());
-		list.add(new ShowTeamBox());
 
+		list.add(new PickSkinBox());
 		list.add(new GameStatusBox());
+		list.add(new BanBox());
+
 		list.add(new CareerBackgroundBox());
 		list.add(new CareerBackgroundSkinBox());
-
-		list.add(new BanBox());
 		list.add(new PickBox());
-		list.add(new HistoryButton());
 
 		return list;
 	}

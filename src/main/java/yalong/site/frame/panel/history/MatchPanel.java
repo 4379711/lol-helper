@@ -1,4 +1,4 @@
-package yalong.site.frame.panel.client;
+package yalong.site.frame.panel.history;
 
 import cn.hutool.core.date.DateUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -157,7 +157,7 @@ public class MatchPanel extends JPanel {
 	private ArrayList<Object> createMatchHistoryBO(GameData data) {
 		Participants me = data.getParticipants().get(0);
 		ArrayList<Object> list = new ArrayList<>();
- 		list.add("<html><body>" + GameDataCache.gameQueuesList.get(data.getQueueId()).getName() + "<hr>" + DateUtil.format(data.getGameCreationDate(), "MM-dd HH:mm") + "</body></html>");
+ 		list.add("<html><body>" + GameDataCache.allGameQueuesList.get(data.getQueueId()).getName() + "<hr>" + DateUtil.format(data.getGameCreationDate(), "MM-dd HH:mm") + "</body></html>");
 		list.add(MatchHistoryUtil.getChampionIcon(me.getChampionId(), FrameSetting.CHAMPION_ICON_SIZE, FrameSetting.CHAMPION_ICON_SIZE, ImageEnum.ROUND));
 		list.add(MatchHistoryUtil.getSummonerSpellImageIcon(me.getSpell1Id(), FrameSetting.ITEM_ICON_SIZE, FrameSetting.ITEM_ICON_SIZE));
 		list.add(MatchHistoryUtil.getPerkStyleImageIcon(me.getStats().getPerkPrimaryStyle(), FrameSetting.ITEM_ICON_SIZE, FrameSetting.ITEM_ICON_SIZE));

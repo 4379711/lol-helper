@@ -8,7 +8,7 @@ import yalong.site.cache.FrameInnerCache;
 import yalong.site.cache.FrameUserSetting;
 import yalong.site.cache.FrameUserSettingPersistence;
 import yalong.site.cache.GameDataCache;
-import yalong.site.frame.panel.client.MyTeamMatchHistoryPanel;
+import yalong.site.frame.panel.history.MyTeamMatchHistoryPanel;
 import yalong.site.services.sgp.RegionSgpApi;
 import yalong.site.utils.ProcessUtil;
 
@@ -84,12 +84,13 @@ public class ChampSelectStrategy implements GameStatusStrategy {
 	 * 展示队友数据
 	 */
 	private void showMatchHistory() throws IOException {
-		if (FrameUserSettingPersistence.showMatchHistory && FrameInnerCache.myTeamMatchHistoryPanel == null) {
+		if (FrameUserSettingPersistence.showMatchHistory && (FrameInnerCache.myTeamMatchHistoryPanel == null || !FrameInnerCache.myTeamMatchHistoryPanel.isVisible())) {
 			String region = ProcessUtil.getClientProcess().getRegion();
 			String roomGameInfo = api.getChampSelectInfo();
+			System.out.println(roomGameInfo);
 			JSONObject jsonObject = JSONObject.parseObject(roomGameInfo);
 			JSONArray myTeam = jsonObject.getJSONArray("myTeam");
-			//可能队友还没进入房间
+//			//可能队友还没进入房间
 			if (myTeam.size() != 5) {
 				log.error(myTeam.getJSONObject(0).getString("puuid"));
 				return;
@@ -98,7 +99,6 @@ public class ChampSelectStrategy implements GameStatusStrategy {
 			for (int i = 0; i < myTeam.size(); i++) {
 				TeamSummonerBO teamSummonerBO = new TeamSummonerBO();
 				String puuid = myTeam.getJSONObject(i).getString("puuid");
-				//String puuid = myTeamList.get(i);
 				List<SpgProductsMatchHistoryBO> productsMatchHistory = sgpApi.getProductsMatchHistoryByPuuid(region, puuid, 0, 20);
 				SGPRank rank = sgpApi.getRankedStatsByPuuid(puuid);
 				SummonerAlias alias = sgpApi.getSummerNameByPuuids(puuid);
@@ -118,6 +118,8 @@ public class ChampSelectStrategy implements GameStatusStrategy {
 			}
 			if (FrameInnerCache.myTeamMatchHistoryPanel == null) {
 				MyTeamMatchHistoryPanel.start();
+			}else{
+				FrameInnerCache.myTeamMatchHistoryPanel.setVisible(true);
 			}
 		}
 	}

@@ -1,4 +1,4 @@
-package yalong.site.frame.panel.client;
+package yalong.site.frame.panel.history;
 
 import yalong.site.bo.GameData;
 import yalong.site.frame.bo.LocationBO;

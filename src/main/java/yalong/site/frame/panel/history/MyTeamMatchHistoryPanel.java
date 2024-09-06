@@ -1,4 +1,4 @@
-package yalong.site.frame.panel.client;
+package yalong.site.frame.panel.history;
 
 import cn.hutool.core.util.NumberUtil;
 import com.sun.jna.platform.win32.WinDef;
@@ -7,7 +7,6 @@ import yalong.site.bo.SpgProductsMatchHistoryBO;
 import yalong.site.bo.TeamSummonerBO;
 import yalong.site.cache.FrameInnerCache;
 import yalong.site.cache.GameDataCache;
-import yalong.site.enums.GameTypeEnum;
 import yalong.site.enums.ImageEnum;
 import yalong.site.frame.bo.ChampionWin;
 import yalong.site.frame.constant.ColorConstant;
@@ -70,7 +69,9 @@ public class MyTeamMatchHistoryPanel extends JWindow implements MouseListener, M
         List<SpgParticipants> spgParticipantsList = new ArrayList<>();
         //获取自己的所有数据
         for (SpgProductsMatchHistoryBO item : data.getMatchHistory()) {
-            if (item.getJson().getQueueId() == GameTypeEnum.ARAM.getQueueId() || item.getJson().getQueueId() == GameTypeEnum.RANK_SOLO.getQueueId() || item.getJson().getQueueId() == GameTypeEnum.RANK_FLEX.getQueueId()) {
+            Integer queueId = item.getJson().getQueueId();
+            if (GameDataCache.allGameQueuesList.get(queueId).getIsVisible().equals("true") &&
+                    GameDataCache.selectGameQueueList.get(queueId).isSelect()) {
                 SpgParticipants spgParticipants = item.getJson().getParticipants()
                         .stream()
                         .filter(line -> line.getPuuid().equals(data.getPuuid()))
