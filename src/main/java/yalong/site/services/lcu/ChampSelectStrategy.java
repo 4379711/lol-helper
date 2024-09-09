@@ -119,7 +119,7 @@ public class ChampSelectStrategy implements GameStatusStrategy {
 			if (FrameInnerCache.myTeamMatchHistoryPanel == null) {
 				MyTeamMatchHistoryPanel.start();
 			}else{
-				FrameInnerCache.myTeamMatchHistoryPanel.setVisible(true);
+				MyTeamMatchHistoryPanel.start();
 			}
 		}
 	}

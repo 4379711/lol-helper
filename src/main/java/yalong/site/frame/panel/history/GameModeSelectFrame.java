@@ -41,9 +41,9 @@ public class GameModeSelectFrame extends JFrame {
             GameQueue gameQueue = GameDataCache.selectGameQueueList.get(key);
 
             JCheckBox button = new JCheckBox(gameQueue.getName());
-            button.setSelected(gameQueue.isSelect());
-            button.addActionListener(e -> {
-                        gameQueue.setSelect(true);
+            button.setSelected(GameDataCache.selectGameQueueList.get(key).isSelect());
+            button.addChangeListener(e -> {
+                GameDataCache.selectGameQueueList.get(key).setSelect(button.isSelected());
                     }
             );
             button.setPreferredSize(new Dimension(250, 30));
