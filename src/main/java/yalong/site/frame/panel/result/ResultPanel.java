@@ -13,7 +13,7 @@ import java.awt.*;
 public class ResultPanel extends JScrollPane {
 	public ResultPanel(ResultTextPane area) {
 		super(area);
-		this.setName("通知");
+		this.setName("帮助信息");
 		// 设置透明
 		this.setOpaque(false);
 		this.setBorder(null);
