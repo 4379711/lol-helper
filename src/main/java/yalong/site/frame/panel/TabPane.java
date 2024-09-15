@@ -32,10 +32,10 @@ public class TabPane extends JTabbedPane {
 	public static TabPane builder() {
 		TabPane tabPane = new TabPane();
 		tabPane.add(ClientPanel.builder());
+		tabPane.add(HistoryPane.builder());
 		tabPane.add(KeyPanel.builder());
 		tabPane.add(FuckPanel.builder());
 		tabPane.add(ResultPanel.builder());
-		tabPane.add(HistoryPane.builder());
 		tabPane.add(AboutPanel.builder());
 		return tabPane;
 	}

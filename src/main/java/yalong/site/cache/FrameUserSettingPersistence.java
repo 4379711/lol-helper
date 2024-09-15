@@ -1,5 +1,8 @@
 package yalong.site.cache;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 配置全局属性
  *
@@ -45,5 +48,10 @@ public class FrameUserSettingPersistence {
 	 * 房间内显示战绩
 	 */
 	public static boolean showMatchHistory = true;
+	/**
+	 * 房间内显示战绩筛选的模式
+	 */
+	public static List<Integer> selectMode = new ArrayList<>();
+
 
 }

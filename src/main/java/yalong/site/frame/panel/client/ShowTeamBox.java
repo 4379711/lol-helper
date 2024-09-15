@@ -14,12 +14,12 @@ import java.awt.event.ItemListener;
 public class ShowTeamBox extends BaseCheckBox {
     public ShowTeamBox() {
         this.setText("显示队友战绩");
-        this.setSelected(FrameUserSettingPersistence.sendScore);
+        this.setSelected(FrameUserSettingPersistence.showMatchHistory);
         this.addItemListener(listener());
     }
 
     private ItemListener listener() {
-        return e -> FrameUserSettingPersistence.sendScore = e.getStateChange() == ItemEvent.SELECTED;
+        return e -> FrameUserSettingPersistence.showMatchHistory = e.getStateChange() == ItemEvent.SELECTED;
 
     }
 }

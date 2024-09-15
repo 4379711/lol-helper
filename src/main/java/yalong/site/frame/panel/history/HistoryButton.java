@@ -43,6 +43,7 @@ public class HistoryButton extends BaseButton {
 					if (GameDataCache.me != null) {
 						try {
 							ProductsMatchHistoryBO pmh = AppCache.api.getProductsMatchHistoryByPuuid(GameDataCache.me.getPuuid(), 0, FrameSetting.PAGE_SIZE - 1);
+							matchPanel.resetIndex();
 							matchPanel.setData(pmh, GameDataCache.me.getPuuid());
 						} catch (IOException ex) {
 							throw new RuntimeException(ex);

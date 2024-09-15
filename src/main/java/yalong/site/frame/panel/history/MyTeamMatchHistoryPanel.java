@@ -6,6 +6,7 @@ import yalong.site.bo.SpgParticipants;
 import yalong.site.bo.SpgProductsMatchHistoryBO;
 import yalong.site.bo.TeamSummonerBO;
 import yalong.site.cache.FrameInnerCache;
+import yalong.site.cache.FrameUserSettingPersistence;
 import yalong.site.cache.GameDataCache;
 import yalong.site.enums.ImageEnum;
 import yalong.site.frame.bo.ChampionWin;
@@ -70,8 +71,8 @@ public class MyTeamMatchHistoryPanel extends JWindow implements MouseListener, M
         //获取自己的所有数据
         for (SpgProductsMatchHistoryBO item : data.getMatchHistory()) {
             Integer queueId = item.getJson().getQueueId();
-            if (GameDataCache.allGameQueuesList.get(queueId).getIsVisible().equals("true") &&
-                    GameDataCache.selectGameQueueList.get(queueId).isSelect()) {
+            if (FrameUserSettingPersistence.selectMode.isEmpty() ||
+                    FrameUserSettingPersistence.selectMode.contains(queueId)) {
                 SpgParticipants spgParticipants = item.getJson().getParticipants()
                         .stream()
                         .filter(line -> line.getPuuid().equals(data.getPuuid()))

@@ -86,17 +86,17 @@ public class MyTeamMatchHistoryLine extends JPanel {
                     jFrame.setSize(FrameSetting.MATCH_WIDTH, FrameSetting.MATCH_HEIGHT);
                     //窗口居中
                     jFrame.setLocationRelativeTo(null);
-
                     MatchPanel matchPanel = new MatchPanel();
-                    jFrame.add(matchPanel);
-                    jFrame.setVisible(true);
                     ProductsMatchHistoryBO pmh = null;
                     try {
                         pmh = AppCache.api.getProductsMatchHistoryByPuuid(data.getPuuid(), 0, FrameSetting.PAGE_SIZE - 1);
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
+                    matchPanel.resetIndex();
                     matchPanel.setData(pmh, data.getPuuid());
+                    jFrame.add(matchPanel);
+                    jFrame.setVisible(true);
                 }else{
                     FrameInnerCache.matchFrame.setVisible(true);
                     ProductsMatchHistoryBO pmh = null;
