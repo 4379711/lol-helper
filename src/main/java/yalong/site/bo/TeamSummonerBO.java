@@ -62,4 +62,8 @@ public class TeamSummonerBO {
      * 英雄胜率
      */
     private List<ChampionWin> championWinList;
+    /**
+     * 所在红蓝方
+     */
+    private String mapSide;
 }

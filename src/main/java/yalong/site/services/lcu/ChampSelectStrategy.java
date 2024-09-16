@@ -103,6 +103,8 @@ public class ChampSelectStrategy implements GameStatusStrategy {
 				SGPRank rank = sgpApi.getRankedStatsByPuuid(puuid);
 				SummonerAlias alias = sgpApi.getSummerNameByPuuids(puuid);
 				SgpSummonerInfoBo summonerInfo = sgpApi.getSummerInfoByPuuid(region, puuid);
+				String mapSide = api.getBlueRed();
+				teamSummonerBO.setMapSide(mapSide);
 				teamSummonerBO.setPuuid(puuid);
 				teamSummonerBO.setRank(rank);
 				teamSummonerBO.setLevel(summonerInfo.getLevel());

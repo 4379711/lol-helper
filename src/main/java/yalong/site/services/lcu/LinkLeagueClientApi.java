@@ -350,6 +350,15 @@ public class LinkLeagueClientApi {
 	}
 
 	/**
+	 * 判断是红方还是蓝方
+	 */
+	public String getBlueRed() throws IOException {
+		String resp = requestLcuUtil.doGet("/lol-champ-select/v1/pin-drop-notification");
+		JSONObject jsonObject = JSON.parseObject(resp);
+		return jsonObject.getString("mapSide");
+	}
+
+	/**
 	 * 获取当前游戏两队人的puuid
 	 */
 	public TeamPuuidBO getTeamPuuid() throws IOException {

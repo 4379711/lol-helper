@@ -53,6 +53,8 @@ public class MyTeamMatchHistoryPanel extends JWindow implements MouseListener, M
         // 设置布局管理器为 BoxLayout（垂直排列）
         this.setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
         JPanel jPanel = new RoundedVerticalPanel(10, ColorConstant.DARK_THREE);
+        //JPanel jPanel= new JPanel();
+        jPanel.add(getMapSide(GameDataCache.myTeamMatchHistory.get(0).getMapSide()));
         for (TeamSummonerBO data : GameDataCache.myTeamMatchHistory) {
             jPanel.add(new HorizontalDivider(this.getWidth() - 10));
             MyTeamMatchHistoryLine builder = MyTeamMatchHistoryLine.builder(buildTeamLineData(data), this.getWidth());
@@ -151,6 +153,18 @@ public class MyTeamMatchHistoryPanel extends JWindow implements MouseListener, M
             data.setWinRate(NumberUtil.decimalFormat("#.##%", NumberUtil.div(win, count, 2)));
         }
         return data;
+    }
+
+    private JLabel getMapSide(String mapSide) {
+        JLabel mapSideLabel = new JLabel();
+        if ("blue".equals(mapSide)) {
+            mapSideLabel.setText("这把是蓝色方,泉水在左下角.");
+            mapSideLabel.setForeground(new Color(64, 158, 255));
+        } else if ("red".equals(mapSide)) {
+            mapSideLabel.setText("这把是红色方,泉水在右上角.");
+            mapSideLabel.setForeground(new Color(245, 108, 108));
+        }
+        return mapSideLabel;
     }
 
     /**

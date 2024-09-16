@@ -47,7 +47,6 @@ public class MyTeamMatchHistoryLine extends JPanel {
         panelTwo.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         panelThree = new RoundedVerticalPanel(10, ColorConstant.DARK_THREE);
-        //panelOne.setOpaque(false);
 
         JLabel iconLabel = new JLabel();
         JLabel nameLabel = new BaseLabel(data.getName(), ColorConstant.DARK_FOUR, 15, 15);
