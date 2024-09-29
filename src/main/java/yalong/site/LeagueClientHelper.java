@@ -32,10 +32,9 @@ public class LeagueClientHelper {
 				msg = "请先启动游戏";
 			} catch (ConnectException ignored) {
 				msg = "游戏客户端连接失败";
-			}catch (RepeatProcessException ignored) {
+			} catch (RepeatProcessException ignored) {
 				msg = "工具已打开请查看任务栏或系统托盘";
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				msg = e.getMessage();
 				log.error(msg, e);
 			}
