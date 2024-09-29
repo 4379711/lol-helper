@@ -87,7 +87,6 @@ public class ChampSelectStrategy implements GameStatusStrategy {
 		if (FrameUserSettingPersistence.showMatchHistory && (FrameInnerCache.myTeamMatchHistoryPanel == null || !FrameInnerCache.myTeamMatchHistoryPanel.isVisible())) {
 			String region = ProcessUtil.getClientProcess().getRegion();
 			String roomGameInfo = api.getChampSelectInfo();
-			System.out.println(roomGameInfo);
 			JSONObject jsonObject = JSONObject.parseObject(roomGameInfo);
 			JSONArray myTeam = jsonObject.getJSONArray("myTeam");
 //			//可能队友还没进入房间

@@ -245,8 +245,7 @@ public class LinkLeagueClientApi {
 	 * 英雄选择界面信息
 	 */
 	public String getChampSelectInfo() throws IOException {
-		String s = requestLcuUtil.doGet("/lol-champ-select/v1/session");
-		return s;
+		return requestLcuUtil.doGet("/lol-champ-select/v1/session");
 	}
 
 	/**

@@ -3,6 +3,7 @@ package yalong.site;
 import lombok.extern.slf4j.Slf4j;
 import yalong.site.cache.GameDataCache;
 import yalong.site.exception.NoProcessException;
+import yalong.site.exception.RepeatProcessException;
 import yalong.site.frame.MainFrame;
 import yalong.site.services.hotkey.HotKeyService;
 
@@ -19,6 +20,7 @@ public class LeagueClientHelper {
 		while (true) {
 			String msg = "";
 			try {
+				MainFrame.checkFileLock();
 				ClientStarter clientStarter = new ClientStarter();
 				clientStarter.initLcu();
 				clientStarter.initSgp();
@@ -30,7 +32,10 @@ public class LeagueClientHelper {
 				msg = "请先启动游戏";
 			} catch (ConnectException ignored) {
 				msg = "游戏客户端连接失败";
-			} catch (Exception e) {
+			}catch (RepeatProcessException ignored) {
+				msg = "工具已打开请查看任务栏或系统托盘";
+			}
+			catch (Exception e) {
 				msg = e.getMessage();
 				log.error(msg, e);
 			}

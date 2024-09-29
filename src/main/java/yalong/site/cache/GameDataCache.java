@@ -83,7 +83,7 @@ public class GameDataCache {
 				perkStyleList = AppCache.api.getAllPerkStyleBO();
 				summonerSpellsList = AppCache.api.getAllSummonerSpells();
 				allGameQueuesList = AppCache.api.getAllQueue();
-				log.error("获取资源文件成功");
+				log.info("获取资源文件成功");
 			} catch (Exception err) {
 				log.error("获取资源文件失败", err);
 			}
