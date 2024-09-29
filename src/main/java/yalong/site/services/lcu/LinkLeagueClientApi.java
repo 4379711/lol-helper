@@ -26,6 +26,9 @@ import java.util.stream.Collectors;
  * @author yaLong
  */
 public class LinkLeagueClientApi {
+
+	public String status = null;
+
 	private final RequestLcuUtil requestLcuUtil;
 
 	public LinkLeagueClientApi(RequestLcuUtil requestLcuUtil) {
@@ -232,6 +235,7 @@ public class LinkLeagueClientApi {
 	 * @param status 状态值
 	 */
 	public void changeStatus(String status) throws IOException {
+		this.status = status;
 		JSONObject body = new JSONObject(1);
 		body.put("availability", status);
 		requestLcuUtil.doPut("/lol-chat/v1/me", body.toJSONString());

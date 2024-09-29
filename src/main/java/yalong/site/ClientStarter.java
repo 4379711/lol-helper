@@ -1,5 +1,6 @@
 package yalong.site;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import yalong.site.bo.LeagueClientBO;
 import yalong.site.cache.AppCache;
@@ -105,6 +106,11 @@ public class ClientStarter {
 				}
 			}
 			gameStatusContext.executeStrategy();
+
+			if (StrUtil.isNotBlank(api.status)) {
+				// 重新设置状态
+				api.changeStatus(api.status);
+			}
 		}
 	}
 
