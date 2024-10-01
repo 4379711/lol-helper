@@ -31,9 +31,9 @@ public class MainFrame extends JFrame {
 	//用于创建后台托盘
 	private static TrayIcon trayIcon;
 	private static SystemTray tray;
-
 	//用于检测软件是否重复打开
 	private static RandomAccessFile RAF;
+	private static boolean lockFlag;
 	final static String LOCK_FILE = "lol-helper.lock";
 	static {
 		SaveFrameConfig.load();
@@ -195,10 +195,13 @@ public class MainFrame extends JFrame {
 	}
 
 	/**
-	 * 查看文件是否右锁 用于判断软件是否重复打开
+	 * 查看文件是否有锁 用于判断软件是否重复打开
 	 */
 	public static void checkFileLock() {
 		try {
+			if (lockFlag) {
+				return;
+			}
 			File file = new File(LOCK_FILE);
 			// 打开文件通道
 			RAF = new RandomAccessFile(file, "rw");
@@ -208,7 +211,10 @@ public class MainFrame extends JFrame {
 			lock = channel.tryLock();
 			if (lock == null) {
 				RAF.close();
+				lockFlag = false;
 				throw new RepeatProcessException();
+			} else {
+				lockFlag = true;
 			}
 		} catch (IOException e) {
 			throw new RuntimeException(e);
