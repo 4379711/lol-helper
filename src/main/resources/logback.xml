@@ -31,7 +31,7 @@
     </appender>
 
     <!-- 本模块日志级别控制  -->
-    <logger name="yalong.site" level="INFO"/>
+    <logger name="helper" level="INFO"/>
 
     <root level="info">
         <appender-ref ref="console"/>
