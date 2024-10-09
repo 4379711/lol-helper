@@ -178,26 +178,26 @@ public class LinkLeagueClientApi {
 			arrayList.add(new SkinBO(id, name));
 			//有签名的皮肤
 			JSONObject questSkinInfo = jsonObject.getJSONObject("questSkinInfo");
-			if(questSkinInfo!=null){
+			if (questSkinInfo != null) {
 				JSONArray tiers = questSkinInfo.getJSONArray("tiers");
-				if(tiers!=null){
+				if (tiers != null) {
 					for (int k = 0; k < tiers.size(); k++) {
 						JSONObject jsonObject_ = tiers.getJSONObject(k);
 						Integer id_ = jsonObject_.getInteger("id");
 						String name_ = jsonObject_.getString("name");
 						//加强版皮肤
 						JSONObject skinAugments = jsonObject_.getJSONObject("skinAugments");
-						if(skinAugments!=null){
+						if (skinAugments != null) {
 							JSONArray augments = skinAugments.getJSONArray("augments");
-							if (augments!=null){
+							if (augments != null) {
 								for (int l = 0; l < augments.size(); l++) {
-                                    String contentId = augments.getJSONObject(l).getString("contentId");
-                                    arrayList.add(new SkinBO(id_, name_,contentId));
-                                }
+									String contentId = augments.getJSONObject(l).getString("contentId");
+									arrayList.add(new SkinBO(id_, name_, contentId));
+								}
 							}
-						}else {
-                            arrayList.add(new SkinBO(id_, name_));
-                        }
+						} else {
+							arrayList.add(new SkinBO(id_, name_));
+						}
 
 					}
 				}

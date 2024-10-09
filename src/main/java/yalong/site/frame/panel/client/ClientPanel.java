@@ -1,10 +1,7 @@
 package yalong.site.frame.panel.client;
 
 import yalong.site.frame.panel.base.BasePanel;
-import yalong.site.frame.panel.history.GameModeBox;
-import yalong.site.frame.panel.history.HistoryButton;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -65,7 +62,7 @@ public class ClientPanel extends BasePanel {
 					// 增加组件的首选宽度和高度
 					0, 0
 			);
-			clientPanel.add(list.get(i),grid);
+			clientPanel.add(list.get(i), grid);
 		}
 		return clientPanel;
 	}

@@ -27,7 +27,7 @@ public class PickSkinBox extends BaseComboBox<ItemBO> {
 		this.addPopupMenuListener(popupMenuListener());
 	}
 
-	private void loadItems(){
+	private void loadItems() {
 		try {
 			if (AppCache.api != null) {
 				List<SkinBO> currentChampionSkins = AppCache.api.getCurrentChampionSkins();

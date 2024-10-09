@@ -35,6 +35,7 @@ public class MainFrame extends JFrame {
 	private static RandomAccessFile RAF;
 	private static boolean lockFlag;
 	final static String LOCK_FILE = "lol-helper.lock";
+
 	static {
 		SaveFrameConfig.load();
 	}

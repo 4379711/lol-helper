@@ -9,7 +9,7 @@ import lombok.Data;
  */
 @Data
 public class SummonerAlias {
-    private String puuid;
-    private String gameName;
-    private String tagLine;
+	private String puuid;
+	private String gameName;
+	private String tagLine;
 }

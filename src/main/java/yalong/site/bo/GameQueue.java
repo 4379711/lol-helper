@@ -9,10 +9,10 @@ import lombok.Data;
  */
 @Data
 public class GameQueue {
-    private Integer id;
-    private String name;
-    private String gameMode;
-    private Integer mapId;
-    private String isVisible;
-    private boolean select;
+	private Integer id;
+	private String name;
+	private String gameMode;
+	private Integer mapId;
+	private String isVisible;
+	private boolean select;
 }

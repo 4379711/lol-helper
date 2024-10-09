@@ -6,6 +6,6 @@ package yalong.site.exception;
  * @author WuYi
  */
 public class RepeatProcessException extends RuntimeException {
-    public RepeatProcessException() {
-    }
+	public RepeatProcessException() {
+	}
 }

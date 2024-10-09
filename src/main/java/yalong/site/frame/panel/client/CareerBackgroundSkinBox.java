@@ -29,7 +29,7 @@ public class CareerBackgroundSkinBox extends BaseComboBox<ItemBO> {
 		this.addPopupMenuListener(popupMenuListener());
 	}
 
-	private void loadItems(){
+	private void loadItems() {
 		try {
 			if (FrameUserSetting.careerChampionId != null && AppCache.api != null) {
 				// 根据所选英雄获取皮肤
@@ -44,6 +44,7 @@ public class CareerBackgroundSkinBox extends BaseComboBox<ItemBO> {
 			log.error("获取生涯背景皮肤接口错误", ex);
 		}
 	}
+
 	private void initItems() {
 		box.removeAllItems();
 		box.addItem(new ItemBO(null, "选择生涯背景皮肤"));
@@ -83,7 +84,7 @@ public class CareerBackgroundSkinBox extends BaseComboBox<ItemBO> {
 						body.put("value", skinId);
 						AppCache.api.setBackgroundSkin(body.toJSONString());
 						//皮肤增强
-						if(item.getOther()!=null){
+						if (item.getOther() != null) {
 							body.put("key", "backgroundSkinAugments");
 							body.put("value", item.getOther());
 							AppCache.api.setBackgroundSkin(body.toJSONString());

@@ -12,14 +12,14 @@ import java.awt.event.ItemListener;
  * @author WuYi
  */
 public class ShowTeamBox extends BaseCheckBox {
-    public ShowTeamBox() {
-        this.setText("显示队友战绩");
-        this.setSelected(FrameUserSettingPersistence.showMatchHistory);
-        this.addItemListener(listener());
-    }
+	public ShowTeamBox() {
+		this.setText("显示队友战绩");
+		this.setSelected(FrameUserSettingPersistence.showMatchHistory);
+		this.addItemListener(listener());
+	}
 
-    private ItemListener listener() {
-        return e -> FrameUserSettingPersistence.showMatchHistory = e.getStateChange() == ItemEvent.SELECTED;
+	private ItemListener listener() {
+		return e -> FrameUserSettingPersistence.showMatchHistory = e.getStateChange() == ItemEvent.SELECTED;
 
-    }
+	}
 }

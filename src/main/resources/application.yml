@@ -1,0 +1,32 @@
+server:
+  port: 9527
+  compression:
+    enabled: true
+    min-response-size: 1024
+    mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
+  http2:
+    enabled: false
+  undertow:
+    # 以下的配置会影响buffer,这些buffer会用于服务器连接的IO操作,有点类似netty的池化内存管理
+    # 每块buffer的空间大小,越小的空间被利用越充分
+    buffer-size: 1024
+    # 是否分配的直接内存
+    direct-buffers: true
+  ssl:
+    enabled: false
+  servlet:
+    session:
+      cookie:
+        http-only: true
+    encoding:
+      force: true
+spring:
+  application:
+    name: lol-helper
+  cache:
+    type: none
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  main:
+    banner-mode: off

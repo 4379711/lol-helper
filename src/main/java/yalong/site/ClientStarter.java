@@ -52,7 +52,7 @@ public class ClientStarter {
 	public void listenGameStatus() throws InterruptedException, IOException {
 		while (true) {
 			TimeUnit.MILLISECONDS.sleep(500);
-			if(AppCache.stopAuto){
+			if (AppCache.stopAuto) {
 				continue;
 			}
 			GameStatusContext gameStatusContext = new GameStatusContext();
@@ -72,7 +72,7 @@ public class ClientStarter {
 					GameDataCache.reset();
 					break;
 				}
-				case Lobby:{
+				case Lobby: {
 					gameStatusContext.setStrategy(new LobbyStrategy(api));
 					break;
 				}

@@ -197,7 +197,7 @@ public class MatchHistoryUtil {
 	 * @param id                 英雄ID
 	 * @param championIconWidth  英雄图标高
 	 * @param championIconHeight 英雄图标宽
-	 * @param imageEnum        图片新装
+	 * @param imageEnum          图片新装
 	 * @return 图片
 	 */
 

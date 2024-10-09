@@ -1,6 +1,5 @@
 package yalong.site.bo;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**

@@ -3,7 +3,10 @@ package yalong.site.cache;
 import lombok.extern.slf4j.Slf4j;
 import yalong.site.bo.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 每一局游戏的数据缓存

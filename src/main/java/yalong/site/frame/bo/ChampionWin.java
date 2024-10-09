@@ -11,9 +11,9 @@ import javax.swing.*;
  */
 @Data
 public class ChampionWin {
-    private int championId;
-    private int wins;
-    private int fails;
-    private ImageIcon icon;
-    private String winRate;
+	private int championId;
+	private int wins;
+	private int fails;
+	private ImageIcon icon;
+	private String winRate;
 }

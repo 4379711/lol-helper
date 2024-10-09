@@ -15,7 +15,7 @@ import java.net.ConnectException;
 @Slf4j
 public class LeagueClientHelper {
 
-	public static void main(String[] args) {
+	public static void run(String[] args) {
 		MainFrame.start();
 		while (true) {
 			String msg = "";

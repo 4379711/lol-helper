@@ -53,5 +53,4 @@ public class FrameUserSettingPersistence {
 	 */
 	public static List<Integer> selectMode = new ArrayList<>();
 
-
 }

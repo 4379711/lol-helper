@@ -6,12 +6,12 @@ package yalong.site.enums;
  * @author WuYi
  */
 public enum ImageEnum {
-    /**
-     * 方形图片
-     */
-    SQUARE,
-    /**
-     * 圆形图片
-     */
-    ROUND
+	/**
+	 * 方形图片
+	 */
+	SQUARE,
+	/**
+	 * 圆形图片
+	 */
+	ROUND
 }

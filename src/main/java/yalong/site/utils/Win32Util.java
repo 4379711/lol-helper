@@ -11,13 +11,13 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class Win32Util {
-    public static WinDef.RECT findWindowsLocation(String lpClassName, String lpWindowName) {
-        WinDef.HWND hwnd = User32.INSTANCE.FindWindow(lpClassName, lpWindowName);
-        if (hwnd == null) {
-            throw new RuntimeException("未找到窗口");
-        }
-        WinDef.RECT rect = new WinDef.RECT();
-        User32.INSTANCE.GetWindowRect(hwnd, rect);
-        return rect;
-    }
+	public static WinDef.RECT findWindowsLocation(String lpClassName, String lpWindowName) {
+		WinDef.HWND hwnd = User32.INSTANCE.FindWindow(lpClassName, lpWindowName);
+		if (hwnd == null) {
+			throw new RuntimeException("未找到窗口");
+		}
+		WinDef.RECT rect = new WinDef.RECT();
+		User32.INSTANCE.GetWindowRect(hwnd, rect);
+		return rect;
+	}
 }
