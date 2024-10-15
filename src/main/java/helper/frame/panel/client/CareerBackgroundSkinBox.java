@@ -1,7 +1,7 @@
 package helper.frame.panel.client;
 
 import com.alibaba.fastjson2.JSONObject;
-import helper.bo.SkinBO;
+import helper.vo.SkinVO;
 import helper.cache.AppCache;
 import helper.cache.FrameUserSetting;
 import helper.frame.bo.ItemBO;
@@ -33,10 +33,10 @@ public class CareerBackgroundSkinBox extends BaseComboBox<ItemBO> {
 		try {
 			if (FrameUserSetting.careerChampionId != null && AppCache.api != null) {
 				// 根据所选英雄获取皮肤
-				List<SkinBO> skin = AppCache.api.getSkinByChampionId(FrameUserSetting.careerChampionId);
-				for (SkinBO bo : skin) {
-					ItemBO itemBO = new ItemBO(String.valueOf(bo.getId()), bo.getName());
-					itemBO.setOther(bo.getContentId());
+				List<SkinVO> skin = AppCache.api.getSkinByChampionId(FrameUserSetting.careerChampionId);
+				for (SkinVO vo : skin) {
+					ItemBO itemBO = new ItemBO(String.valueOf(vo.getSkinId()), vo.getName());
+					itemBO.setOther(vo.getContentId());
 					box.addItem(itemBO);
 				}
 			}

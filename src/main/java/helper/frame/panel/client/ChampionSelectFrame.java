@@ -1,7 +1,7 @@
 package helper.frame.panel.client;
 
 import ch.qos.logback.core.util.StringUtil;
-import helper.bo.ChampionBO;
+import helper.vo.ChampionVO;
 import helper.cache.FrameSetting;
 import helper.cache.GameDataCache;
 import helper.frame.panel.base.SearchTextField;
@@ -57,8 +57,8 @@ public class ChampionSelectFrame extends JFrame {
 		//创建按钮组
 		ButtonGroup group = new ButtonGroup();
 
-		for (ChampionBO championBO : GameDataCache.allChampion) {
-			String name = championBO.getName();
+		for (ChampionVO championVO : GameDataCache.allChampion) {
+			String name = championVO.getName();
 			if (StringUtil.isNullOrEmpty(filter) || name.contains(filter)) {
 				JRadioButton button = new JRadioButton(name);
 				if (callBack != null) {

@@ -9,6 +9,8 @@ import helper.bo.*;
 import helper.cache.AppCache;
 import helper.enums.GameStatusEnum;
 import helper.http.RequestLcuUtil;
+import helper.vo.ChampionVO;
+import helper.vo.SkinVO;
 import okhttp3.Request;
 
 import javax.imageio.ImageIO;
@@ -110,15 +112,15 @@ public class LinkLeagueClientApi {
 	 *
 	 * @param championId 英雄id
 	 */
-	public List<SkinBO> getChromasSkinByChampionId(int championId) throws IOException {
+	public List<SkinVO> getChromasSkinByChampionId(int championId) throws IOException {
 		String resp = requestLcuUtil.doGet("/lol-game-data/assets/v1/champions/" + championId + ".json");
-		ArrayList<SkinBO> arrayList = new ArrayList<>();
+		ArrayList<SkinVO> arrayList = new ArrayList<>();
 		JSONArray skins = JSON.parseObject(resp).getJSONArray("skins");
 		for (int i = 0; i < skins.size(); i++) {
 			JSONObject jsonObject = skins.getJSONObject(i);
 			Integer id = jsonObject.getInteger("id");
 			String name = jsonObject.getString("name");
-			arrayList.add(new SkinBO(id, name));
+			arrayList.add(new SkinVO(id, name));
 			JSONArray chromas = jsonObject.getJSONArray("chromas");
 			if (chromas == null) {
 				continue;
@@ -126,7 +128,7 @@ public class LinkLeagueClientApi {
 			for (int j = 0; j < chromas.size(); j++) {
 				Integer chromasId = chromas.getJSONObject(j).getInteger("id");
 				String chromasName = chromas.getJSONObject(j).getString("name");
-				arrayList.add(new SkinBO(chromasId, chromasName));
+				arrayList.add(new SkinVO(chromasId, chromasName));
 			}
 		}
 		return arrayList.stream().distinct().collect(Collectors.toList());
@@ -135,7 +137,7 @@ public class LinkLeagueClientApi {
 	/**
 	 * 查询当前选定的英雄所有可用的炫彩皮肤
 	 */
-	public List<SkinBO> getCurrentChampionSkins() throws IOException {
+	public List<SkinVO> getCurrentChampionSkins() throws IOException {
 		String resp = requestLcuUtil.doGet("/lol-champ-select/v1/skin-carousel-skins");
 		JSONArray jsonArray = JSON.parseArray(resp);
 		if (jsonArray == null || jsonArray.isEmpty()) {
@@ -143,10 +145,10 @@ public class LinkLeagueClientApi {
 		}
 		Integer championId = jsonArray.getJSONObject(0).getInteger("championId");
 		//查询此英雄的皮肤名字
-		List<SkinBO> skinBOList = getChromasSkinByChampionId(championId);
-		Map<Integer, SkinBO> map = skinBOList.stream().collect(Collectors.toMap(SkinBO::getId, i -> i));
+		List<SkinVO> skinVOList = getChromasSkinByChampionId(championId);
+		Map<Integer, SkinVO> map = skinVOList.stream().collect(Collectors.toMap(SkinVO::getSkinId, i -> i));
 
-		List<SkinBO> childSkinList = new ArrayList<>();
+		List<SkinVO> childSkinList = new ArrayList<>();
 		for (int i = 0; i < jsonArray.size(); i++) {
 			JSONObject jsonObject = jsonArray.getJSONObject(i);
 			JSONArray childSkins = jsonObject.getJSONArray("childSkins");
@@ -166,15 +168,15 @@ public class LinkLeagueClientApi {
 	 *
 	 * @param championId 英雄id
 	 */
-	public List<SkinBO> getSkinByChampionId(int championId) throws IOException {
+	public List<SkinVO> getSkinByChampionId(int championId) throws IOException {
 		String resp = requestLcuUtil.doGet("/lol-game-data/assets/v1/champions/" + championId + ".json");
-		ArrayList<SkinBO> arrayList = new ArrayList<>();
+		ArrayList<SkinVO> arrayList = new ArrayList<>();
 		JSONArray skins = JSON.parseObject(resp).getJSONArray("skins");
 		for (int i = 0; i < skins.size(); i++) {
 			JSONObject jsonObject = skins.getJSONObject(i);
 			Integer id = jsonObject.getInteger("id");
 			String name = jsonObject.getString("name");
-			arrayList.add(new SkinBO(id, name));
+			arrayList.add(new SkinVO(id, name));
 			//有签名的皮肤
 			JSONObject questSkinInfo = jsonObject.getJSONObject("questSkinInfo");
 			if (questSkinInfo != null) {
@@ -191,11 +193,11 @@ public class LinkLeagueClientApi {
 							if (augments != null) {
 								for (int l = 0; l < augments.size(); l++) {
 									String contentId = augments.getJSONObject(l).getString("contentId");
-									arrayList.add(new SkinBO(id_, name_, contentId));
+									arrayList.add(new SkinVO(id_, name_, contentId));
 								}
 							}
 						} else {
-							arrayList.add(new SkinBO(id_, name_));
+							arrayList.add(new SkinVO(id_, name_));
 						}
 
 					}
@@ -217,9 +219,9 @@ public class LinkLeagueClientApi {
 	/**
 	 * 获取所有英雄
 	 */
-	public ArrayList<ChampionBO> getAllChampion() throws IOException {
+	public ArrayList<ChampionVO> getAllChampion() throws IOException {
 		String s = requestLcuUtil.doGet("/lol-game-data/assets/v1/champion-summary.json");
-		return JSON.parseObject(s, new TypeReference<ArrayList<ChampionBO>>() {
+		return JSON.parseObject(s, new TypeReference<ArrayList<ChampionVO>>() {
 		});
 	}
 
@@ -312,6 +314,7 @@ public class LinkLeagueClientApi {
 		String s = requestLcuUtil.doGet("/lol-gameflow/v1/gameflow-phase");
 		String s1 = JSON.parseObject(s, String.class);
 		return GameStatusEnum.valueOf(s1);
+		//return GameStatusEnum.InProgress;
 	}
 
 	/**
@@ -425,7 +428,7 @@ public class LinkLeagueClientApi {
 	 *
 	 * @param championId 英雄ID
 	 */
-	public Image getChampionIcons(Integer championId) throws IOException {
+	public Image getChampionIcon(Integer championId) throws IOException {
 		String endpoint = "/lol-game-data/assets/v1/champion-icons/" + championId + ".png ";
 		String url;
 		url = endpoint.substring(1);
@@ -436,6 +439,22 @@ public class LinkLeagueClientApi {
 			File file = FileUtil.writeBytes(requestLcuUtil.download(endpoint), new File(url));
 			return ImageIO.read(FileUtil.getInputStream(file));
 		}
+	}
+
+	/**
+	 * 通过英雄ID查询英雄头像
+	 *
+	 * @param championId 英雄ID
+	 */
+	public String getChampionIconUrl(Integer championId) throws IOException {
+		String endpoint = "/lol-game-data/assets/v1/champion-icons/" + championId + ".png";
+		String url;
+		url = endpoint.substring(1);
+		boolean exist = FileUtil.exist(new File(url));
+		if (!exist) {
+			FileUtil.writeBytes(requestLcuUtil.download(endpoint), new File(url));
+		}
+		return endpoint;
 	}
 
 	/**
@@ -454,7 +473,7 @@ public class LinkLeagueClientApi {
 	 *
 	 * @param iconsPath 图标或图像地址
 	 */
-	public Image geImageByPath(String iconsPath) throws IOException {
+	public Image getImageByPath(String iconsPath) throws IOException {
 		String url;
 		if (iconsPath.charAt(0) == '/') {
 			url = iconsPath.substring(1);
@@ -469,6 +488,29 @@ public class LinkLeagueClientApi {
 			return ImageIO.read(FileUtil.getInputStream(file));
 		}
 
+	}
+
+	/**
+	 * 加载图片资源到本地
+	 *
+	 * @param iconsPath 图片地址
+	 */
+	public Boolean loadImage(String iconsPath) {
+		try {
+			String url;
+			if (iconsPath.charAt(0) == '/') {
+				url = iconsPath.substring(1);
+			} else {
+				url = iconsPath.replace("/", "\\");
+			}
+			boolean exist = FileUtil.exist(new File(url));
+			if (!exist) {
+				File file = FileUtil.writeBytes(requestLcuUtil.download(iconsPath), new File(url));
+			}
+		} catch (IOException e) {
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -570,5 +612,12 @@ public class LinkLeagueClientApi {
 	public String getMaps() throws IOException {
 		String endpoint = "/lol-maps/v1/maps";
 		return requestLcuUtil.doGet(endpoint);
+	}
+
+	public String downloadReplay(Long gameId) throws IOException {
+		String endpoint = "/lol-replays/v1/rofls/" + gameId + "/download";
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("componentType", "");
+		return requestLcuUtil.doPost(endpoint, jsonObject.toJSONString());
 	}
 }

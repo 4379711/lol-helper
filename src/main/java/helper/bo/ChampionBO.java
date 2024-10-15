@@ -1,7 +1,9 @@
 package helper.bo;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author @_@
@@ -13,10 +15,7 @@ public class ChampionBO {
 	/**
 	 * 英雄id
 	 */
-	private Integer id;
-	/**
-	 * 英雄中文名
-	 */
-	private String name;
-
+	@Schema(description = "英雄id", requiredMode = Schema.RequiredMode.REQUIRED)
+	@NotNull
+	private Integer championId;
 }

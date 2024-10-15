@@ -1,6 +1,8 @@
 package helper.bo;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author @_@
@@ -10,23 +12,14 @@ public class SkinBO {
 	/**
 	 * 皮肤id
 	 */
-	private Integer id;
-	/**
-	 * 皮肤中文名
-	 */
-	private String name;
+	@NotNull
+	@Schema(description = "皮肤id", requiredMode = Schema.RequiredMode.REQUIRED)
+	private Integer skinId;
 	/**
 	 * 皮肤增强
 	 */
+	@Schema(description = "皮肤增强")
 	private String contentId;
-	public SkinBO(Integer id, String name, String contentId) {
-		this.id = id;
-		this.name = name;
-		this.contentId = contentId;
-	}
-	public SkinBO(Integer id, String name) {
-		this.id = id;
-		this.name = name;
-	}
+
 
 }

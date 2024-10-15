@@ -7,8 +7,9 @@ import helper.constant.ResultCode;
  */
 
 public enum SuccessEnum implements ResultCode {
-	SUCCESS(90000, "成功"),
-	WARNING(90001, "警告"),
+	SUCCESS(200, "成功"),
+	ERROR(400, "错误"),
+	WARNING(500, "警告"),
 
 	;
 	private final Integer code;

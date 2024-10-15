@@ -1,6 +1,7 @@
 package helper.cache;
 
 import helper.bo.*;
+import helper.vo.ChampionVO;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class GameDataCache {
 	public static Player me;
 	public static ArrayList<String> otherTeamScore = new ArrayList<>();
 	public static ArrayList<String> myTeamScore = new ArrayList<>();
-	public static ArrayList<ChampionBO> allChampion = new ArrayList<>();
+	public static ArrayList<ChampionVO> allChampion = new ArrayList<>();
 	/**
 	 * 召唤师技能信息
 	 */

@@ -152,6 +152,14 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-swing -->
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-swing</artifactId>
+            <version>1.17</version>
+        </dependency>
+
+
     </dependencies>
     <build>
         <plugins>

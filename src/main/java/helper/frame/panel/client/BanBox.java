@@ -1,6 +1,6 @@
 package helper.frame.panel.client;
 
-import helper.bo.ChampionBO;
+import helper.vo.ChampionVO;
 import helper.cache.FrameUserSetting;
 import helper.cache.GameDataCache;
 import helper.frame.panel.base.BaseButton;
@@ -25,8 +25,8 @@ public class BanBox extends BaseButton {
 		return e -> {
 			ChampionSelectFrame selectFrame = new ChampionSelectFrame("禁用英雄", (name) -> {
 				if (!GameDataCache.allChampion.isEmpty()) {
-					ChampionBO championBO = GameDataCache.allChampion.stream().filter(i -> name.equals(i.getName())).findFirst().get();
-					FrameUserSetting.banChampionId = championBO.getId();
+					ChampionVO championVO = GameDataCache.allChampion.stream().filter(i -> name.equals(i.getName())).findFirst().get();
+					FrameUserSetting.banChampionId = championVO.getId();
 				}
 
 				banBox.setText("禁用(" + name + ")");

@@ -1,6 +1,6 @@
 package helper.frame.panel.client;
 
-import helper.bo.SkinBO;
+import helper.vo.SkinVO;
 import helper.cache.AppCache;
 import helper.frame.bo.ItemBO;
 import helper.frame.panel.base.BaseComboBox;
@@ -30,9 +30,9 @@ public class PickSkinBox extends BaseComboBox<ItemBO> {
 	private void loadItems() {
 		try {
 			if (AppCache.api != null) {
-				List<SkinBO> currentChampionSkins = AppCache.api.getCurrentChampionSkins();
-				for (SkinBO bo : currentChampionSkins) {
-					box.addItem(new ItemBO(String.valueOf(bo.getId()), bo.getName()));
+				List<SkinVO> currentChampionSkins = AppCache.api.getCurrentChampionSkins();
+				for (SkinVO bo : currentChampionSkins) {
+					box.addItem(new ItemBO(String.valueOf(bo.getSkinId()), bo.getName()));
 				}
 			}
 

@@ -1,6 +1,6 @@
 package helper.frame.panel.client;
 
-import helper.bo.ChampionBO;
+import helper.vo.ChampionVO;
 import helper.cache.FrameUserSetting;
 import helper.cache.GameDataCache;
 import helper.frame.panel.base.BaseButton;
@@ -24,8 +24,8 @@ public class PickBox extends BaseButton {
 	private ActionListener actionListener() {
 		return e -> {
 			ChampionSelectFrame selectFrame = new ChampionSelectFrame("选择英雄", (name) -> {
-				ChampionBO championBO = GameDataCache.allChampion.stream().filter(i -> name.equals(i.getName())).findFirst().get();
-				FrameUserSetting.pickChampionId = championBO.getId();
+				ChampionVO championVO = GameDataCache.allChampion.stream().filter(i -> name.equals(i.getName())).findFirst().get();
+				FrameUserSetting.pickChampionId = championVO.getId();
 				pickBox.setText("秒选(" + name + ")");
 			});
 			selectFrame.setVisible(true);

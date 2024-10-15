@@ -36,7 +36,7 @@ public class MatchHistoryUtil {
 		if (id != 0) {
 			try {
 				String iconPath = GameDataCache.itemList.stream().filter(item -> item.getId().equals(id)).findFirst().get().getIconPath();
-				return new ImageIcon(AppCache.api.geImageByPath(iconPath).getScaledInstance(itemIconWidth, itemIconHeight, Image.SCALE_DEFAULT));
+				return new ImageIcon(AppCache.api.getImageByPath(iconPath).getScaledInstance(itemIconWidth, itemIconHeight, Image.SCALE_DEFAULT));
 			} catch (IOException e) {
 				log.error("未检测到图像");
 				new ImageIcon(new BufferedImage(itemIconWidth, itemIconHeight, BufferedImage.TYPE_INT_ARGB));
@@ -55,7 +55,7 @@ public class MatchHistoryUtil {
 		if (id != 0) {
 			try {
 				String iconPath = GameDataCache.perkList.stream().filter(perk -> perk.getId().equals(id)).findFirst().get().getIconPath();
-				return new ImageIcon(AppCache.api.geImageByPath(iconPath).getScaledInstance(perkIconWidth, perkIconHeight, Image.SCALE_DEFAULT));
+				return new ImageIcon(AppCache.api.getImageByPath(iconPath).getScaledInstance(perkIconWidth, perkIconHeight, Image.SCALE_DEFAULT));
 			} catch (IOException e) {
 				log.error("未检测到图像");
 				new ImageIcon(new BufferedImage(perkIconWidth, perkIconHeight, BufferedImage.TYPE_INT_ARGB));
@@ -74,7 +74,7 @@ public class MatchHistoryUtil {
 		if (id != 0) {
 			try {
 				String iconPath = GameDataCache.perkStyleList.stream().filter(perk -> perk.getId().equals(id)).findFirst().get().getIconPath();
-				return new ImageIcon(AppCache.api.geImageByPath(iconPath).getScaledInstance(perkStyleIconWidth, perkStyleIconHeight, Image.SCALE_DEFAULT));
+				return new ImageIcon(AppCache.api.getImageByPath(iconPath).getScaledInstance(perkStyleIconWidth, perkStyleIconHeight, Image.SCALE_DEFAULT));
 			} catch (IOException e) {
 				log.error("未检测到图像");
 				new ImageIcon(new BufferedImage(perkStyleIconWidth, perkStyleIconHeight, BufferedImage.TYPE_INT_ARGB));
@@ -159,7 +159,7 @@ public class MatchHistoryUtil {
 		if (id != 0) {
 			try {
 				String iconPath = GameDataCache.summonerSpellsList.stream().filter(item -> item.getId().equals(id)).findFirst().get().getIconPath();
-				return new ImageIcon(AppCache.api.geImageByPath(iconPath).getScaledInstance(spellIconWidth, spellIconHeight, Image.SCALE_DEFAULT));
+				return new ImageIcon(AppCache.api.getImageByPath(iconPath).getScaledInstance(spellIconWidth, spellIconHeight, Image.SCALE_DEFAULT));
 			} catch (IOException e) {
 				log.error("未检测到图像");
 				new ImageIcon(new BufferedImage(spellIconWidth, spellIconHeight, BufferedImage.TYPE_INT_ARGB));
@@ -205,13 +205,13 @@ public class MatchHistoryUtil {
 		if (id != 0) {
 			if (imageEnum == ImageEnum.ROUND) {
 				try {
-					return new ImageIcon(ImageUtil.makeRoundedCorner(AppCache.api.getChampionIcons(id).getScaledInstance(championIconWidth, championIconHeight, Image.SCALE_REPLICATE)));
+					return new ImageIcon(ImageUtil.makeRoundedCorner(AppCache.api.getChampionIcon(id).getScaledInstance(championIconWidth, championIconHeight, Image.SCALE_REPLICATE)));
 				} catch (IOException e) {
 					return new ImageIcon(new BufferedImage(championIconWidth, championIconHeight, BufferedImage.TYPE_INT_ARGB));
 				}
 			} else if (imageEnum == ImageEnum.SQUARE) {
 				try {
-					return new ImageIcon(AppCache.api.getChampionIcons(id).getScaledInstance(championIconWidth, championIconHeight, Image.SCALE_REPLICATE));
+					return new ImageIcon(AppCache.api.getChampionIcon(id).getScaledInstance(championIconWidth, championIconHeight, Image.SCALE_REPLICATE));
 				} catch (IOException e) {
 					return new ImageIcon(new BufferedImage(championIconWidth, championIconHeight, BufferedImage.TYPE_INT_ARGB));
 				}
