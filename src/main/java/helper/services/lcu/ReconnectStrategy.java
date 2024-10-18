@@ -1,6 +1,7 @@
 package helper.services.lcu;
 
 import helper.cache.FrameUserSettingPersistence;
+import helper.cache.GlobalData;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -16,7 +17,7 @@ public class ReconnectStrategy implements GameStatusStrategy {
 
 	@Override
 	public void doThis() {
-		if (FrameUserSettingPersistence.autoReconnect) {
+		if (GlobalData.settingState.getAutoReconnect()) {
 			//重连
 			try {
 				String reconnect = api.reconnect();

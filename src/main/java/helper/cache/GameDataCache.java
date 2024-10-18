@@ -2,6 +2,7 @@ package helper.cache;
 
 import helper.bo.*;
 import helper.vo.ChampionVO;
+import helper.vo.PlayerVO;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import java.util.Map;
 @Slf4j
 public class GameDataCache {
 
-	public static Player me;
+	public static PlayerVO me;
 	public static ArrayList<String> otherTeamScore = new ArrayList<>();
 	public static ArrayList<String> myTeamScore = new ArrayList<>();
 	public static ArrayList<ChampionVO> allChampion = new ArrayList<>();

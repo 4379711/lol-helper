@@ -1,23 +1,23 @@
 package helper.controller;
 
-import helper.bo.BooleanBO;
-import helper.bo.GameModeSelectBO;
+import helper.bo.*;
 import helper.constant.R;
 import helper.services.web.RecordService;
 import helper.vo.SettingRecordVO;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author WuYi
  */
 @RestController
 @RequestMapping("/record")
-@Tag(name = "战绩设置")
+@Tag(name = "战绩")
 @Validated
 public class RecordController {
     @Resource
@@ -49,4 +49,23 @@ public class RecordController {
         recordService.gameModeSelectUpdate(bo.getGameModeSelect());
         return R.ok();
     }
+
+    @PostMapping("/match/lcu")
+    @Operation(summary = "获取lcu战绩")
+    public R<ProductsMatchHistoryBO> matchLcu(@RequestBody @Validated LcuMatchBO bo) {
+        return R.ok(recordService.getMatchLcu(bo));
+    }
+
+    @PostMapping("/match/sgp")
+    @Operation(summary = "获取sgp战绩")
+    public R<List<SpgProductsMatchHistoryBO>> matchSgp(@RequestBody @Validated SgpMatchBO bo) {
+        return R.ok(recordService.getMatchSgp(bo));
+    }
+
+    @PostMapping("/rank")
+    @Operation(summary = "获取段位")
+    public R<Rank> rank(@RequestBody @Validated SummonerBO bo) {
+        return R.ok(recordService.getRank(bo.getPuuid()));
+    }
+
 }

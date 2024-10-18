@@ -1,6 +1,7 @@
 package helper.services.lcu;
 
 import helper.cache.FrameUserSettingPersistence;
+import helper.cache.GlobalData;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -16,7 +17,7 @@ public class LobbyStrategy implements GameStatusStrategy {
 
 	@Override
 	public void doThis() {
-		if (FrameUserSettingPersistence.autoSearch) {
+		if (GlobalData.settingState.getAutoSearch()) {
 			// 自动寻找对局
 			try {
 				String search = this.api.search();

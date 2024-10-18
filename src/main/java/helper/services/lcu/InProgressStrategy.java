@@ -3,6 +3,7 @@ package helper.services.lcu;
 import helper.bo.TeamPuuidBO;
 import helper.cache.FrameUserSettingPersistence;
 import helper.cache.GameDataCache;
+import helper.cache.GlobalData;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -38,7 +39,7 @@ public class InProgressStrategy implements GameStatusStrategy {
 
 	@Override
 	public void doThis() {
-		if (FrameUserSettingPersistence.sendScore && GameDataCache.otherTeamScore.isEmpty()) {
+		if (GlobalData.settingRecord.getSendScore() && GameDataCache.otherTeamScore.isEmpty()) {
 			try {
 				List<String> otherPuuid = getOtherPuuid();
 				if (!otherPuuid.contains(null)) {

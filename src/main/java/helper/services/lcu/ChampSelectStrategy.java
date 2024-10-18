@@ -3,10 +3,7 @@ package helper.services.lcu;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import helper.bo.*;
-import helper.cache.FrameInnerCache;
-import helper.cache.FrameUserSetting;
-import helper.cache.FrameUserSettingPersistence;
-import helper.cache.GameDataCache;
+import helper.cache.*;
 import helper.frame.panel.history.MyTeamMatchHistoryPanel;
 import helper.services.sgp.RegionSgpApi;
 import helper.utils.ProcessUtil;
@@ -33,7 +30,7 @@ public class ChampSelectStrategy implements GameStatusStrategy {
 
 	private void autoBanPick() throws IOException {
 		// todo 有些游戏模式会让选择多次,暂未发现什么标记能够分辨是预选和确认选择,所以目前的方式让程序一直发起pick请求
-		if ((FrameUserSetting.pickChampionId != null && FrameUserSetting.pickChampionId != 0) || (FrameUserSetting.banChampionId != null && FrameUserSetting.banChampionId != 0)) {
+		if ((GlobalData.settingState.getPickChampionId() != null && GlobalData.settingState.getPickChampionId() != 0) || (GlobalData.settingState.getBanChampionId() != null && GlobalData.settingState.getBanChampionId() != 0)) {
 			String roomGameInfo = api.getChampSelectInfo();
 			JSONObject jsonObject = JSONObject.parseObject(roomGameInfo);
 			int localPlayerCellId = jsonObject.getIntValue("localPlayerCellId");
@@ -47,9 +44,9 @@ public class ChampSelectStrategy implements GameStatusStrategy {
 						String type = actionElement.getString("type");
 						if ("pick".equals(type)) {
 							//报错处理? {"errorCode":"RPC_ERROR","httpStatus":500,"implementationDetails":{},"message":"Error response for PATCH /lol-lobby-team-builder/champ-select/v1/session/actions/2: Unable to process action change: Received status Error: INVALID_STATE instead of expected status of OK from request to teambuilder-draft:updateActionV1"}
-							api.banPick("pick", actionId, FrameUserSetting.pickChampionId);
+							api.banPick("pick", actionId, GlobalData.settingState.getPickChampionId());
 						} else {
-							api.banPick("ban", actionId, FrameUserSetting.banChampionId);
+							api.banPick("ban", actionId, GlobalData.settingState.getBanChampionId());
 						}
 					}
 				}
@@ -59,7 +56,7 @@ public class ChampSelectStrategy implements GameStatusStrategy {
 	}
 
 	private void selectScore() throws IOException {
-		if (FrameUserSettingPersistence.sendScore && GameDataCache.myTeamScore.isEmpty()) {
+		if (GlobalData.settingRecord.getSendScore() && GameDataCache.myTeamScore.isEmpty()) {
 			String roomGameInfo = api.getChampSelectInfo();
 			JSONObject jsonObject = JSONObject.parseObject(roomGameInfo);
 			JSONArray myTeam = jsonObject.getJSONArray("myTeam");
@@ -84,13 +81,13 @@ public class ChampSelectStrategy implements GameStatusStrategy {
 	 * 展示队友数据
 	 */
 	private void showMatchHistory() throws IOException {
-		if (FrameUserSettingPersistence.showMatchHistory && (FrameInnerCache.myTeamMatchHistoryPanel == null || !FrameInnerCache.myTeamMatchHistoryPanel.isVisible())) {
+		if (GlobalData.settingRecord.getShowTeamRecord() && (FrameInnerCache.myTeamMatchHistoryPanel == null || !FrameInnerCache.myTeamMatchHistoryPanel.isVisible())) {
 			String region = ProcessUtil.getClientProcess().getRegion();
 			String roomGameInfo = api.getChampSelectInfo();
 			JSONObject jsonObject = JSONObject.parseObject(roomGameInfo);
 			JSONArray myTeam = jsonObject.getJSONArray("myTeam");
 //			//可能队友还没进入房间
-			if (myTeam.size() != 5) {
+			if (myTeam.size() != 1) {
 				log.error(myTeam.getJSONObject(0).getString("puuid"));
 				return;
 			}

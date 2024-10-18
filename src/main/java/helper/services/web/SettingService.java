@@ -5,13 +5,10 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSONObject;
 import helper.bo.RankBO;
-import helper.bo.SettingStateBO;
 import helper.bo.SkinBO;
-import helper.services.lcu.LinkLeagueClientApi;
-import helper.vo.SkinVO;
 import helper.cache.AppCache;
+import helper.cache.GlobalData;
 import helper.vo.SettingStateVO;
-import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -23,18 +20,15 @@ import java.io.IOException;
 @Service
 @Slf4j
 public class SettingService {
-    @Resource
-    private SettingStateBO settingStateBO;
-    @Resource
-    private LinkLeagueClientApi lcuApi;
+
 
     public SettingStateVO settingStateList() {
-        return BeanUtil.toBean(settingStateBO, SettingStateVO.class);
+        return BeanUtil.toBean(GlobalData.settingState, SettingStateVO.class);
     }
 
     public Boolean updateRank(RankBO rank) {
         try {
-            lcuApi.setRank(rank);
+            AppCache.api.setRank(rank);
         } catch (IOException e) {
             return false;
         }
@@ -42,32 +36,32 @@ public class SettingService {
     }
 
     public void updateAutoAccept(Boolean flag) {
-        settingStateBO.setAutoAccept(flag);
+        GlobalData.settingState.setAutoAccept(flag);
     }
 
     public void updateAutoSearch(Boolean flag) {
-        settingStateBO.setAutoSearch(flag);
+        GlobalData.settingState.setAutoSearch(flag);
     }
 
     public void updateAutoPlayAgain(Boolean flag) {
-        settingStateBO.setAutoPlayAgain(flag);
+        GlobalData.settingState.setAutoPlayAgain(flag);
     }
 
     public void updateAutoReconnect(Boolean flag) {
-        settingStateBO.setAutoReconnect(flag);
+        GlobalData.settingState.setAutoReconnect(flag);
     }
 
     public void updateAutoKey(Boolean flag) {
-        settingStateBO.setAutoKey(flag);
+        GlobalData.settingState.setAutoKey(flag);
     }
 
     public void updateCommunicate(Boolean flag) {
-        settingStateBO.setCommunicate(flag);
+        GlobalData.settingState.setCommunicate(flag);
     }
 
     public Boolean updateClientState(String state) {
         try {
-            lcuApi.changeStatus(state);
+            AppCache.api.changeStatus(state);
         } catch (IOException e) {
             return false;
         }
@@ -75,11 +69,11 @@ public class SettingService {
     }
 
     public void updatePickChampion(Integer championId) {
-        settingStateBO.setPickChampionId(championId);
+        GlobalData.settingState.setPickChampionId(championId);
     }
 
     public void updateBanChampion(Integer championId) {
-        settingStateBO.setBanChampionId(championId);
+        GlobalData.settingState.setBanChampionId(championId);
     }
 
     public Boolean updateBackgroundSkin(SkinBO bo) {
@@ -88,12 +82,12 @@ public class SettingService {
             JSONObject body = new JSONObject(2);
             body.put("key", "backgroundSkinId");
             body.put("value", bo.getSkinId());
-            lcuApi.setBackgroundSkin(body.toJSONString());
+            AppCache.api.setBackgroundSkin(body.toJSONString());
             //皮肤增强
             if (StrUtil.isBlank(bo.getContentId())) {
                 body.put("key", "backgroundSkinAugments");
                 body.put("value", bo.getContentId());
-                lcuApi.setBackgroundSkin(body.toJSONString());
+                AppCache.api.setBackgroundSkin(body.toJSONString());
             }
         } catch (IOException e) {
             return false;

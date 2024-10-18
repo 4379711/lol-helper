@@ -28,14 +28,14 @@ public class SettingStateVO {
     private boolean communicate;
 //    @Schema(description = "选择炫彩皮肤")
 //    private int pickSkinId;
-    @Schema(description = "客户端状态")
-    private String state;
+//    @Schema(description = "客户端状态")
+//    private String state;
     @Schema(description = "禁用英雄")
     private Integer banChampionId;
     @Schema(description = "秒选英雄")
     private Integer pickChampionId;
-    @Schema(description = "生涯背景英雄")
-    private Integer backgroundChampionId;
-    @Schema(description = "生涯背景英雄皮肤")
-    private Integer backgroundSkinId;
+//    @Schema(description = "生涯背景英雄")
+//    private Integer backgroundChampionId;
+//    @Schema(description = "生涯背景英雄皮肤")
+//    private Integer backgroundSkinId;
 }

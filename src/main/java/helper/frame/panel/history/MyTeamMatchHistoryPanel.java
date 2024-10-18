@@ -8,11 +8,13 @@ import helper.bo.TeamSummonerBO;
 import helper.cache.FrameInnerCache;
 import helper.cache.FrameUserSettingPersistence;
 import helper.cache.GameDataCache;
+import helper.cache.GlobalData;
 import helper.enums.ImageEnum;
 import helper.frame.bo.ChampionWin;
 import helper.frame.constant.ColorConstant;
 import helper.frame.panel.base.HorizontalDivider;
 import helper.frame.panel.base.RoundedVerticalPanel;
+import helper.frame.panel.client.PickSkinBox;
 import helper.frame.utils.MatchHistoryUtil;
 import helper.utils.Win32Util;
 
@@ -26,6 +28,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static cn.hutool.core.swing.ScreenUtil.dimension;
 
 /**
  * @author WuYi
@@ -51,9 +55,22 @@ public class MyTeamMatchHistoryPanel extends JWindow implements MouseListener, M
 		Shape roundRect = new RoundRectangle2D.Double(0, 0, this.getWidth(), this.getHeight(), 15, 15);
 		this.setShape(roundRect);
 		// 设置布局管理器为 BoxLayout（垂直排列）
-		this.setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+		this.setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
 		JPanel jPanel = new RoundedVerticalPanel(10, ColorConstant.DARK_THREE);
+		JPanel jPanel2 = new JPanel();
+		jPanel2.setLayout(new BoxLayout(jPanel2, BoxLayout.Y_AXIS));
+		jPanel2.setSize(new Dimension(600,50));
+		jPanel2.setPreferredSize(new Dimension(600,50));
+
 		//JPanel jPanel= new JPanel();
+		PickSkinBox pickSkinBox = new PickSkinBox();
+		Dimension dimension = new Dimension(100, 25);
+		pickSkinBox.setSize(dimension);
+		pickSkinBox.setMinimumSize(dimension);
+		pickSkinBox.setMaximumSize(dimension);
+		pickSkinBox.setPreferredSize(dimension);
+		jPanel2.add(pickSkinBox);
+		this.add(jPanel2);
 		jPanel.add(getMapSide(GameDataCache.myTeamMatchHistory.get(0).getMapSide()));
 		for (TeamSummonerBO data : GameDataCache.myTeamMatchHistory) {
 			jPanel.add(new HorizontalDivider(this.getWidth() - 10));
@@ -73,8 +90,8 @@ public class MyTeamMatchHistoryPanel extends JWindow implements MouseListener, M
 		//获取自己的所有数据
 		for (SpgProductsMatchHistoryBO item : data.getMatchHistory()) {
 			Integer queueId = item.getJson().getQueueId();
-			if (FrameUserSettingPersistence.selectMode.isEmpty() ||
-					FrameUserSettingPersistence.selectMode.contains(queueId)) {
+			if (GlobalData.settingRecord.getGameModeSelect().isEmpty() ||
+					GlobalData.settingRecord.getGameModeSelect().contains(queueId)) {
 				SpgParticipants spgParticipants = item.getJson().getParticipants()
 						.stream()
 						.filter(line -> line.getPuuid().equals(data.getPuuid()))

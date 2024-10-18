@@ -1,9 +1,11 @@
 package helper.services.web;
 
 import cn.hutool.core.bean.BeanUtil;
-import helper.bo.SettingRecordBO;
+import helper.bo.*;
+import helper.cache.AppCache;
+import helper.cache.GlobalData;
 import helper.vo.SettingRecordVO;
-import jakarta.annotation.Resource;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -15,22 +17,36 @@ import java.util.List;
 @Service
 @Slf4j
 public class RecordService {
-    @Resource
-    private SettingRecordBO settingRecordBO;
+
 
     public SettingRecordVO getSettingRecord() {
-        return BeanUtil.toBean(settingRecordBO, SettingRecordVO.class);
+        return BeanUtil.toBean(GlobalData.settingRecord, SettingRecordVO.class);
     }
 
     public void sendScoreUpdate(Boolean flag) {
-        settingRecordBO.setSendScore(flag);
+        GlobalData.settingRecord.setSendScore(flag);
     }
 
     public void showTeamRecordUpdate(Boolean flag) {
-        settingRecordBO.setShowTeamRecord(flag);
+        GlobalData.settingRecord.setShowTeamRecord(flag);
     }
 
     public void gameModeSelectUpdate(List<Integer> gameModeSelect) {
-        settingRecordBO.setGameModeSelect(gameModeSelect);
+        GlobalData.settingRecord.setGameModeSelect(gameModeSelect);
+    }
+
+    @SneakyThrows
+    public ProductsMatchHistoryBO getMatchLcu(LcuMatchBO bo) {
+        return AppCache.api.getProductsMatchHistoryByPuuid(bo.getPuuid(), bo.getStartIndex(), bo.getStartIndex());
+    }
+
+    @SneakyThrows
+    public List<SpgProductsMatchHistoryBO> getMatchSgp(SgpMatchBO bo) {
+        return AppCache.sgpApi.getProductsMatchHistoryByPuuid(bo.getRegion().toString(), bo.getPuuid(), bo.getStartIndex(), bo.getCount());
+    }
+
+    @SneakyThrows
+    public Rank getRank(String puuid) {
+        return AppCache.api.getRank(puuid);
     }
 }

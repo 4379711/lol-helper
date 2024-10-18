@@ -6,6 +6,7 @@ import helper.frame.bo.ItemBO;
 import helper.frame.panel.base.BaseComboBox;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.swing.*;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import java.awt.event.ItemEvent;
@@ -17,7 +18,7 @@ import java.util.List;
  * @author @_@
  */
 @Slf4j
-public class PickSkinBox extends BaseComboBox<ItemBO> {
+public class PickSkinBox extends JComboBox<ItemBO> {
 	private final PickSkinBox box;
 
 	public PickSkinBox() {

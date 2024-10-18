@@ -2,7 +2,6 @@ package helper;
 
 import cn.hutool.core.util.StrUtil;
 import helper.bo.LeagueClientBO;
-import helper.bo.SettingStateBO;
 import helper.cache.AppCache;
 import helper.cache.FrameInnerCache;
 import helper.cache.GameDataCache;
@@ -17,9 +16,7 @@ import helper.services.hotkey.HotKeyService;
 import helper.services.lcu.*;
 import helper.services.sgp.RegionSgpApi;
 import helper.utils.ProcessUtil;
-import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.ConnectException;
@@ -30,12 +27,11 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 public class ClientStarter {
-	@Resource
-	private SettingStateBO settingStateBO;
 	private LinkLeagueClientApi api;
 	private RegionSgpApi localSgpApi;
 
 	public void run() {
+
 		MainFrame.start();
 		while (true) {
 			String msg = "";
@@ -62,6 +58,8 @@ public class ClientStarter {
 			int running = MainFrame.continueRun(msg);
 			if (running != 0) {
 				System.exit(0);
+			}else {
+				GameDataCache.cacheLcuMe();
 			}
 		}
 	}

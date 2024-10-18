@@ -142,8 +142,6 @@ public class MainFrame extends JFrame {
 			@Override
 			public void windowOpened(WindowEvent e) {
 				log.info("配置加载完成");
-				// 加载垃圾话
-				AppCache.garbageWordList = GarbageWord.loadWord();
 				log.info("垃圾话加载完成");
 			}
 

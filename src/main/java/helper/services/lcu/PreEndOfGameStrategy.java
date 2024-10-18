@@ -1,6 +1,7 @@
 package helper.services.lcu;
 
 import helper.cache.FrameUserSettingPersistence;
+import helper.cache.GlobalData;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -16,7 +17,7 @@ public class PreEndOfGameStrategy implements GameStatusStrategy {
 
 	@Override
 	public void doThis() {
-		if (FrameUserSettingPersistence.autoPlayAgain) {
+		if (GlobalData.settingState.getAutoPlayAgain()) {
 			//点赞
 			try {
 				String s = api.honor();

@@ -1,6 +1,7 @@
 package helper.services.lcu;
 
 import helper.cache.FrameUserSettingPersistence;
+import helper.cache.GlobalData;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -16,7 +17,7 @@ public class ReadyCheckStrategy implements GameStatusStrategy {
 
 	@Override
 	public void doThis() {
-		if (FrameUserSettingPersistence.autoAccept) {
+		if (GlobalData.settingState.getAutoAccept()) {
 			// 自动接受对局
 			try {
 				String accept = this.api.accept();

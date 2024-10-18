@@ -3,6 +3,7 @@ package helper.frame.utils;
 import cn.hutool.core.io.FileUtil;
 import helper.cache.AppCache;
 import helper.cache.FrameUserSettingPersistence;
+import helper.cache.GlobalData;
 import helper.services.hotkey.HotKeyConsumer;
 import helper.utils.RobotUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -91,7 +92,7 @@ public class DiyKeyUtil {
 						i -> Integer.parseInt(i[0]),
 						line -> () -> keyCodeParam -> {
 							for (int i = 1; i < line.length; i++) {
-								if (FrameUserSettingPersistence.autoKey) {
+								if (GlobalData.settingState.getAutoKey()) {
 									int keyCode = Integer.parseInt(line[i]);
 									if (keyCode >= 0) {
 										RobotUtil.ROBOT.keyPress(keyCode);

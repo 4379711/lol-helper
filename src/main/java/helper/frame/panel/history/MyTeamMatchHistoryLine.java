@@ -129,6 +129,7 @@ public class MyTeamMatchHistoryLine extends JPanel {
 			JLabel jLabel = new JLabel();
 			jLabel.setIcon(championWin.getIcon());
 			panelTwo.add(jLabel);
+
 		}
 
 		this.add(panelOne);

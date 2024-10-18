@@ -10,6 +10,7 @@ import helper.cache.AppCache;
 import helper.enums.GameStatusEnum;
 import helper.http.RequestLcuUtil;
 import helper.vo.ChampionVO;
+import helper.vo.PlayerVO;
 import helper.vo.SkinVO;
 import okhttp3.Request;
 
@@ -52,9 +53,9 @@ public class LinkLeagueClientApi {
 	/**
 	 * 获取登录用户信息
 	 */
-	public Player getCurrentSummoner() throws IOException {
+	public PlayerVO getCurrentSummoner() throws IOException {
 		String resp = requestLcuUtil.doGet("/lol-summoner/v1/current-summoner");
-		return JSON.parseObject(resp, Player.class);
+		return JSON.parseObject(resp, PlayerVO.class);
 	}
 
 	/**

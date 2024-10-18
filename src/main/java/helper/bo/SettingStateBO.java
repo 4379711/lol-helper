@@ -1,13 +1,16 @@
 package helper.bo;
 
+import com.alibaba.fastjson2.annotation.JSONField;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+
+import java.io.Serializable;
 
 /**
  * @author WuYi
  */
 @Data
-public class SettingStateBO {
+public class SettingStateBO implements Serializable {
     @Schema(description = "段位游戏模式")
     private String rankFirst;
     @Schema(description = "段位")
@@ -15,17 +18,19 @@ public class SettingStateBO {
     @Schema(description = "段位等级")
     private String rankThird;
     @Schema(description = "自动接受对局")
-    private boolean autoAccept;
+    private Boolean autoAccept;
     @Schema(description = "自动寻找对局")
-    private boolean autoSearch;
+    private Boolean autoSearch;
     @Schema(description = "自动再来一局")
-    private boolean autoPlayAgain;
+    private Boolean autoPlayAgain;
     @Schema(description = "掉线自动重连")
-    private boolean autoReconnect;
+    private Boolean autoReconnect;
     @Schema(description = "一键连招")
-    private boolean autoKey;
+    private Boolean autoKey;
     @Schema(description = "互动模式")
-    private boolean communicate;
+    private Boolean communicate;
+    @Schema(description = "卡炫彩")
+    private Boolean pickSkin;
     @Schema(description = "客户端状态")
     private String state;
     @Schema(description = "禁用英雄")
@@ -36,4 +41,20 @@ public class SettingStateBO {
     private Integer backgroundChampionId;
     @Schema(description = "生涯背景英雄皮肤")
     private Integer backgroundSkinId;
+    public SettingStateBO(){
+        this.rankFirst = "";
+        this.rankSecond = "";
+        this.rankThird = "";
+        this.autoAccept = false;
+        this.autoSearch = false;
+        this.autoPlayAgain = false;
+        this.autoReconnect = false;
+        this.autoKey = false;
+        this.communicate = false;
+        this.state = "";
+        this.banChampionId = 0;
+        this.pickChampionId = 0;
+        this.backgroundChampionId = 0;
+        this.backgroundSkinId = 0;
+    }
 }

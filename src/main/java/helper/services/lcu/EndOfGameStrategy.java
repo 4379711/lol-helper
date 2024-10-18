@@ -1,6 +1,7 @@
 package helper.services.lcu;
 
 import helper.cache.FrameUserSettingPersistence;
+import helper.cache.GlobalData;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -16,7 +17,7 @@ public class EndOfGameStrategy implements GameStatusStrategy {
 
 	@Override
 	public void doThis() {
-		if (FrameUserSettingPersistence.autoPlayAgain) {
+		if (GlobalData.settingState.getAutoPlayAgain()) {
 			//再来一局
 			try {
 				String s = api.playAgain();

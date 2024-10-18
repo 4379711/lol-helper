@@ -1,9 +1,6 @@
 package helper.frame.constant;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 游戏常量映射
@@ -25,7 +22,7 @@ public class GameConstant {
 			put(1700, "斗魂竞技场");
 		}
 	};
-	public final static Map<String, String> RANK = new HashMap<String, String>() {
+	public final static Map<String, String> RANK = new LinkedHashMap<>() {
 		{
 			put("NONE", "暂无段位");
 			put("IRON", "坚韧黑铁");

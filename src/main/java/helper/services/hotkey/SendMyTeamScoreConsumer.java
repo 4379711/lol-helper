@@ -2,6 +2,7 @@ package helper.services.hotkey;
 
 import helper.cache.FrameUserSettingPersistence;
 import helper.cache.GameDataCache;
+import helper.cache.GlobalData;
 import helper.utils.KeyEventUtil;
 
 import java.util.concurrent.TimeUnit;
@@ -15,7 +16,7 @@ public class SendMyTeamScoreConsumer implements HotKeyConsumer {
 	@Override
 	public Consumer<Integer> build() {
 		return i -> {
-			if (FrameUserSettingPersistence.sendScore) {
+			if (GlobalData.settingRecord.getSendScore()) {
 				for (String s : GameDataCache.myTeamScore) {
 					KeyEventUtil.sendMsg("我方" + s);
 					try {

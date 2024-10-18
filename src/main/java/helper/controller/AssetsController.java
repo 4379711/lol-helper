@@ -4,6 +4,8 @@ import helper.bo.*;
 import helper.constant.R;
 import helper.services.web.AssetsService;
 import helper.vo.ChampionVO;
+import helper.vo.PlayerVO;
+import helper.vo.SettingRankVO;
 import helper.vo.SkinVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -71,6 +73,29 @@ public class AssetsController {
         return R.ok(assetsService.getChampionIcon(bo.getChampionId()));
     }
 
+    @GetMapping("/currentPlayer")
+    @Operation(summary = "获取登录人信息")
+    public R<PlayerVO> currentPlayer() {
+        return R.ok(assetsService.getCurrentPlayer());
+    }
+
+    @GetMapping("/region")
+    @Operation(summary = "获取当前大区")
+    public R<String> region() {
+        return R.ok(assetsService.getRegion());
+    }
+
+    @GetMapping("/settingRank")
+    @Operation(summary = "获取用于设置伪造的段位")
+    public R<SettingRankVO> SettingRank() {
+        return R.ok(new SettingRankVO());
+    }
+
+    @GetMapping("/recordRank")
+    @Operation(summary = "获取战绩段位")
+    public R<Map<String, String>> RecordRank() {
+        return R.ok(assetsService.getRecordRank());
+    }
 
 
 }

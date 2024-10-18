@@ -2,6 +2,7 @@ package helper.services.hotkey;
 
 import helper.cache.AppCache;
 import helper.cache.FrameUserSettingPersistence;
+import helper.cache.GlobalData;
 import helper.utils.KeyEventUtil;
 
 import java.util.function.Consumer;
@@ -15,7 +16,7 @@ public class GarbageWordConsumer implements HotKeyConsumer {
 	@Override
 	public Consumer<Integer> build() {
 		return i -> {
-			if (FrameUserSettingPersistence.communicate) {
+			if (GlobalData.settingState.getCommunicate()) {
 				String s = AppCache.garbageWordList.get(nextLineNo);
 				KeyEventUtil.sendMsg(s);
 				int size = AppCache.garbageWordList.size();

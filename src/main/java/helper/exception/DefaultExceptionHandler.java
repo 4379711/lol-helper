@@ -37,7 +37,7 @@ public class DefaultExceptionHandler {
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
 	public R<?> requestMethodNotSupported(HttpRequestMethodNotSupportedException e) {
 		log.error(e.getMessage(), e);
-		return R.fail(ExceptionEnum.METHOD_NOT_ALLOWED);
+		return R.fail(ExceptionEnum.METHOD_NOT_ALLOWED, e.toString());
 	}
 
 	@ExceptionHandler({
@@ -54,7 +54,7 @@ public class DefaultExceptionHandler {
 	})
 	public R<?> argument(Exception e) {
 		log.error(e.getMessage(), e);
-		return R.fail(ExceptionEnum.PARAM_ERROR);
+		return R.fail(ExceptionEnum.PARAM_ERROR, e.toString());
 	}
 
 	/**
@@ -63,13 +63,13 @@ public class DefaultExceptionHandler {
 	@ExceptionHandler(HttpMediaTypeNotSupportedException.class)
 	public R<?> mediaType(Exception e) {
 		log.error(e.getMessage(), e);
-		return R.fail(ExceptionEnum.MEDIA_TYPE_ERROR);
+		return R.fail(ExceptionEnum.MEDIA_TYPE_ERROR, e.toString());
 	}
 
 	@ExceptionHandler(Exception.class)
 	public R<?> handleException(Exception e) {
 		log.error(e.getMessage(), e);
-		return R.fail(ExceptionEnum.INTERNAL_SERVER_ERROR);
+		return R.fail(ExceptionEnum.INTERNAL_SERVER_ERROR, e.toString());
 	}
 
 }

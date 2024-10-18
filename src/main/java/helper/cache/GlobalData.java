@@ -2,26 +2,15 @@ package helper.cache;
 
 import helper.bo.SettingRecordBO;
 import helper.bo.SettingStateBO;
-import helper.utils.GlobalDataFileUtil;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import helper.vo.SettingRankVO;
 
 /**
  * @author WuYi
  */
-@Configuration
-@Slf4j
+
 public class GlobalData {
+    public static SettingStateBO settingState;
+    public static SettingRecordBO settingRecord;
 
-
-    @Bean
-    public SettingStateBO getSettingState() {
-        return GlobalDataFileUtil.getSettingStateBO();
-    }
-    @Bean
-    public SettingRecordBO getSettingRecord() {
-        return GlobalDataFileUtil.SettingRecordBO();
-    }
-
+    public static SettingRankVO rank;
 }
