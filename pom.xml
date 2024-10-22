@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>yalong.site</groupId>
+    <groupId>helper</groupId>
     <artifactId>lol-helper</artifactId>
     <version>1.0</version>
 
@@ -20,7 +20,7 @@
         <logback.version>1.5.6</logback.version>
         <hutool.version>5.8.27</hutool.version>
         <!-- 在这里定义程序入口类 -->
-        <mainClass>yalong.site.LeagueClientHelper</mainClass>
+        <mainClass>helper.site.LeagueClientHelper</mainClass>
     </properties>
 
     <dependencies>
