@@ -1,5 +1,6 @@
 package helper.cache;
 
+import com.alibaba.fastjson2.annotation.JSONField;
 import helper.bo.RankBO;
 import helper.frame.utils.FrameConfigUtil;
 import lombok.Getter;
@@ -65,18 +66,22 @@ public class FrameUserSetting {
 	/**
 	 * 秒选英雄id
 	 */
+	@JSONField(serialize = false)
 	private Integer pickChampionId = null;
 	/**
 	 * 禁用英雄id
 	 */
+	@JSONField(serialize = false)
 	private Integer banChampionId = null;
 	/**
 	 * 生涯背景英雄id
 	 */
+	@JSONField(serialize = false)
 	private Integer careerChampionId = null;
 	/**
 	 * 伪造段位
 	 */
+	@JSONField(serialize = false)
 	private RankBO currentRankBO = new RankBO("RANKED_SOLO_5x5", "UNRANKED", "I");
 
 	public void setAutoSearch(Boolean autoSearch) {
@@ -141,11 +146,6 @@ public class FrameUserSetting {
 
 	public void setCareerChampionId(Integer careerChampionId) {
 		this.careerChampionId = careerChampionId;
-		FrameConfigUtil.save();
-	}
-
-	public void setCurrentRankBO(RankBO currentRankBO) {
-		this.currentRankBO = currentRankBO;
 		FrameConfigUtil.save();
 	}
 }

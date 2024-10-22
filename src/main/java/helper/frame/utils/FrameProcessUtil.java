@@ -11,6 +11,7 @@ import java.nio.channels.FileLock;
  */
 public class FrameProcessUtil {
 	final static String LOCK_FILE = "lol-helper.lock";
+	static RandomAccessFile raf = null;
 
 	/**
 	 * 查看文件是否有锁 用于判断软件是否重复打开
@@ -20,11 +21,9 @@ public class FrameProcessUtil {
 	public static boolean checkFileLock() {
 		try {
 			File file = new File(LOCK_FILE);
-			//用于检测软件是否重复打开
-			RandomAccessFile raf = new RandomAccessFile(file, "rw");
-			FileChannel channel = raf.getChannel();
+			raf = new RandomAccessFile(file, "rws");
 			// 尝试获取独占锁
-			FileLock lock = channel.tryLock();
+			FileLock lock = raf.getChannel().tryLock();
 			return lock == null;
 		} catch (Exception e) {
 			return true;

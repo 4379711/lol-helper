@@ -33,8 +33,6 @@ public class ClientStarter {
 		}
 		RequestLcuUtil requestUtil = new RequestLcuUtil(leagueClientBO);
 		api = new LinkLeagueClientApi(requestUtil);
-		GameDataCache.cacheLcuMe();
-		api.setRank(AppCache.settingPersistence.getCurrentRankBO());
 	}
 
 	public void initSgp() throws Exception {
