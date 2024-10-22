@@ -25,13 +25,8 @@ public class FrameProcessUtil {
 			FileChannel channel = raf.getChannel();
 			// 尝试获取独占锁
 			FileLock lock = channel.tryLock();
-			if (lock == null) {
-				raf.close();
-				return true;
-			} else {
-				return false;
-			}
-		} catch (IOException e) {
+			return lock == null;
+		} catch (Exception e) {
 			return true;
 		}
 	}
