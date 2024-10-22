@@ -18,7 +18,7 @@ public class FrameUserSetting {
 	/**
 	 * 自动寻找对局
 	 */
-	private Boolean autoSearch = true;
+	private Boolean autoSearch = false;
 
 	/**
 	 * 自动接受对局
@@ -52,7 +52,7 @@ public class FrameUserSetting {
 	/**
 	 * 选择炫彩
 	 */
-	private Boolean pickSkin = true;
+	private Boolean pickSkin = false;
 	/**
 	 * 房间内显示战绩
 	 */
