@@ -20,7 +20,7 @@
         <logback.version>1.5.6</logback.version>
         <hutool.version>5.8.27</hutool.version>
         <!-- 在这里定义程序入口类 -->
-        <mainClass>helper.site.LeagueClientHelper</mainClass>
+        <mainClass>helper.LeagueClientHelper</mainClass>
     </properties>
 
     <dependencies>
