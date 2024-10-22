@@ -1,7 +1,8 @@
 package helper.cache;
 
 import helper.bo.RankBO;
-import lombok.Data;
+import helper.frame.utils.FrameConfigUtil;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  *
  * @author @_@
  */
-@Data
+@Getter
 public class FrameUserSetting {
 
 	/**
@@ -78,4 +79,73 @@ public class FrameUserSetting {
 	 */
 	private RankBO currentRankBO = new RankBO("RANKED_SOLO_5x5", "UNRANKED", "I");
 
+	public void setAutoSearch(Boolean autoSearch) {
+		this.autoSearch = autoSearch;
+		FrameConfigUtil.save();
+	}
+
+	public void setAutoAccept(Boolean autoAccept) {
+		this.autoAccept = autoAccept;
+		FrameConfigUtil.save();
+	}
+
+	public void setAutoReconnect(Boolean autoReconnect) {
+		this.autoReconnect = autoReconnect;
+		FrameConfigUtil.save();
+	}
+
+	public void setAutoPlayAgain(Boolean autoPlayAgain) {
+		this.autoPlayAgain = autoPlayAgain;
+		FrameConfigUtil.save();
+	}
+
+	public void setSendScore(Boolean sendScore) {
+		this.sendScore = sendScore;
+		FrameConfigUtil.save();
+	}
+
+	public void setCommunicate(Boolean communicate) {
+		this.communicate = communicate;
+		FrameConfigUtil.save();
+	}
+
+	public void setAutoKey(Boolean autoKey) {
+		this.autoKey = autoKey;
+		FrameConfigUtil.save();
+	}
+
+	public void setPickSkin(Boolean pickSkin) {
+		this.pickSkin = pickSkin;
+		FrameConfigUtil.save();
+	}
+
+	public void setShowMatchHistory(Boolean showMatchHistory) {
+		this.showMatchHistory = showMatchHistory;
+		FrameConfigUtil.save();
+	}
+
+	public void setSelectMode(List<Integer> selectMode) {
+		this.selectMode = selectMode;
+		FrameConfigUtil.save();
+	}
+
+	public void setPickChampionId(Integer pickChampionId) {
+		this.pickChampionId = pickChampionId;
+		FrameConfigUtil.save();
+	}
+
+	public void setBanChampionId(Integer banChampionId) {
+		this.banChampionId = banChampionId;
+		FrameConfigUtil.save();
+	}
+
+	public void setCareerChampionId(Integer careerChampionId) {
+		this.careerChampionId = careerChampionId;
+		FrameConfigUtil.save();
+	}
+
+	public void setCurrentRankBO(RankBO currentRankBO) {
+		this.currentRankBO = currentRankBO;
+		FrameConfigUtil.save();
+	}
 }

@@ -10,7 +10,7 @@ import java.io.File;
 /**
  * @author @_@
  */
-public class SaveFrameConfig {
+public class FrameConfigUtil {
 	private static final String FRAME_CONFIG_FILE = "frameConfig.json";
 
 	public static void save() {

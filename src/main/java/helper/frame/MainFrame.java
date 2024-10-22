@@ -3,8 +3,10 @@ package helper.frame;
 import helper.cache.AppCache;
 import helper.cache.FrameSetting;
 import helper.frame.panel.TabPane;
+import helper.frame.utils.FrameConfigUtil;
 import helper.frame.utils.FrameMsgUtil;
-import helper.frame.utils.SaveFrameConfig;
+import helper.frame.utils.FrameProcessUtil;
+import helper.frame.utils.FrameTipUtil;
 import helper.services.word.GarbageWord;
 import lombok.extern.slf4j.Slf4j;
 
@@ -12,11 +14,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.nio.channels.FileChannel;
-import java.nio.channels.FileLock;
 
 /**
  * 主窗体
@@ -30,13 +27,6 @@ public class MainFrame extends JFrame {
 	//用于创建后台托盘
 	private static TrayIcon trayIcon;
 	private static SystemTray tray;
-	//用于检测软件是否重复打开
-	private static RandomAccessFile RAF;
-	final static String LOCK_FILE = "lol-helper.lock";
-
-	static {
-		SaveFrameConfig.load();
-	}
 
 	public MainFrame() throws HeadlessException {
 		super();
@@ -68,15 +58,6 @@ public class MainFrame extends JFrame {
 
 			@Override
 			public void windowClosing(WindowEvent e) {
-				SaveFrameConfig.save();
-				if (RAF != null) {
-					try {
-						RAF.close();
-					} catch (IOException ex) {
-						throw new RuntimeException(ex);
-					}
-				}
-				log.info("配置保存完成");
 			}
 
 			@Override
@@ -106,6 +87,12 @@ public class MainFrame extends JFrame {
 	}
 
 	public static void start() {
+		boolean checked = FrameProcessUtil.checkFileLock();
+		if (checked) {
+			FrameTipUtil.errorOccur("无法启动多个进程");
+			System.exit(0);
+		}
+		FrameConfigUtil.load();
 		frame = new MainFrame();
 		TabPane tabPane = TabPane.builder();
 		frame.add(tabPane);
@@ -185,30 +172,6 @@ public class MainFrame extends JFrame {
 			frame.setVisible(true);
 			frame.setState(Frame.NORMAL);
 			frame.toFront();
-		}
-	}
-
-	/**
-	 * 查看文件是否有锁 用于判断软件是否重复打开
-	 *
-	 * @ Return 如果打开过,返回true
-	 */
-	public static boolean checkFileLock() {
-		try {
-			File file = new File(LOCK_FILE);
-			// 打开文件通道
-			RAF = new RandomAccessFile(file, "rw");
-			FileChannel channel = RAF.getChannel();
-			// 尝试获取独占锁
-			FileLock lock = channel.tryLock();
-			if (lock == null) {
-				RAF.close();
-				return true;
-			} else {
-				return false;
-			}
-		} catch (IOException e) {
-			return true;
 		}
 	}
 }
