@@ -3,7 +3,10 @@ package yalong.site.cache;
 import lombok.extern.slf4j.Slf4j;
 import yalong.site.bo.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 每一局游戏的数据缓存
@@ -55,7 +58,7 @@ public class GameDataCache {
 
 	public static void cacheLcuMe() {
 		// 缓存登录人的信息
-		if (GameDataCache.me == null && AppCache.api != null) {
+		if (AppCache.api != null) {
 			try {
 				GameDataCache.me = AppCache.api.getCurrentSummoner();
 			} catch (Exception e) {
@@ -96,6 +99,9 @@ public class GameDataCache {
 			if (value.getIsVisible().equals("true")) {
 				selectGameQueueList.put(key, value);
 			}
+		}
+		if (FrameUserSettingPersistence.selectMode.isEmpty()) {
+			FrameUserSettingPersistence.selectMode = new ArrayList<>(selectGameQueueList.keySet());
 		}
 	}
 

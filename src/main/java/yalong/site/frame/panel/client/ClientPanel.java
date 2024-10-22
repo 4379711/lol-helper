@@ -32,7 +32,7 @@ public class ClientPanel extends BasePanel {
 		list.add(new CommunicateCheckBox());
 		list.add(new AutoReconnectCheckBox());
 
-		list.add(new PickSkinBox());
+		list.add(new PickSkinCheckBox());
 		list.add(new GameStatusBox());
 		list.add(new BanBox());
 

@@ -12,7 +12,7 @@ import yalong.site.enums.ImageEnum;
 import yalong.site.frame.bo.ChampionWin;
 import yalong.site.frame.constant.ColorConstant;
 import yalong.site.frame.panel.base.HorizontalDivider;
-import yalong.site.frame.panel.base.RoundedVerticalPanel;
+import yalong.site.frame.panel.client.PickSkinBox;
 import yalong.site.frame.utils.MatchHistoryUtil;
 import yalong.site.utils.Win32Util;
 
@@ -39,8 +39,32 @@ public class MyTeamMatchHistoryPanel extends JWindow implements MouseListener, M
         this.setAlwaysOnTop(true);
         this.getContentPane().setBackground(ColorConstant.DARK_THREE);
         WinDef.RECT lolWindows = Win32Util.findWindowsLocation(null, "League of Legends");
-        int height = 550;
-        int width = 200;
+
+        int height = 20;
+        int width = 210;
+        // 设置布局管理器为 BoxLayout（垂直排列）
+        this.setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+        this.setLayout(new CardLayout());
+        JPanel jPanel = new JPanel();
+        jPanel.setBackground(ColorConstant.DARK_THREE);
+        jPanel.add(getMapSide(GameDataCache.myTeamMatchHistory.get(0).getMapSide()));
+        if (FrameUserSettingPersistence.pickSkin) {
+            PickSkinBox pickSkinBox = new PickSkinBox();
+            pickSkinBox.setBackground(ColorConstant.DARK_THREE);
+            pickSkinBox.setForeground(Color.WHITE);
+            height +=40;
+            jPanel.add(pickSkinBox);
+        }
+        if (FrameUserSettingPersistence.showMatchHistory) {
+            for (TeamSummonerBO data : GameDataCache.myTeamMatchHistory) {
+                jPanel.add(new HorizontalDivider(this.getWidth() - 10));
+                MyTeamMatchHistoryLine builder = MyTeamMatchHistoryLine.builder(buildTeamLineData(data), this.getWidth());
+                jPanel.add(builder);
+            }
+            height +=480;
+        }
+        this.add(jPanel);
+
         Dimension size = new Dimension(width, height);
         this.setSize(size);
         int x = lolWindows.left - width;
@@ -50,18 +74,8 @@ public class MyTeamMatchHistoryPanel extends JWindow implements MouseListener, M
         // 创建一个圆角矩形形状
         Shape roundRect = new RoundRectangle2D.Double(0, 0, this.getWidth(), this.getHeight(), 15, 15);
         this.setShape(roundRect);
-        // 设置布局管理器为 BoxLayout（垂直排列）
-        this.setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-        JPanel jPanel = new RoundedVerticalPanel(10, ColorConstant.DARK_THREE);
-        //JPanel jPanel= new JPanel();
-        jPanel.add(getMapSide(GameDataCache.myTeamMatchHistory.get(0).getMapSide()));
-        for (TeamSummonerBO data : GameDataCache.myTeamMatchHistory) {
-            jPanel.add(new HorizontalDivider(this.getWidth() - 10));
-            MyTeamMatchHistoryLine builder = MyTeamMatchHistoryLine.builder(buildTeamLineData(data), this.getWidth());
-            jPanel.add(builder);
-        }
-        this.add(jPanel);
         this.setVisible(true);
+
     }
 
     public static void start() {

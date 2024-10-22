@@ -84,42 +84,43 @@ public class ChampSelectStrategy implements GameStatusStrategy {
 	 * 展示队友数据
 	 */
 	private void showMatchHistory() throws IOException {
-		if (FrameUserSettingPersistence.showMatchHistory && (FrameInnerCache.myTeamMatchHistoryPanel == null || !FrameInnerCache.myTeamMatchHistoryPanel.isVisible())) {
-			String region = ProcessUtil.getClientProcess().getRegion();
-			String roomGameInfo = api.getChampSelectInfo();
-			JSONObject jsonObject = JSONObject.parseObject(roomGameInfo);
-			JSONArray myTeam = jsonObject.getJSONArray("myTeam");
-//			//可能队友还没进入房间
-			if (myTeam.size() != 5) {
-				log.error(myTeam.getJSONObject(0).getString("puuid"));
-				return;
-			}
-			List<TeamSummonerBO> dataList = new ArrayList<>();
-			for (int i = 0; i < myTeam.size(); i++) {
-				TeamSummonerBO teamSummonerBO = new TeamSummonerBO();
-				String puuid = myTeam.getJSONObject(i).getString("puuid");
-				List<SpgProductsMatchHistoryBO> productsMatchHistory = sgpApi.getProductsMatchHistoryByPuuid(region, puuid, 0, 20);
-				SGPRank rank = sgpApi.getRankedStatsByPuuid(puuid);
-				SummonerAlias alias = sgpApi.getSummerNameByPuuids(puuid);
-				SgpSummonerInfoBo summonerInfo = sgpApi.getSummerInfoByPuuid(region, puuid);
-				String mapSide = api.getBlueRed();
-				teamSummonerBO.setMapSide(mapSide);
-				teamSummonerBO.setPuuid(puuid);
-				teamSummonerBO.setRank(rank);
-				teamSummonerBO.setLevel(summonerInfo.getLevel());
-				teamSummonerBO.setProfileIconId(summonerInfo.getProfileIconId());
-				teamSummonerBO.setName(alias.getGameName());
-				teamSummonerBO.setTagLine(alias.getTagLine());
-				teamSummonerBO.setPrivacy(summonerInfo.getPrivacy().equalsIgnoreCase("private"));
-				teamSummonerBO.setMatchHistory(productsMatchHistory);
-				dataList.add(teamSummonerBO);
-			}
-			if (!dataList.isEmpty()) {
-				GameDataCache.myTeamMatchHistory = dataList;
-			}
-			if (FrameInnerCache.myTeamMatchHistoryPanel == null) {
-				MyTeamMatchHistoryPanel.start();
-			}else{
+		if(FrameInnerCache.myTeamMatchHistoryPanel == null || !FrameInnerCache.myTeamMatchHistoryPanel.isVisible()){
+			if (FrameUserSettingPersistence.showMatchHistory) {
+				String region = ProcessUtil.getClientProcess().getRegion();
+				String roomGameInfo = api.getChampSelectInfo();
+				JSONObject jsonObject = JSONObject.parseObject(roomGameInfo);
+				JSONArray myTeam = jsonObject.getJSONArray("myTeam");
+				//可能队友还没进入房间
+				if (myTeam.size() != 5) {
+					log.error(myTeam.getJSONObject(0).getString("puuid"));
+					return;
+				}
+				List<TeamSummonerBO> dataList = new ArrayList<>();
+				for (int i = 0; i < myTeam.size(); i++) {
+					TeamSummonerBO teamSummonerBO = new TeamSummonerBO();
+					String puuid = myTeam.getJSONObject(i).getString("puuid");
+					List<SpgProductsMatchHistoryBO> productsMatchHistory = sgpApi.getProductsMatchHistoryByPuuid(region, puuid, 0, 20);
+					SGPRank rank = sgpApi.getRankedStatsByPuuid(puuid);
+					SummonerAlias alias = sgpApi.getSummerNameByPuuids(puuid);
+					SgpSummonerInfoBo summonerInfo = sgpApi.getSummerInfoByPuuid(region, puuid);
+					String mapSide = api.getBlueRed();
+					teamSummonerBO.setMapSide(mapSide);
+					teamSummonerBO.setPuuid(puuid);
+					teamSummonerBO.setRank(rank);
+					teamSummonerBO.setLevel(summonerInfo.getLevel());
+					teamSummonerBO.setProfileIconId(summonerInfo.getProfileIconId());
+					teamSummonerBO.setName(alias.getGameName());
+					teamSummonerBO.setTagLine(alias.getTagLine());
+					teamSummonerBO.setPrivacy(summonerInfo.getPrivacy().equalsIgnoreCase("private"));
+					teamSummonerBO.setMatchHistory(productsMatchHistory);
+					dataList.add(teamSummonerBO);
+				}
+				if (!dataList.isEmpty()) {
+					GameDataCache.myTeamMatchHistory = dataList;
+				}
+                MyTeamMatchHistoryPanel.start();
+            }
+			else if(FrameUserSettingPersistence.pickSkin){
 				MyTeamMatchHistoryPanel.start();
 			}
 		}

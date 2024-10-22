@@ -45,6 +45,10 @@ public class FrameUserSettingPersistence {
 	 */
 	public static boolean autoKey = false;
 	/**
+	 * 选择炫彩
+	 */
+	public static boolean pickSkin = true;
+	/**
 	 * 房间内显示战绩
 	 */
 	public static boolean showMatchHistory = true;

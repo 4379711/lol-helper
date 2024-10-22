@@ -42,6 +42,8 @@ public class LeagueClientHelper {
 			int running = MainFrame.continueRun(msg);
 			if (running != 0) {
 				System.exit(0);
+			} else {
+				GameDataCache.cacheLcuMe();
 			}
 		}
 	}

@@ -25,12 +25,13 @@ public class RankSecondBox extends BaseComboBox<ItemBO> {
 		this.addItem(new ItemBO("CHALLENGER", "最强王者"));
 		this.addItem(new ItemBO("GRANDMASTER", "傲世宗师"));
 		this.addItem(new ItemBO("MASTER", "超凡大师"));
-		this.addItem(new ItemBO("IRON", "坚韧黑铁"));
 		this.addItem(new ItemBO("DIAMOND", "璀璨钻石"));
+		this.addItem(new ItemBO("EMERALD", "流光翡翠"));
 		this.addItem(new ItemBO("PLATINUM", "华贵铂金"));
 		this.addItem(new ItemBO("GOLD", "荣耀黄金"));
 		this.addItem(new ItemBO("SILVER", "不屈白银"));
 		this.addItem(new ItemBO("BRONZE", "英勇黄铜"));
+		this.addItem(new ItemBO("IRON", "坚韧黑铁"));
 	}
 
 	private ItemListener listener() {
