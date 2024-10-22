@@ -47,7 +47,6 @@ public class MyTeamMatchHistoryPanel extends JWindow implements MouseListener, M
 		this.setLayout(new CardLayout());
 		JPanel jPanel = new JPanel();
 		jPanel.setBackground(ColorConstant.DARK_THREE);
-		jPanel.add(getMapSide(GameDataCache.myTeamMatchHistory.get(0).getMapSide()));
 		if (AppCache.settingPersistence.getPickSkin()) {
 			PickSkinBox pickSkinBox = new PickSkinBox();
 			pickSkinBox.setBackground(ColorConstant.DARK_THREE);
@@ -56,6 +55,7 @@ public class MyTeamMatchHistoryPanel extends JWindow implements MouseListener, M
 			jPanel.add(pickSkinBox);
 		}
 		if (AppCache.settingPersistence.getShowMatchHistory()) {
+			jPanel.add(getMapSide(GameDataCache.myTeamMatchHistory.get(0).getMapSide()));
 			for (TeamSummonerBO data : GameDataCache.myTeamMatchHistory) {
 				jPanel.add(new HorizontalDivider(this.getWidth() - 10));
 				MyTeamMatchHistoryLine builder = MyTeamMatchHistoryLine.builder(buildTeamLineData(data), this.getWidth());
