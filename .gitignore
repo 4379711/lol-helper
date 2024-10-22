@@ -88,3 +88,4 @@ test/
 *.txt
 lol-game-data
 logs
+lol-helper.lock
