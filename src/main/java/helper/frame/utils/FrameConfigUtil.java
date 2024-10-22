@@ -23,12 +23,8 @@ public class FrameConfigUtil {
 		if (!exist) {
 			return;
 		}
-		try {
-			String jsonString = FileUtil.readUtf8String(new File(FRAME_CONFIG_FILE));
-			AppCache.settingPersistence = JSONObject.parseObject(jsonString, AppCache.settingPersistence.getClass());
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		String jsonString = FileUtil.readUtf8String(new File(FRAME_CONFIG_FILE));
+		AppCache.settingPersistence = JSONObject.parseObject(jsonString, AppCache.settingPersistence.getClass());
 	}
 
 }
