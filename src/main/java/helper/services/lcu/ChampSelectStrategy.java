@@ -31,23 +31,30 @@ public class ChampSelectStrategy implements GameStatusStrategy {
 	}
 
 	private void autoBanPick() throws IOException {
-		// todo 有些游戏模式会让选择多次,暂未发现什么标记能够分辨是预选和确认选择,所以目前的方式让程序一直发起pick请求
 		if ((AppCache.settingPersistence.getPickChampionId() != null && AppCache.settingPersistence.getPickChampionId() != 0) || (AppCache.settingPersistence.getBanChampionId() != null && AppCache.settingPersistence.getBanChampionId() != 0)) {
 			String roomGameInfo = api.getChampSelectInfo();
 			JSONObject jsonObject = JSONObject.parseObject(roomGameInfo);
+			JSONObject timer = jsonObject.getJSONObject("timer");
+			String phase = timer.getString("phase");
 			int localPlayerCellId = jsonObject.getIntValue("localPlayerCellId");
 			JSONArray actions = jsonObject.getJSONArray("actions");
 			for (int j = 0; j < actions.size(); j++) {
 				JSONArray action = actions.getJSONArray(j);
 				for (int i = 0; i < action.size(); i++) {
 					JSONObject actionElement = action.getJSONObject(i);
-					if (localPlayerCellId == actionElement.getIntValue("actorCellId")) {
+					if (localPlayerCellId == actionElement.getIntValue("actorCellId") && !actionElement.getBooleanValue("completed")) {
 						int actionId = actionElement.getIntValue("id");
 						String type = actionElement.getString("type");
-						if ("pick".equals(type)) {
-							//报错处理? {"errorCode":"RPC_ERROR","httpStatus":500,"implementationDetails":{},"message":"Error response for PATCH /lol-lobby-team-builder/champ-select/v1/session/actions/2: Unable to process action change: Received status Error: INVALID_STATE instead of expected status of OK from request to teambuilder-draft:updateActionV1"}
+						//预选英雄
+						if ("pick".equals(type) && "PLANNING".equals(phase)) {
 							api.banPick("pick", actionId, AppCache.settingPersistence.getPickChampionId());
-						} else {
+						}
+						//选英雄
+						else if ("pick".equals(type) && "BAN_PICK".equals(phase)) {
+							api.banPick("pick", actionId, AppCache.settingPersistence.getPickChampionId());
+						}
+						//ban英雄
+						else if ("ban".equals(type) && "BAN_PICK".equals(phase)) {
 							api.banPick("ban", actionId, AppCache.settingPersistence.getBanChampionId());
 						}
 					}
