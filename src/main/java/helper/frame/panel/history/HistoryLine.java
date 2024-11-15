@@ -32,7 +32,7 @@ public class HistoryLine extends JPanel {
 		for (LocationBO locationBO : list) {
 			add(locationBO.getJLabel(), locationBO.getGrid());
 		}
-		this.addMouseListener(new SelectDetailListener(gameId));
+		//this.addMouseListener(new SelectDetailListener(gameId));
 	}
 
 	public static HistoryLine builder(ArrayList<Object> objects, Color color, Long gameId) {

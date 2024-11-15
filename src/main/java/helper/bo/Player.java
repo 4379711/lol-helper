@@ -15,7 +15,7 @@ public class Player {
 	private String gameName;
 	private String matchHistoryUri;
 	private String platformId;
-	private String profileIcon;
+	private Integer profileIconId;
 	private String puuid;
 	private Long summonerId;
 	private String summonerName;

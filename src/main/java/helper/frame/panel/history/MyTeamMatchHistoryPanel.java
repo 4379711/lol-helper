@@ -41,9 +41,9 @@ public class MyTeamMatchHistoryPanel extends JWindow implements MouseListener, M
 		WinDef.RECT lolWindows = Win32Util.findWindowsLocation(null, "League of Legends");
 
 		int height = 20;
-		int width = 210;
+		int width = 240;
 		// 设置布局管理器为 BoxLayout（垂直排列）
-		this.setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+		//this.setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 		this.setLayout(new CardLayout());
 		JPanel jPanel = new JPanel();
 		jPanel.setBackground(ColorConstant.DARK_THREE);
@@ -61,7 +61,7 @@ public class MyTeamMatchHistoryPanel extends JWindow implements MouseListener, M
 				MyTeamMatchHistoryLine builder = MyTeamMatchHistoryLine.builder(buildTeamLineData(data), this.getWidth());
 				jPanel.add(builder);
 			}
-			height += 480;
+			height += 580;
 		}
 		this.add(jPanel);
 
@@ -85,87 +85,101 @@ public class MyTeamMatchHistoryPanel extends JWindow implements MouseListener, M
 	private TeamSummonerBO buildTeamLineData(TeamSummonerBO data) {
 		List<SpgParticipants> spgParticipantsList = new ArrayList<>();
 		//获取自己的所有数据
+
 		for (SpgProductsMatchHistoryBO item : data.getMatchHistory()) {
-			Integer queueId = item.getJson().getQueueId();
-			if (AppCache.settingPersistence.getSelectMode().isEmpty() ||
-					AppCache.settingPersistence.getSelectMode().contains(queueId)) {
-				SpgParticipants spgParticipants = item.getJson().getParticipants()
+			SpgParticipants spgParticipants = item.getJson().getParticipants()
 						.stream()
 						.filter(line -> line.getPuuid().equals(data.getPuuid()))
 						.findFirst()
 						.get();
 				spgParticipantsList.add(spgParticipants);
-			}
 		}
-		//计算平均数据
-		Map<Integer, ChampionWin> winChampions = new HashMap<>();
-		int win = 0;
-		int kill = 0;
-		int death = 0;
-		int count = 0;
 
-		for (SpgParticipants spgParticipants : spgParticipantsList) {
-			count++;
-			//获取总胜场
-			if (spgParticipants.isWin()) {
-				win++;
-				//获取英雄胜场
-				if (winChampions.containsKey(spgParticipants.getChampionId())) {
-					ChampionWin championWin = winChampions.get(spgParticipants.getChampionId());
-					championWin.setWins(championWin.getWins() + 1);
+		if (!spgParticipantsList.isEmpty()) {
+			//计算平均数据
+			Map<Integer, ChampionWin> winChampions = new HashMap<>();
+			int win = 0;
+			int fail = 0;
+			int kill = 0;
+			int death = 0;
+			int count = 0;
+			int successiveCount = 0;
+			boolean successiveWin = spgParticipantsList.get(0).isWin();
+			boolean successiveFlag = true;
+			for (SpgParticipants spgParticipants : spgParticipantsList) {
+				count++;
+				if (successiveFlag && successiveWin == spgParticipants.isWin()) {
+					successiveCount++;
 				} else {
-					ChampionWin championWin = new ChampionWin();
-					championWin.setChampionId(spgParticipants.getChampionId());
-					championWin.setWins(1);
-					winChampions.put(spgParticipants.getChampionId(), championWin);
+					successiveFlag = false;
 				}
-			} else {
-				if (winChampions.containsKey(spgParticipants.getChampionId())) {
-					ChampionWin championWin = winChampions.get(spgParticipants.getChampionId());
-					championWin.setWins(championWin.getFails() + 1);
+				//获取总胜场
+				if (spgParticipants.isWin()) {
+					win++;
+					//获取英雄胜场
+					if (winChampions.containsKey(spgParticipants.getChampionId())) {
+						ChampionWin championWin = winChampions.get(spgParticipants.getChampionId());
+						championWin.setWins(championWin.getWins() + 1);
+					} else {
+						ChampionWin championWin = new ChampionWin();
+						championWin.setChampionId(spgParticipants.getChampionId());
+						championWin.setWins(1);
+						winChampions.put(spgParticipants.getChampionId(), championWin);
+					}
 				} else {
-					ChampionWin championWin = new ChampionWin();
-					championWin.setChampionId(spgParticipants.getChampionId());
-					championWin.setFails(1);
-					winChampions.put(spgParticipants.getChampionId(), championWin);
+					fail++;
+					if (winChampions.containsKey(spgParticipants.getChampionId())) {
+						ChampionWin championWin = winChampions.get(spgParticipants.getChampionId());
+						championWin.setFails(championWin.getFails() + 1);
+					} else {
+						ChampionWin championWin = new ChampionWin();
+						championWin.setChampionId(spgParticipants.getChampionId());
+						championWin.setFails(1);
+						winChampions.put(spgParticipants.getChampionId(), championWin);
+					}
+				}
+				kill += spgParticipants.getKills();
+				death += spgParticipants.getDeaths();
+			}
+			data.setSuccessiveWin(successiveWin);
+			data.setSuccessiveCount(successiveCount);
+			// 将 Map 转换为 List，并按 wins + fails 的总和从大到小排序
+			List<Map.Entry<Integer, ChampionWin>> entryList = new ArrayList<>(winChampions.entrySet());
+			entryList.sort((e1, e2) -> {
+				int total1 = e1.getValue().getWins() + e1.getValue().getFails();
+				int total2 = e2.getValue().getWins() + e2.getValue().getFails();
+				return Integer.compare(total2, total1); // 按总数从大到小排序
+			});
+
+			// 创建一个数组集合来存储排序结果
+			List<ChampionWin> sortedList = new ArrayList<>();
+			for (Map.Entry<Integer, ChampionWin> entry : entryList) {
+				ChampionWin value = entry.getValue();
+				int sum = value.getWins() + value.getFails();
+				if (value.getWins() != 0) {
+					String championRate = NumberUtil.decimalFormat("#.##%", NumberUtil.div(value.getWins(), sum));
+					value.setWinRate(championRate);
+				} else {
+					value.setWinRate("0.00%");
+				}
+				value.setIcon(MatchHistoryUtil.getChampionIcon(value.getChampionId(), 40, 40, ImageEnum.SQUARE));
+				sortedList.add(value);
+				if (sortedList.size() >= 5) {
+					break;
 				}
 			}
-			kill += spgParticipants.getKills();
-			death += spgParticipants.getDeaths();
-		}
-
-		// 将 Map 转换为 List，并按 wins + fails 的总和从大到小排序
-		List<Map.Entry<Integer, ChampionWin>> entryList = new ArrayList<>(winChampions.entrySet());
-		entryList.sort((e1, e2) -> {
-			int total1 = e1.getValue().getWins() + e1.getValue().getFails();
-			int total2 = e2.getValue().getWins() + e2.getValue().getFails();
-			return Integer.compare(total2, total1); // 按总数从大到小排序
-		});
-
-		// 创建一个数组集合来存储排序结果
-		List<ChampionWin> sortedList = new ArrayList<>();
-		for (Map.Entry<Integer, ChampionWin> entry : entryList) {
-			ChampionWin value = entry.getValue();
-			int sum = value.getWins() + value.getFails();
-			if (value.getWins() != 0) {
-				String championRate = NumberUtil.decimalFormat("#.##%", NumberUtil.div(value.getWins(), sum));
-				value.setWinRate(championRate);
+			data.setChampionWinList(sortedList);
+			data.setProfileIcon(MatchHistoryUtil.getSummonerIcon(data.getProfileIconId(), 50, 50));
+			if (win == 0) {
+				data.setWinRate("0%");
 			} else {
-				value.setWinRate("0.00%");
+				data.setWinRate(NumberUtil.decimalFormat("#.##%", NumberUtil.div(win, count, 2)));
 			}
-			value.setIcon(MatchHistoryUtil.getChampionIcon(value.getChampionId(), 40, 40, ImageEnum.SQUARE));
-			sortedList.add(value);
-			if (sortedList.size() >= 5) {
-				break;
-			}
-		}
-		data.setChampionWinList(sortedList);
-		data.setProfileIcon(MatchHistoryUtil.getSummonerIcon(data.getProfileIconId(), 50, 50));
-		if (win == 0) {
-			data.setWinRate("0%");
 		} else {
-			data.setWinRate(NumberUtil.decimalFormat("#.##%", NumberUtil.div(win, count, 2)));
+			data.setWinRate("无数据");
+			data.setProfileIcon(MatchHistoryUtil.getSummonerIcon(data.getProfileIconId(), 50, 50));
 		}
+
 		return data;
 	}
 
@@ -173,10 +187,10 @@ public class MyTeamMatchHistoryPanel extends JWindow implements MouseListener, M
 		JLabel mapSideLabel = new JLabel();
 		if ("blue".equals(mapSide)) {
 			mapSideLabel.setText("这把是蓝色方,泉水在左下角.");
-			mapSideLabel.setForeground(new Color(64, 158, 255));
+			mapSideLabel.setForeground(ColorConstant.BLUE);
 		} else if ("red".equals(mapSide)) {
 			mapSideLabel.setText("这把是红色方,泉水在右上角.");
-			mapSideLabel.setForeground(new Color(245, 108, 108));
+			mapSideLabel.setForeground(ColorConstant.RED);
 		}
 		return mapSideLabel;
 	}

@@ -66,4 +66,12 @@ public class TeamSummonerBO {
 	 * 所在红蓝方
 	 */
 	private String mapSide;
+	/**
+	 * 最近一把是否胜利
+	 */
+	private boolean successiveWin;
+	/**
+	 * 连胜连败的场次
+	 */
+	private int successiveCount;
 }

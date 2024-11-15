@@ -51,9 +51,9 @@ public class LinkLeagueClientApi {
 	/**
 	 * 获取登录用户信息
 	 */
-	public Player getCurrentSummoner() throws IOException {
+	public MePlayer getCurrentSummoner() throws IOException {
 		String resp = requestLcuUtil.doGet("/lol-summoner/v1/current-summoner");
-		return JSON.parseObject(resp, Player.class);
+		return JSON.parseObject(resp, MePlayer.class);
 	}
 
 	/**
@@ -528,7 +528,6 @@ public class LinkLeagueClientApi {
 		String endpoint = "/entitlements/v1/token";
 		String resp = requestLcuUtil.doGet(endpoint);
 		return JSON.parseObject(resp).get("accessToken").toString();
-
 	}
 
 	/**

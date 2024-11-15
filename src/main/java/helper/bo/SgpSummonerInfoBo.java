@@ -3,7 +3,7 @@ package helper.bo;
 import lombok.Data;
 
 /**
- * sgp的召唤术数据姓名为老数据尽量
+ * sgp的召唤师数据姓名为老数据尽量
  *
  * @author WuYi
  */

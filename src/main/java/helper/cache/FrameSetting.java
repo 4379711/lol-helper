@@ -6,14 +6,14 @@ package helper.cache;
 public class FrameSetting {
 	public static final int WIDTH = 800;
 	public static final int HEIGHT = 400;
-	public static final int MATCH_WIDTH = 1000;
+	public static final int MATCH_WIDTH = 1100;
 	public static final int MATCH_HEIGHT = 850;
 	public static final int CHAMPION_SELECT_WIDTH = 1000;
 	public static final int CHAMPION_SELECT_HEIGHT = 800;
 	/**
 	 * 英雄图标大小
 	 */
-	public static final int CHAMPION_ICON_SIZE = 80;
+	public static final int CHAMPION_ICON_SIZE = 70;
 	/**
 	 * 装备图标大小
 	 */

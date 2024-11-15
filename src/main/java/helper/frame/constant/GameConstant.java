@@ -51,4 +51,5 @@ public class GameConstant {
 			add("bgp2");
 		}
 	};
+	public final static String BLACK_LIST_FILE = "blacklist/game/";
 }

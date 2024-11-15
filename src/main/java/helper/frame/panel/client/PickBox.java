@@ -4,6 +4,7 @@ import helper.bo.ChampionBO;
 import helper.cache.AppCache;
 import helper.cache.GameDataCache;
 import helper.frame.panel.base.BaseButton;
+import helper.frame.utils.FrameConfigUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.awt.event.ActionListener;
@@ -26,6 +27,7 @@ public class PickBox extends BaseButton {
 			ChampionSelectFrame selectFrame = new ChampionSelectFrame("选择英雄", (name) -> {
 				ChampionBO championBO = GameDataCache.allChampion.stream().filter(i -> name.equals(i.getName())).findFirst().get();
 				AppCache.settingPersistence.setPickChampionId(championBO.getId());
+				FrameConfigUtil.save();
 				pickBox.setText("秒选(" + name + ")");
 			});
 			selectFrame.setVisible(true);

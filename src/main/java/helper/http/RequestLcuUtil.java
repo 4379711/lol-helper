@@ -90,6 +90,8 @@ public class RequestLcuUtil {
 			String body = JSONObject.toJSONString(original.body());
 			if (body != null && !"null".equals(body) && !"".equals(body)) {
 				log.info("{} - {} - {}", method, uri, body);
+			} else if (uri.contains("lol-gameflow/v1/gameflow-phase")) {
+
 			} else {
 				log.info("{} - {}", method, uri);
 			}

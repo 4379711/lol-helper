@@ -661,5 +661,9 @@ public class SpgParticipants {
 	 * 比赛是否获胜
 	 */
 	private boolean win;
+	/**
+	 * 符文
+	 */
+	private Perks perks;
 
 }

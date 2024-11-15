@@ -1,7 +1,7 @@
 package helper.frame.utils;
 
-import helper.bo.Participants;
 import helper.bo.PerkBO;
+import helper.bo.SpgParticipants;
 import helper.bo.Stats;
 import helper.bo.Teams;
 import helper.cache.AppCache;
@@ -19,6 +19,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 对局战绩工具类
@@ -227,10 +228,10 @@ public class MatchHistoryUtil {
 	public static Color getBackGroundColor(boolean win) {
 		if (win) {
 			//半透明绿色
-			return new Color(103, 194, 58, 63);
+			return new Color(35, 53, 92);
 		} else {
 			//半透明红色
-			return new Color(245, 108, 108, 63);
+			return new Color(101, 46, 56);
 		}
 	}
 
@@ -267,44 +268,44 @@ public class MatchHistoryUtil {
 	 * 计算评分返回列表
 	 * 会用团战击杀参与率、伤害占比、承伤占比、治疗占比、视野评分占比、控制占比来计算评分
 	 */
-	public static ArrayList<ScoreLevelBO> getScoreLevelList(List<Participants> participants) {
+	public static Map<Integer, List<ScoreLevelBO>> getScoreLevelList(List<SpgParticipants> teamOne, List<SpgParticipants> teamTwo) {
 		ArrayList<ScoreLevelBO> scoreLevelList = new ArrayList<>();
+		if (teamOne != null) {
+			double Team1Kill = teamOne.stream().mapToInt(SpgParticipants::getKills).sum();
+			double Team1TotalDamageDealtToChampions = teamOne.stream().mapToInt(SpgParticipants::getTotalDamageDealtToChampions).sum();
+			double Team1TotalDamageTaken = teamOne.stream().mapToInt(SpgParticipants::getTotalDamageTaken).sum();
+			double Team1TotalHeal = teamOne.stream().mapToInt(SpgParticipants::getTotalHeal).sum();
+			double Team1VisionScore = teamOne.stream().mapToInt(SpgParticipants::getVisionScore).sum();
+			double Team1TotalTimeCrowdControlDealt = teamOne.stream().mapToInt(SpgParticipants::getTotalTimeCCDealt).sum();
 
-		double Team1Kill = participants.stream().filter(item -> item.getTeamId().equals(GameConstant.TEAM_ONE)).mapToInt(item -> item.getStats().getKills()).sum();
-		double Team1TotalDamageDealtToChampions = participants.stream().filter(item -> item.getTeamId().equals(GameConstant.TEAM_ONE)).mapToInt(item -> item.getStats().getTotalDamageDealtToChampions()).sum();
-		double Team1TotalDamageTaken = participants.stream().filter(item -> item.getTeamId().equals(GameConstant.TEAM_ONE)).mapToInt(item -> item.getStats().getTotalDamageTaken()).sum();
-		double Team1TotalHeal = participants.stream().filter(item -> item.getTeamId().equals(GameConstant.TEAM_ONE)).mapToInt(item -> item.getStats().getTotalHeal()).sum();
-		double Team1VisionScore = participants.stream().filter(item -> item.getTeamId().equals(GameConstant.TEAM_ONE)).mapToInt(item -> item.getStats().getVisionScore()).sum();
-		double Team1TotalTimeCrowdControlDealt = participants.stream().filter(item -> item.getTeamId().equals(GameConstant.TEAM_ONE)).mapToInt(item -> item.getStats().getTotalTimeCrowdControlDealt()).sum();
-
-		double Team2Kill = participants.stream().filter(item -> item.getTeamId().equals(GameConstant.TEAM_TWO)).mapToInt(item -> item.getStats().getKills()).sum();
-		double Team2TotalDamageDealtToChampions = participants.stream().filter(item -> item.getTeamId().equals(GameConstant.TEAM_TWO)).mapToInt(item -> item.getStats().getTotalDamageDealtToChampions()).sum();
-		double Team2TotalDamageTaken = participants.stream().filter(item -> item.getTeamId().equals(GameConstant.TEAM_TWO)).mapToInt(item -> item.getStats().getTotalDamageTaken()).sum();
-		double Team2TotalHeal = participants.stream().filter(item -> item.getTeamId().equals(GameConstant.TEAM_TWO)).mapToInt(item -> item.getStats().getTotalHeal()).sum();
-		double Team2VisionScore = participants.stream().filter(item -> item.getTeamId().equals(GameConstant.TEAM_TWO)).mapToInt(item -> item.getStats().getVisionScore()).sum();
-		double Team2TotalTimeCrowdControlDealt = participants.stream().filter(item -> item.getTeamId().equals(GameConstant.TEAM_TWO)).mapToInt(item -> item.getStats().getTotalTimeCrowdControlDealt()).sum();
-
-		for (int i = 0; i < participants.size(); i++) {
-			if (participants.get(i).getTeamId().equals(GameConstant.TEAM_ONE)) {
-				Stats stats = participants.get(i).getStats();
-				double killScore = Team1Kill == 0 ? 0 : ((stats.getKills() + stats.getAssists()) / Team1Kill) * 10;
-				double damageDealtScore = Team1TotalDamageDealtToChampions == 0 ? 0 : ((stats.getTotalDamageDealtToChampions() / Team1TotalDamageDealtToChampions)) * 5;
-				double damageTakenScore = Team1TotalDamageTaken == 0 ? 0 : ((stats.getTotalDamageTaken() / Team1TotalDamageTaken)) * 4;
-				double totalHealScore = Team1TotalHeal == 0 ? 0 : ((stats.getTotalHeal() / Team1TotalHeal)) * 2;
-				double visionScore = Team1VisionScore == 0 ? 0 : ((stats.getVisionScore() / Team1VisionScore)) * 2;
-				double ControlScore = Team1TotalTimeCrowdControlDealt == 0 ? 0 : ((stats.getTotalTimeCrowdControlDealt() / Team1TotalTimeCrowdControlDealt)) * 2;
+			for (SpgParticipants item : teamOne) {
+				double killScore = Team1Kill == 0 ? 0 : ((item.getKills() + item.getAssists()) / Team1Kill) * 10;
+				double damageDealtScore = Team1TotalDamageDealtToChampions == 0 ? 0 : ((item.getTotalDamageDealtToChampions() / Team1TotalDamageDealtToChampions)) * 5;
+				double damageTakenScore = Team1TotalDamageTaken == 0 ? 0 : ((item.getTotalDamageTaken() / Team1TotalDamageTaken)) * 4;
+				double totalHealScore = Team1TotalHeal == 0 ? 0 : ((item.getTotalHeal() / Team1TotalHeal)) * 2;
+				double visionScore = Team1VisionScore == 0 ? 0 : ((item.getVisionScore() / Team1VisionScore)) * 2;
+				double ControlScore = Team1TotalTimeCrowdControlDealt == 0 ? 0 : ((item.getTotalTimeCCDealt() / Team1TotalTimeCrowdControlDealt)) * 2;
 				ScoreLevelBO scoreLevelBO = new ScoreLevelBO();
 				scoreLevelBO.setScore(killScore + damageDealtScore + damageTakenScore + totalHealScore + visionScore + ControlScore);
 				scoreLevelBO.setTeamId(GameConstant.TEAM_ONE);
 				scoreLevelList.add(scoreLevelBO);
-			} else if (participants.get(i).getTeamId().equals(GameConstant.TEAM_TWO)) {
-				Stats stats = participants.get(i).getStats();
-				double killScore = Team2Kill == 0 ? 0 : ((stats.getKills() + stats.getAssists()) / Team2Kill) * 10;
-				double damageDealtScore = Team2TotalDamageDealtToChampions == 0 ? 0 : ((stats.getTotalDamageDealtToChampions() / Team2TotalDamageDealtToChampions)) * 5;
-				double damageTakenScore = Team2TotalDamageTaken == 0 ? 0 : ((stats.getTotalDamageTaken() / Team2TotalDamageTaken)) * 4;
-				double totalHealScore = Team2TotalHeal == 0 ? 0 : ((stats.getTotalHeal() / Team2TotalHeal)) * 2;
-				double visionScore = Team2VisionScore == 0 ? 0 : ((stats.getVisionScore() / Team2VisionScore)) * 2;
-				double ControlScore = Team2TotalTimeCrowdControlDealt == 0 ? 0 : ((stats.getTotalTimeCrowdControlDealt() / Team2TotalTimeCrowdControlDealt)) * 2;
+			}
+		}
+		if (teamTwo != null) {
+			double Team2Kill = teamTwo.stream().mapToInt(SpgParticipants::getKills).sum();
+			double Team2TotalDamageDealtToChampions = teamTwo.stream().mapToInt(SpgParticipants::getTotalDamageDealtToChampions).sum();
+			double Team2TotalDamageTaken = teamTwo.stream().mapToInt(SpgParticipants::getTotalDamageTaken).sum();
+			double Team2TotalHeal = teamTwo.stream().mapToInt(SpgParticipants::getTotalHeal).sum();
+			double Team2VisionScore = teamTwo.stream().mapToInt(SpgParticipants::getVisionScore).sum();
+			double Team2TotalTimeCrowdControlDealt = teamTwo.stream().mapToInt(SpgParticipants::getTotalTimeCCDealt).sum();
+
+			for (SpgParticipants item : teamTwo) {
+				double killScore = Team2Kill == 0 ? 0 : ((item.getKills() + item.getAssists()) / Team2Kill) * 10;
+				double damageDealtScore = Team2TotalDamageDealtToChampions == 0 ? 0 : ((item.getTotalDamageDealtToChampions() / Team2TotalDamageDealtToChampions)) * 5;
+				double damageTakenScore = Team2TotalDamageTaken == 0 ? 0 : ((item.getTotalDamageTaken() / Team2TotalDamageTaken)) * 4;
+				double totalHealScore = Team2TotalHeal == 0 ? 0 : ((item.getTotalHeal() / Team2TotalHeal)) * 2;
+				double visionScore = Team2VisionScore == 0 ? 0 : ((item.getVisionScore() / Team2VisionScore)) * 2;
+				double ControlScore = Team2TotalTimeCrowdControlDealt == 0 ? 0 : ((item.getTotalTimeCCDealt() / Team2TotalTimeCrowdControlDealt)) * 2;
 				ScoreLevelBO scoreLevelBO = new ScoreLevelBO();
 				scoreLevelBO.setScore(killScore + damageDealtScore + damageTakenScore + totalHealScore + visionScore + ControlScore);
 				scoreLevelBO.setTeamId(GameConstant.TEAM_TWO);
@@ -344,8 +345,9 @@ public class MatchHistoryUtil {
 		for (Map.Entry<Integer, ScoreLevelBO> entry : teamLowestRank.values()) {
 			entry.getValue().setIsMvp(true);
 		}
+		Map<Integer, List<ScoreLevelBO>> collect = scoreLevelList.stream().collect(Collectors.groupingBy(ScoreLevelBO::getTeamId));
 
-		return scoreLevelList;
+		return collect;
 	}
 
 	/**

@@ -105,7 +105,13 @@ public class ChampSelectStrategy implements GameStatusStrategy {
 				for (int i = 0; i < myTeam.size(); i++) {
 					TeamSummonerBO teamSummonerBO = new TeamSummonerBO();
 					String puuid = myTeam.getJSONObject(i).getString("puuid");
-					List<SpgProductsMatchHistoryBO> productsMatchHistory = sgpApi.getProductsMatchHistoryByPuuid(region, puuid, 0, 20);
+					List<SpgProductsMatchHistoryBO> productsMatchHistory;
+					Integer selectMode = AppCache.settingPersistence.getSelectMode();
+					if (selectMode.equals(-1)) {
+						productsMatchHistory = sgpApi.getProductsMatchHistoryByPuuid(region, puuid, 0, 20);
+					} else {
+						productsMatchHistory = sgpApi.getProductsMatchHistoryByPuuid(region, puuid, 0, 20, "cq_" + selectMode);
+					}
 					SGPRank rank = sgpApi.getRankedStatsByPuuid(puuid);
 					SummonerAlias alias = sgpApi.getSummerNameByPuuids(puuid);
 					SgpSummonerInfoBo summonerInfo = sgpApi.getSummerInfoByPuuid(region, puuid);

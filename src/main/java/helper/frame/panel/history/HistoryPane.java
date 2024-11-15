@@ -24,7 +24,7 @@ public class HistoryPane extends BasePanel {
 		list.add(new GameModeBox());
 
 		list.add(new HistoryButton());
-		list.add(new JPanel());
+		list.add(new BlackListHistoryButton());
 		list.add(new JPanel());
 
 		list.add(new JPanel());

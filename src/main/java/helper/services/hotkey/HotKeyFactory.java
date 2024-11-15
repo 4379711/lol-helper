@@ -2,6 +2,7 @@ package helper.services.hotkey;
 
 import helper.frame.utils.DiyKeyUtil;
 import org.jnativehook.keyboard.NativeKeyEvent;
+import org.jnativehook.mouse.NativeMouseEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;

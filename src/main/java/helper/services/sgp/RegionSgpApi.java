@@ -136,6 +136,19 @@ public class RegionSgpApi {
 		return JSON.parseArray(jsonObject.get("games").toString(), SpgProductsMatchHistoryBO.class);
 	}
 
+	public List<SpgProductsMatchHistoryBO> getProductsMatchHistoryByPuuid(String region, String id, int startIndex, int count, String queueId) throws IOException {
+		String endpoint = "/match-history-query/v1/products/lol/player/" + id + "/SUMMARY?startIndex=" + startIndex + "&count=" + count + "&tag=" + queueId;
+		JSONObject jsonObject = null;
+		String resp = requestSpgUtil.doGet(endpoint, region);
+		if (resp.equals("[]")) {
+			return null;
+		} else {
+			jsonObject = JSONObject.parseObject(resp);
+
+		}
+		return JSON.parseArray(jsonObject.get("games").toString(), SpgProductsMatchHistoryBO.class);
+	}
+
 	/**
 	 * 获取玩家排位信息
 	 *
@@ -158,6 +171,13 @@ public class RegionSgpApi {
 		} else {
 			return null;
 		}
+	}
+
+	public List<SGPRank> getRankedStatsListByPuuid(String puuid, String region) throws IOException {
+		String endpoint = "/leagues-ledge/v2/rankedStats/puuid/" + puuid;
+		String resp = requestSpgUtil.doGet(endpoint, region);
+		List<SGPRank> queues = JSON.parseArray(JSONObject.parseObject(resp).get("queues").toString(), SGPRank.class);
+		return queues;
 	}
 
 	/**

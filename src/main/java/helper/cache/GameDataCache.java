@@ -1,8 +1,10 @@
 package helper.cache;
 
 import helper.bo.*;
+import helper.utils.ProcessUtil;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -16,7 +18,7 @@ import java.util.Map;
 @Slf4j
 public class GameDataCache {
 
-	public static Player me;
+	public static MePlayer me;
 	public static ArrayList<String> otherTeamScore = new ArrayList<>();
 	public static ArrayList<String> myTeamScore = new ArrayList<>();
 	public static ArrayList<ChampionBO> allChampion = new ArrayList<>();
@@ -46,6 +48,8 @@ public class GameDataCache {
 	public static List<TeamSummonerBO> myTeamMatchHistory = new ArrayList<>();
 
 	public static Map<Integer, GameQueue> selectGameQueueList = new LinkedHashMap<>();
+
+	public static LeagueClientBO leagueClient;
 
 	public static void reset() {
 		resetScore();
@@ -94,19 +98,35 @@ public class GameDataCache {
 	}
 
 	public static void cacheSelectGameMode() {
+		GameQueue allQueue = new GameQueue();
+		allQueue.setId(-1);
+		allQueue.setName("全部模式");
+		selectGameQueueList.put(-1, allQueue);
 		for (Integer key : allGameQueuesList.keySet()) {
 			GameQueue value = allGameQueuesList.get(key);
 			if ("true".equals(value.getIsVisible())) {
-				selectGameQueueList.put(key, value);
+				//排除人机和自定义并且只包含开放的模式
+				if (value.getId() != 0 && value.getId() != 870 && value.getId() != 880 && value.getId() != 890) {
+					selectGameQueueList.put(key, value);
+				}
 			}
 		}
-		if (AppCache.settingPersistence.getSelectMode().isEmpty()) {
-			AppCache.settingPersistence.setSelectMode(new ArrayList<>(selectGameQueueList.keySet()));
+		if (FrameInnerCache.gameModeBox != null) {
+			FrameInnerCache.gameModeBox.setItems();
+		}
+	}
+
+	public static void cacheLeagueClient() {
+		try {
+			leagueClient = ProcessUtil.getClientProcess();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
 		}
 	}
 
 	public static void cacheLcuAll() {
 		cacheLcuMe();
+		cacheLeagueClient();
 		cacheLcuChampion();
 		cacheLcuStatic();
 		cacheSelectGameMode();

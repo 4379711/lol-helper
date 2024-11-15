@@ -43,8 +43,13 @@ public class ClientStarter {
 		if (AppCache.api == null) {
 			throw new NoLcuApiException();
 		}
-		RequestSgpUtil requestUtil = new RequestSgpUtil(AppCache.api.getSgpAccessToken(), leagueClientBO.getRegion().toLowerCase());
-		localSgpApi = new RegionSgpApi(requestUtil);
+		if (leagueClientBO.getRegion() != null) {
+			RequestSgpUtil requestUtil = new RequestSgpUtil(AppCache.api.getSgpAccessToken(), leagueClientBO.getRegion().toLowerCase());
+			localSgpApi = new RegionSgpApi(requestUtil);
+		} else {
+			log.error("未识别到国服大区");
+		}
+
 	}
 
 	@SuppressWarnings("InfiniteLoopStatement")
@@ -65,16 +70,11 @@ public class ClientStarter {
 			}
 			switch (gameStatus) {
 				case None:
-				case Matchmaking:
-				case WaitingForStats: {
-					gameStatusContext.setStrategy(new OtherStatusStrategy());
-					GameDataCache.reset();
-					break;
-				}
 				case Lobby: {
 					gameStatusContext.setStrategy(new LobbyStrategy(api));
 					break;
 				}
+				case Matchmaking:
 				case ReadyCheck: {
 					gameStatusContext.setStrategy(new ReadyCheckStrategy(api));
 					break;
@@ -93,6 +93,11 @@ public class ClientStarter {
 				}
 				case EndOfGame: {
 					gameStatusContext.setStrategy(new EndOfGameStrategy(api));
+					break;
+				}
+				case WaitingForStats: {
+					gameStatusContext.setStrategy(new OtherStatusStrategy());
+					GameDataCache.reset();
 					break;
 				}
 				case Reconnect: {

@@ -2,6 +2,7 @@ package helper.frame.panel.client;
 
 import helper.cache.AppCache;
 import helper.frame.panel.base.BaseCheckBox;
+import helper.frame.utils.FrameConfigUtil;
 
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -18,7 +19,10 @@ public class AutoAcceptCheckBox extends BaseCheckBox {
 	}
 
 	private ItemListener listener() {
-		return e -> AppCache.settingPersistence.setAutoAccept(e.getStateChange() == ItemEvent.SELECTED);
+		return e -> {
+			AppCache.settingPersistence.setAutoAccept(e.getStateChange() == ItemEvent.SELECTED);
+			FrameConfigUtil.save();
+		};
 	}
 
 }

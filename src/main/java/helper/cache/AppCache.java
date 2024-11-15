@@ -1,8 +1,10 @@
 package helper.cache;
 
+import helper.bo.LeagueClientBO;
 import helper.services.lcu.LinkLeagueClientApi;
 import helper.services.sgp.RegionSgpApi;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,4 +24,6 @@ public class AppCache {
 	public static RegionSgpApi sgpApi;
 	// 用来持久化用户的配置
 	public static FrameUserSetting settingPersistence = new FrameUserSetting();
+	public static Image fireImage = Toolkit.getDefaultToolkit().getImage(AppCache.class.getResource("/assets/fire.png"));
+	public static Image cryImage = Toolkit.getDefaultToolkit().getImage(AppCache.class.getResource("/assets/cry.png"));
 }

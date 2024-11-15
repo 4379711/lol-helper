@@ -2,18 +2,17 @@ package helper.cache;
 
 import com.alibaba.fastjson2.annotation.JSONField;
 import helper.bo.RankBO;
-import helper.frame.utils.FrameConfigUtil;
-import lombok.Getter;
+import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * 用户的配置
  *
  * @author @_@
  */
-@Getter
+@Data
 public class FrameUserSetting {
 
 	/**
@@ -59,9 +58,17 @@ public class FrameUserSetting {
 	 */
 	private Boolean showMatchHistory = true;
 	/**
+	 * 战绩功能提示
+	 */
+	private Boolean showNotice = false;
+	/**
 	 * 房间内显示战绩筛选的模式
 	 */
-	private List<Integer> selectMode = new ArrayList<>();
+	private Integer selectMode;
+	/**
+	 * 黑名单玩家
+	 */
+	private Map<String, String> blacklistPlayers = new LinkedHashMap<>();
 
 	/**
 	 * 秒选英雄id
@@ -83,69 +90,4 @@ public class FrameUserSetting {
 	 */
 	@JSONField(serialize = false)
 	private RankBO currentRankBO = new RankBO("RANKED_SOLO_5x5", "UNRANKED", "I");
-
-	public void setAutoSearch(Boolean autoSearch) {
-		this.autoSearch = autoSearch;
-		FrameConfigUtil.save();
-	}
-
-	public void setAutoAccept(Boolean autoAccept) {
-		this.autoAccept = autoAccept;
-		FrameConfigUtil.save();
-	}
-
-	public void setAutoReconnect(Boolean autoReconnect) {
-		this.autoReconnect = autoReconnect;
-		FrameConfigUtil.save();
-	}
-
-	public void setAutoPlayAgain(Boolean autoPlayAgain) {
-		this.autoPlayAgain = autoPlayAgain;
-		FrameConfigUtil.save();
-	}
-
-	public void setSendScore(Boolean sendScore) {
-		this.sendScore = sendScore;
-		FrameConfigUtil.save();
-	}
-
-	public void setCommunicate(Boolean communicate) {
-		this.communicate = communicate;
-		FrameConfigUtil.save();
-	}
-
-	public void setAutoKey(Boolean autoKey) {
-		this.autoKey = autoKey;
-		FrameConfigUtil.save();
-	}
-
-	public void setPickSkin(Boolean pickSkin) {
-		this.pickSkin = pickSkin;
-		FrameConfigUtil.save();
-	}
-
-	public void setShowMatchHistory(Boolean showMatchHistory) {
-		this.showMatchHistory = showMatchHistory;
-		FrameConfigUtil.save();
-	}
-
-	public void setSelectMode(List<Integer> selectMode) {
-		this.selectMode = selectMode;
-		FrameConfigUtil.save();
-	}
-
-	public void setPickChampionId(Integer pickChampionId) {
-		this.pickChampionId = pickChampionId;
-		FrameConfigUtil.save();
-	}
-
-	public void setBanChampionId(Integer banChampionId) {
-		this.banChampionId = banChampionId;
-		FrameConfigUtil.save();
-	}
-
-	public void setCareerChampionId(Integer careerChampionId) {
-		this.careerChampionId = careerChampionId;
-		FrameConfigUtil.save();
-	}
 }

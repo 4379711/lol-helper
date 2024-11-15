@@ -16,7 +16,7 @@ public class GameMatchHistoryBO {
 	private String endOfGameResult;
 	private String gameCreation;
 	private Date gameCreationDate;
-	private String gameDuration;
+	private Long gameDuration;
 	private Long gameId;
 	private String gameVersion;
 	private Integer mapId;
@@ -30,5 +30,6 @@ public class GameMatchHistoryBO {
 	 * 进行映射和判断是否能进行对局详情展示
 	 */
 	private Integer queueId;
+	private List<Teams> teams;
 
 }
