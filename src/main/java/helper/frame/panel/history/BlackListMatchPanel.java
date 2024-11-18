@@ -181,7 +181,7 @@ public class BlackListMatchPanel extends JPanel {
             panelContainer.repaint();
             this.add(panelContainer);
         } else {
-            FrameTipUtil.errorOccur("请到战绩查询羁押新犯人");
+            FrameTipUtil.errorOccur("请到战绩查询点开详情后召唤师姓名右键 羁押新犯人");
         }
     }
 

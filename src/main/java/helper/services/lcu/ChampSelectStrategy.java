@@ -110,7 +110,7 @@ public class ChampSelectStrategy implements GameStatusStrategy {
 					if (selectMode.equals(-1)) {
 						productsMatchHistory = sgpApi.getProductsMatchHistoryByPuuid(region, puuid, 0, 20);
 					} else {
-						productsMatchHistory = sgpApi.getProductsMatchHistoryByPuuid(region, puuid, 0, 20, "cq_" + selectMode);
+						productsMatchHistory = sgpApi.getProductsMatchHistoryByPuuid(region, puuid, 0, 20, "q_" + selectMode);
 					}
 					SGPRank rank = sgpApi.getRankedStatsByPuuid(puuid);
 					SummonerAlias alias = sgpApi.getSummerNameByPuuids(puuid);

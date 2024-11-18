@@ -41,11 +41,14 @@ public class BlackListHistoryButton extends BaseButton {
                 //窗口居中
                 jFrame.setLocationRelativeTo(null);
 
+                File file = new File(GameConstant.BLACK_LIST_FILE);
+                if (!FileUtil.exist(file)) {
+                    FileUtil.mkdir(file);
+                }
                 BlackListMatchPanel blackListMatchPanel = new BlackListMatchPanel(true);
                 jFrame.add(blackListMatchPanel);
                 jFrame.setVisible(true);
-                List<String> blacklistFiles = FileUtil.listFileNames(new File(GameConstant.BLACK_LIST_FILE).getAbsolutePath());
-
+                List<String> blacklistFiles = FileUtil.listFileNames(file.getAbsolutePath());
                 List<String> page = ListUtil.page(0, FrameSetting.PAGE_SIZE - 1, blacklistFiles);
                 List<BlackListBO> blackLists = new ArrayList<BlackListBO>();
                 for (String s : page) {
@@ -54,7 +57,6 @@ public class BlackListHistoryButton extends BaseButton {
                     blackLists.add(blackListBO);
                 }
                 blackListMatchPanel.resetIndex();
-
                 blackListMatchPanel.setData(blackLists);
             }
         };

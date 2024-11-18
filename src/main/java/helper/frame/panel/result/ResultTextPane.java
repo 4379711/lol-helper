@@ -22,7 +22,7 @@ public class ResultTextPane extends JTextPane {
 		//设置全局结果展示面板
 		FrameInnerCache.resultTextPane = this;
 		// 双击清屏
-		this.addMouseListener(clear());
+		//this.addMouseListener(clear());
 	}
 
 	public static ResultTextPane builder() {
@@ -35,9 +35,9 @@ public class ResultTextPane extends JTextPane {
 			public void mouseClicked(MouseEvent e) {
 				//如果是双击,清屏
 				//noinspection AlibabaUndefineMagicConstant
-				if (e.getClickCount() == 2) {
-					FrameMsgUtil.clear();
-				}
+//				if (e.getClickCount() == 2) {
+//					FrameMsgUtil.clear();
+//				}
 			}
 
 			@Override
