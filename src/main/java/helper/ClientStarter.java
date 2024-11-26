@@ -4,13 +4,13 @@ import cn.hutool.core.util.StrUtil;
 import helper.bo.LeagueClientBO;
 import helper.cache.AppCache;
 import helper.cache.FrameInnerCache;
-import helper.cache.GameDataCache;
 import helper.enums.GameStatusEnum;
 import helper.exception.NoLcuApiException;
 import helper.exception.NoProcessException;
 import helper.http.RequestLcuUtil;
 import helper.http.RequestSgpUtil;
-import helper.services.lcu.*;
+import helper.services.lcu.LinkLeagueClientApi;
+import helper.services.lcu.strategy.*;
 import helper.services.sgp.RegionSgpApi;
 import helper.utils.ProcessUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class ClientStarter {
 	private LinkLeagueClientApi api;
-	private RegionSgpApi localSgpApi;
+	private RegionSgpApi sgpApi;
 
 	public void initLcu() throws Exception {
 		LeagueClientBO leagueClientBO = ProcessUtil.getClientProcess();
@@ -45,7 +45,7 @@ public class ClientStarter {
 		}
 		if (leagueClientBO.getRegion() != null) {
 			RequestSgpUtil requestUtil = new RequestSgpUtil(AppCache.api.getSgpAccessToken(), leagueClientBO.getRegion().toLowerCase());
-			localSgpApi = new RegionSgpApi(requestUtil);
+			sgpApi = new RegionSgpApi(requestUtil);
 		} else {
 			log.error("未识别到国服大区");
 		}
@@ -60,7 +60,6 @@ public class ClientStarter {
 				continue;
 			}
 			GameStatusContext gameStatusContext = new GameStatusContext();
-			CalculateScore calculateScore = new CalculateScore(api);
 			//监听游戏状态
 			GameStatusEnum gameStatus = api.getGameStatus();
 			if (!gameStatus.equals(GameStatusEnum.ChampSelect)) {
@@ -69,22 +68,20 @@ public class ClientStarter {
 				}
 			}
 			switch (gameStatus) {
-				case None:
 				case Lobby: {
-					gameStatusContext.setStrategy(new LobbyStrategy(api));
+					gameStatusContext.setStrategy(new LobbyStrategy(api, sgpApi));
 					break;
 				}
-				case Matchmaking:
 				case ReadyCheck: {
 					gameStatusContext.setStrategy(new ReadyCheckStrategy(api));
 					break;
 				}
 				case ChampSelect: {
-					gameStatusContext.setStrategy(new ChampSelectStrategy(api, localSgpApi, calculateScore));
+					gameStatusContext.setStrategy(new ChampSelectStrategy(api, sgpApi));
 					break;
 				}
 				case InProgress: {
-					gameStatusContext.setStrategy(new InProgressStrategy(api, calculateScore));
+					gameStatusContext.setStrategy(new InProgressStrategy(api, sgpApi));
 					break;
 				}
 				case PreEndOfGame: {
@@ -93,11 +90,6 @@ public class ClientStarter {
 				}
 				case EndOfGame: {
 					gameStatusContext.setStrategy(new EndOfGameStrategy(api));
-					break;
-				}
-				case WaitingForStats: {
-					gameStatusContext.setStrategy(new OtherStatusStrategy());
-					GameDataCache.reset();
 					break;
 				}
 				case Reconnect: {

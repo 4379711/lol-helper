@@ -16,8 +16,8 @@ public class SendOtherTeamScoreConsumer implements HotKeyConsumer {
 	public Consumer<Integer> build() {
 		return i -> {
 			if (AppCache.settingPersistence.getSendScore()) {
-				for (String s : GameDataCache.otherTeamScore) {
-					KeyEventUtil.sendMsg("对方" + s);
+				for (String s : GameDataCache.enemyTeamScore) {
+					KeyEventUtil.sendMsg(s);
 					try {
 						TimeUnit.MILLISECONDS.sleep(500);
 					} catch (InterruptedException e) {

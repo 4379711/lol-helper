@@ -1,4 +1,4 @@
-package helper.services.lcu;
+package helper.services.lcu.strategy;
 
 import lombok.Setter;
 

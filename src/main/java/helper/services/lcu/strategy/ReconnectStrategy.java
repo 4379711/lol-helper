@@ -1,6 +1,7 @@
-package helper.services.lcu;
+package helper.services.lcu.strategy;
 
 import helper.cache.AppCache;
+import helper.services.lcu.LinkLeagueClientApi;
 import lombok.extern.slf4j.Slf4j;
 
 /**

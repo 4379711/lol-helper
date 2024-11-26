@@ -1,6 +1,7 @@
 package helper.services.lcu;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.text.UnicodeUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
@@ -224,6 +225,15 @@ public class LinkLeagueClientApi {
 		});
 	}
 
+	public List<TencentChampion> getChampionNameList() throws IOException {
+		Request request = new Request.Builder()
+				.url("http://game.gtimg.cn/images/lol/act/img/js/heroList/hero_list.js")
+				.get()
+				.build();
+		String json = UnicodeUtil.toString(requestLcuUtil.callString(request));
+		JSONObject jsonObject = JSONObject.parseObject(json);
+		return jsonObject.getJSONArray("hero").toJavaList(TencentChampion.class);
+	}
 	/**
 	 * 更改游戏状态
 	 * "chat"->在线

@@ -1,11 +1,16 @@
-package helper.services.lcu;
+package helper.services.lcu.strategy;
 
 import helper.bo.TeamPuuidBO;
+import helper.bo.TeamSummonerBO;
 import helper.cache.AppCache;
 import helper.cache.GameDataCache;
+import helper.frame.utils.MatchHistoryUtil;
+import helper.services.lcu.LinkLeagueClientApi;
+import helper.services.sgp.RegionSgpApi;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,11 +19,11 @@ import java.util.List;
 @Slf4j
 public class InProgressStrategy implements GameStatusStrategy {
 	private final LinkLeagueClientApi api;
-	private final CalculateScore calculateScore;
+	private final RegionSgpApi sgpApi;
 
-	public InProgressStrategy(LinkLeagueClientApi api, CalculateScore calculateScore) {
+	public InProgressStrategy(LinkLeagueClientApi api, RegionSgpApi sgpApi) {
 		this.api = api;
-		this.calculateScore = calculateScore;
+		this.sgpApi = sgpApi;
 	}
 
 	/**
@@ -38,12 +43,17 @@ public class InProgressStrategy implements GameStatusStrategy {
 
 	@Override
 	public void doThis() {
-		if (AppCache.settingPersistence.getSendScore() && GameDataCache.otherTeamScore.isEmpty()) {
+		if (AppCache.settingPersistence.getSendScore() && (GameDataCache.enemyTeamScore.isEmpty() || GameDataCache.enemyTeamMatchHistory.isEmpty())) {
 			try {
-				List<String> otherPuuid = getOtherPuuid();
-				if (!otherPuuid.contains(null)) {
+				List<String> enemyPuuids = getOtherPuuid();
+				if (!enemyPuuids.contains(null)) {
+					List<TeamSummonerBO> dataList = new ArrayList<>();
+					for (String enemyPuuid : enemyPuuids) {
+						dataList.add(MatchHistoryUtil.buildTeamSummoner(enemyPuuid, sgpApi));
+					}
+					GameDataCache.enemyTeamMatchHistory = dataList;
 					// 查询对方队员战绩,放到缓存区
-					GameDataCache.otherTeamScore = calculateScore.dealScore2Msg(otherPuuid);
+					GameDataCache.enemyTeamScore = MatchHistoryUtil.dealScoreMsg(GameDataCache.enemyTeamMatchHistory, false);
 				}
 			} catch (Exception e) {
 				log.error("查询战绩失败", e);

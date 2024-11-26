@@ -1,15 +1,14 @@
 package helper.frame.utils;
 
-import helper.bo.PerkBO;
-import helper.bo.SpgParticipants;
-import helper.bo.Stats;
-import helper.bo.Teams;
+import cn.hutool.core.util.NumberUtil;
+import helper.bo.*;
 import helper.cache.AppCache;
 import helper.cache.GameDataCache;
-import helper.enums.GameTypeEnum;
+import helper.enums.GameQueueEnum;
 import helper.enums.ImageEnum;
 import helper.frame.bo.ScoreLevelBO;
 import helper.frame.constant.GameConstant;
+import helper.services.sgp.RegionSgpApi;
 import helper.utils.ImageUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -239,7 +238,7 @@ public class MatchHistoryUtil {
 	 * 该游戏模式是否能查看详情对局数据
 	 */
 	public static boolean isQueryHistoryDetail(Integer queueId) {
-		GameTypeEnum typeEnum = GameTypeEnum.valueOf(queueId);
+		GameQueueEnum typeEnum = GameQueueEnum.valueOf(queueId);
 		switch (typeEnum) {
 			case ARAM, RANK_FLEX, RANK_SOLO -> {
 				return true;
@@ -266,7 +265,7 @@ public class MatchHistoryUtil {
 
 	/**
 	 * 计算评分返回列表
-	 * 会用团战击杀参与率、伤害占比、承伤占比、治疗占比、视野评分占比、控制占比来计算评分
+	 * 会用团战击杀参与率、伤害占比、承伤占比、视野评分占比、控制占比来计算评分
 	 */
 	public static Map<Integer, List<ScoreLevelBO>> getScoreLevelList(List<SpgParticipants> teamOne, List<SpgParticipants> teamTwo) {
 		ArrayList<ScoreLevelBO> scoreLevelList = new ArrayList<>();
@@ -280,13 +279,12 @@ public class MatchHistoryUtil {
 
 			for (SpgParticipants item : teamOne) {
 				double killScore = Team1Kill == 0 ? 0 : ((item.getKills() + item.getAssists()) / Team1Kill) * 10;
-				double damageDealtScore = Team1TotalDamageDealtToChampions == 0 ? 0 : ((item.getTotalDamageDealtToChampions() / Team1TotalDamageDealtToChampions)) * 5;
+				double damageDealtScore = Team1TotalDamageDealtToChampions == 0 ? 0 : ((item.getTotalDamageDealtToChampions() / Team1TotalDamageDealtToChampions)) * 7;
 				double damageTakenScore = Team1TotalDamageTaken == 0 ? 0 : ((item.getTotalDamageTaken() / Team1TotalDamageTaken)) * 4;
-				double totalHealScore = Team1TotalHeal == 0 ? 0 : ((item.getTotalHeal() / Team1TotalHeal)) * 2;
 				double visionScore = Team1VisionScore == 0 ? 0 : ((item.getVisionScore() / Team1VisionScore)) * 2;
-				double ControlScore = Team1TotalTimeCrowdControlDealt == 0 ? 0 : ((item.getTotalTimeCCDealt() / Team1TotalTimeCrowdControlDealt)) * 2;
+				double controlScore = Team1TotalTimeCrowdControlDealt == 0 ? 0 : ((item.getTotalTimeCCDealt() / Team1TotalTimeCrowdControlDealt)) * 2;
 				ScoreLevelBO scoreLevelBO = new ScoreLevelBO();
-				scoreLevelBO.setScore(killScore + damageDealtScore + damageTakenScore + totalHealScore + visionScore + ControlScore);
+				scoreLevelBO.setScore(killScore + damageDealtScore + damageTakenScore + visionScore + controlScore);
 				scoreLevelBO.setTeamId(GameConstant.TEAM_ONE);
 				scoreLevelList.add(scoreLevelBO);
 			}
@@ -301,13 +299,12 @@ public class MatchHistoryUtil {
 
 			for (SpgParticipants item : teamTwo) {
 				double killScore = Team2Kill == 0 ? 0 : ((item.getKills() + item.getAssists()) / Team2Kill) * 10;
-				double damageDealtScore = Team2TotalDamageDealtToChampions == 0 ? 0 : ((item.getTotalDamageDealtToChampions() / Team2TotalDamageDealtToChampions)) * 5;
+				double damageDealtScore = Team2TotalDamageDealtToChampions == 0 ? 0 : ((item.getTotalDamageDealtToChampions() / Team2TotalDamageDealtToChampions)) * 7;
 				double damageTakenScore = Team2TotalDamageTaken == 0 ? 0 : ((item.getTotalDamageTaken() / Team2TotalDamageTaken)) * 4;
-				double totalHealScore = Team2TotalHeal == 0 ? 0 : ((item.getTotalHeal() / Team2TotalHeal)) * 2;
 				double visionScore = Team2VisionScore == 0 ? 0 : ((item.getVisionScore() / Team2VisionScore)) * 2;
-				double ControlScore = Team2TotalTimeCrowdControlDealt == 0 ? 0 : ((item.getTotalTimeCCDealt() / Team2TotalTimeCrowdControlDealt)) * 2;
+				double controlScore = Team2TotalTimeCrowdControlDealt == 0 ? 0 : ((item.getTotalTimeCCDealt() / Team2TotalTimeCrowdControlDealt)) * 2;
 				ScoreLevelBO scoreLevelBO = new ScoreLevelBO();
-				scoreLevelBO.setScore(killScore + damageDealtScore + damageTakenScore + totalHealScore + visionScore + ControlScore);
+				scoreLevelBO.setScore(killScore + damageDealtScore + damageTakenScore + visionScore + controlScore);
 				scoreLevelBO.setTeamId(GameConstant.TEAM_TWO);
 				scoreLevelList.add(scoreLevelBO);
 			}
@@ -370,6 +367,190 @@ public class MatchHistoryUtil {
 			}
 		}
 		return new ImageIcon(new BufferedImage(iconWidth, iconHeight, BufferedImage.TYPE_INT_ARGB));
+	}
+
+	/**
+	 * 计算kda
+	 *
+	 * @param puuid        计算人的puuid
+	 * @param matchHistory sgp战绩list
+	 * @return kda
+	 */
+	public static double computeKda(String puuid, List<SpgProductsMatchHistoryBO> matchHistory) {
+		List<Double> scoreList = new ArrayList<Double>();
+		if (matchHistory.isEmpty()) {
+			return 0;
+		}
+		matchHistory.stream()
+				.forEach(item -> {
+					//如果对局不是重开局
+					if (item.getJson().getParticipants().stream().noneMatch(SpgParticipants::isTeamEarlySurrendered)) {
+						SpgParticipants self = item.getJson().getParticipants().stream()
+								//找到本人的数据
+								.filter(player -> player.getPuuid().equals(puuid))
+								.findFirst()
+								.get();
+						List<SpgParticipants> team = item.getJson().getParticipants().stream()
+								.filter(player -> player.getTeamId() == self.getTeamId())
+								.toList();
+						double score = computeScore(self, team, item.getJson().getQueueId());
+						scoreList.add(score);
+					}
+				});
+		if (scoreList.isEmpty()) {
+			return 0;
+		}
+		Double svg = scoreList.stream().collect(Collectors.averagingDouble(x -> x));
+		return NumberUtil.round(svg, 1).doubleValue();
+	}
+
+	private static double computeScore(SpgParticipants self, List<SpgParticipants> team, Integer queue) {
+		double score = 0;
+		switch (queue) {
+			case 420, 430, 440: {
+				score = computeRankScore(self, team);
+				break;
+			}
+			case 450: {
+				score = computeAramScore(self, team);
+				break;
+			}
+			default: {
+				score = computeRankScore(self, team);
+				break;
+			}
+		}
+		return score;
+	}
+
+	/**
+	 * 峡谷评分
+	 */
+	private static double computeRankScore(SpgParticipants self, List<SpgParticipants> team) {
+		double TeamKill = team.stream().mapToInt(SpgParticipants::getKills).sum();
+		double TeamDeath = team.stream().mapToInt(SpgParticipants::getDeaths).sum();
+		double TeamTotalDamageDealtToChampions = team.stream().mapToInt(SpgParticipants::getTotalDamageDealtToChampions).sum();
+		double TeamTotalDamageTaken = team.stream().mapToInt(SpgParticipants::getTotalDamageTaken).sum();
+		double TeamVisionScore = team.stream().mapToInt(SpgParticipants::getVisionScore).sum();
+		double TeamTotalTimeCrowdControlDealt = team.stream().mapToInt(SpgParticipants::getTotalTimeCCDealt).sum();
+
+		double killScore = TeamKill == 0 ? 0 : ((self.getKills() + self.getAssists()) / TeamKill) * 15;
+		double deathScore = 1;
+		if (self.getDeaths() != 0) {
+			deathScore = 1 - (TeamDeath == 0 ? 0 : ((self.getDeaths()) / TeamKill));
+		}
+		double damageDealtScore = TeamTotalDamageDealtToChampions == 0 ? 0 : ((self.getTotalDamageDealtToChampions() / TeamTotalDamageDealtToChampions)) * 8;
+		double damageTakenScore = TeamTotalDamageTaken == 0 ? 0 : ((self.getTotalDamageTaken() / TeamTotalDamageTaken)) * 6;
+		double visionScore = TeamVisionScore == 0 ? 0 : ((self.getVisionScore() / TeamVisionScore)) * 2;
+		double controlScore = TeamTotalTimeCrowdControlDealt == 0 ? 0 : ((self.getTotalTimeCCDealt() / TeamTotalTimeCrowdControlDealt)) * 2;
+		double scoreSum = (killScore * deathScore) + damageDealtScore + damageTakenScore + visionScore + controlScore;
+		return scoreSum;
+	}
+
+	/**
+	 * 大乱斗评分
+	 */
+	private static double computeAramScore(SpgParticipants self, List<SpgParticipants> team) {
+		double TeamKill = team.stream().mapToInt(SpgParticipants::getKills).sum();
+		double TeamTotalDamageDealtToChampions = team.stream().mapToInt(SpgParticipants::getTotalDamageDealtToChampions).sum();
+		double TeamTotalDamageTaken = team.stream().mapToInt(SpgParticipants::getTotalDamageTaken).sum();
+		double TeamVisionScore = team.stream().mapToInt(SpgParticipants::getVisionScore).sum();
+		double TeamTotalTimeCrowdControlDealt = team.stream().mapToInt(SpgParticipants::getTotalTimeCCDealt).sum();
+
+		double killScore = TeamKill == 0 ? 0 : (self.getKills() / TeamKill) * 20;
+		double damageDealtScore = TeamTotalDamageDealtToChampions == 0 ? 0 : ((self.getTotalDamageDealtToChampions() / TeamTotalDamageDealtToChampions)) * 15;
+		double damageTakenScore = TeamTotalDamageTaken == 0 ? 0 : ((self.getTotalDamageTaken() / TeamTotalDamageTaken)) * 8;
+		double visionScore = TeamVisionScore == 0 ? 0 : ((self.getVisionScore() / TeamVisionScore)) * 2;
+		double controlScore = TeamTotalTimeCrowdControlDealt == 0 ? 0 : ((self.getTotalTimeCCDealt() / TeamTotalTimeCrowdControlDealt)) * 6;
+		double scoreSum = killScore + damageDealtScore + damageTakenScore + visionScore + controlScore;
+		if (!self.isWin()) {
+			scoreSum -= 1;
+		}
+		return scoreSum;
+	}
+
+	/**
+	 * 计算评分文本
+	 */
+	public static ArrayList<String> dealScoreMsg(List<TeamSummonerBO> teamSummonerBO, boolean isMyTeam) {
+		ArrayList<String> result = new ArrayList<>();
+		for (TeamSummonerBO bo : teamSummonerBO) {
+			//跳过自己
+			if (bo.getPuuid().equals(GameDataCache.me.getPuuid())) {
+				continue;
+			}
+			StringBuilder prefix = new StringBuilder();
+			if (isMyTeam) {
+				prefix.append("我方");
+			} else {
+				prefix.append("敌方");
+			}
+			double kda = computeKda(bo.getPuuid(), bo.getMatchHistory());
+			String[] playerTags = AppCache.settingPersistence.getPlayerTags();
+			double[] playerBetween = AppCache.settingPersistence.getPlayerBetween();
+			for (int i = 0; i < playerBetween.length; i++) {
+
+				//处理最高分
+				if (kda > playerBetween[playerBetween.length - 1]) {
+					prefix.append(playerTags[playerTags.length - 1]).append(":").append(bo.getName()).append("评分为").append(kda);
+					if (prefix.length() > 21) {
+						result.add(prefix.substring(0, 21));
+						result.add(prefix.substring(21));
+					} else {
+						result.add(prefix.toString());
+					}
+					break;
+				}
+				//处理最低分
+				if (kda < playerBetween[0]) {
+					prefix.append(playerTags[0]).append(bo.getName()).append(":").append("评分为").append(kda);
+					if (prefix.length() > 21) {
+						result.add(prefix.substring(0, 21));
+						result.add(prefix.substring(21));
+					} else {
+						result.add(prefix.toString());
+					}
+					break;
+				}
+				//处理区间分数
+				if (kda >= playerBetween[i] && kda < playerBetween[i + 1]) {
+					prefix.append(playerTags[i + 1]).append(bo.getName()).append(":").append("评分为").append(kda);
+					if (prefix.length() > 21) {
+						result.add(prefix.substring(0, 21));
+						result.add(prefix.substring(21));
+					} else {
+						result.add(prefix.toString());
+					}
+					break;
+				}
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * 构建召唤师的历史对局数据
+	 */
+	public static TeamSummonerBO buildTeamSummoner(String puuid, RegionSgpApi sgpApi) throws IOException {
+		TeamSummonerBO teamSummonerBO = new TeamSummonerBO();
+		List<SpgProductsMatchHistoryBO> productsMatchHistory;
+		if (GameDataCache.queueId == null) {
+			productsMatchHistory = sgpApi.getProductsMatchHistoryByPuuid(GameDataCache.leagueClient.getRegion(), puuid, 0, AppCache.settingPersistence.getHistoryCount());
+		} else {
+			productsMatchHistory = sgpApi.getProductsMatchHistoryByPuuid(GameDataCache.leagueClient.getRegion(), puuid, 0, AppCache.settingPersistence.getHistoryCount(), "q_" + GameDataCache.queueId);
+		}
+		SGPRank rank = sgpApi.getRankedStatsByPuuid(puuid);
+		SummonerAlias alias = sgpApi.getSummerNameByPuuids(puuid);
+		SgpSummonerInfoBo summonerInfo = sgpApi.getSummerInfoByPuuid(GameDataCache.leagueClient.getRegion(), puuid);
+		teamSummonerBO.setPuuid(puuid);
+		teamSummonerBO.setLevel(summonerInfo.getLevel());
+		teamSummonerBO.setProfileIconId(summonerInfo.getProfileIconId());
+		teamSummonerBO.setName(alias.getGameName());
+		teamSummonerBO.setTagLine(alias.getTagLine());
+		teamSummonerBO.setPrivacy(summonerInfo.getPrivacy().equalsIgnoreCase("private"));
+		teamSummonerBO.setMatchHistory(productsMatchHistory);
+		teamSummonerBO.setRank(rank);
+		return teamSummonerBO;
 	}
 
 }

@@ -1,4 +1,4 @@
-package helper.frame.panel.client;
+package helper.frame.panel.history;
 
 import helper.cache.AppCache;
 import helper.frame.panel.base.BaseCheckBox;

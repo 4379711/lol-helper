@@ -19,9 +19,22 @@ import java.util.Map;
 public class GameDataCache {
 
 	public static MePlayer me;
-	public static ArrayList<String> otherTeamScore = new ArrayList<>();
+	/**
+	 * 敌人战绩
+	 */
+	public static ArrayList<String> enemyTeamScore = new ArrayList<>();
+	/**
+	 * 我方评分
+	 */
 	public static ArrayList<String> myTeamScore = new ArrayList<>();
+	/**
+	 * 所有英雄
+	 */
 	public static ArrayList<ChampionBO> allChampion = new ArrayList<>();
+	/**
+	 * 所有英雄的绰号
+	 */
+	public static List<TencentChampion> allChampionName = new ArrayList<>();
 	/**
 	 * 召唤师技能信息
 	 */
@@ -46,18 +59,30 @@ public class GameDataCache {
 	 * 队友战绩缓存
 	 */
 	public static List<TeamSummonerBO> myTeamMatchHistory = new ArrayList<>();
+	/**
+	 * 敌人战绩缓存
+	 */
+	public static List<TeamSummonerBO> enemyTeamMatchHistory = new ArrayList<>();
 
 	public static Map<Integer, GameQueue> selectGameQueueList = new LinkedHashMap<>();
+
+	public static Integer queueId = null;
 
 	public static LeagueClientBO leagueClient;
 
 	public static void reset() {
 		resetScore();
+		resetHistory();
 	}
 
 	public static void resetScore() {
-		otherTeamScore = new ArrayList<>();
+		enemyTeamScore = new ArrayList<>();
 		myTeamScore = new ArrayList<>();
+	}
+
+	public static void resetHistory() {
+		myTeamMatchHistory = new ArrayList<>();
+		enemyTeamMatchHistory = new ArrayList<>();
 	}
 
 	public static void cacheLcuMe() {
@@ -76,6 +101,7 @@ public class GameDataCache {
 			//缓存所有英雄
 			try {
 				allChampion = AppCache.api.getAllChampion();
+				allChampionName = AppCache.api.getChampionNameList();
 			} catch (Exception e) {
 				log.error("获取所有英雄错误");
 			}
@@ -110,9 +136,6 @@ public class GameDataCache {
 					selectGameQueueList.put(key, value);
 				}
 			}
-		}
-		if (FrameInnerCache.gameModeBox != null) {
-			FrameInnerCache.gameModeBox.setItems();
 		}
 	}
 

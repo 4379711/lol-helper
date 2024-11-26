@@ -90,4 +90,16 @@ public class FrameUserSetting {
 	 */
 	@JSONField(serialize = false)
 	private RankBO currentRankBO = new RankBO("RANKED_SOLO_5x5", "UNRANKED", "I");
+	/**
+	 * 评分和胜率的筛选数量
+	 */
+	private Integer HistoryCount = 20;
+	/**
+	 * 评分标记
+	 */
+	private String[] playerTags = new String[]{"内鬼", "下等马", "中等马", "上等马"};
+	/**
+	 * 评分分割数
+	 */
+	private double[] playerBetween = new double[]{7, 8, 10};
 }

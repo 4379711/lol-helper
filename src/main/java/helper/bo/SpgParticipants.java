@@ -508,7 +508,7 @@ public class SpgParticipants {
 	private String summonerName;
 
 	/**
-	 * 团队是否早早投降
+	 * 是否是本队伍发起的重开
 	 */
 	private boolean teamEarlySurrendered;
 

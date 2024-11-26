@@ -8,7 +8,7 @@ import java.util.Map;
  *
  * @author WuYi
  */
-public enum GameTypeEnum {
+public enum GameQueueEnum {
 	CUSTOM(0, "自定义"),
 	RANK_SOLO(420, "单双排位"),
 	NORMAL(430, "匹配模式"),
@@ -22,20 +22,20 @@ public enum GameTypeEnum {
 	private final int queueId;
 	private final String typeName;
 
-	GameTypeEnum(int queueId, String typeName) {
+	GameQueueEnum(int queueId, String typeName) {
 		this.queueId = queueId;
 		this.typeName = typeName;
 	}
 
-	private static final Map<Integer, GameTypeEnum> BY_ID = new HashMap<>();
+	private static final Map<Integer, GameQueueEnum> BY_ID = new HashMap<>();
 
 	static {
-		for (GameTypeEnum e : values()) {
+		for (GameQueueEnum e : values()) {
 			BY_ID.put(e.getQueueId(), e);
 		}
 	}
 
-	public static GameTypeEnum valueOf(int id) {
+	public static GameQueueEnum valueOf(int id) {
 		return BY_ID.get(id);
 	}
 

@@ -73,44 +73,45 @@ public class PlayerDetail extends JPanel {
             this.add(rerollLabel);
             this.add(rerollNeedLabel);
         }
-
         List<SGPRank> ranks = AppCache.sgpApi.getRankedStatsListByPuuid(player.getPuuid(), FrameInnerCache.sgpRecordPanel.currentRegion);
-        Dimension titleSize = new Dimension(80, 40);
-        JPanel rankTitle = new JPanel();
-        rankTitle.setLayout(new BoxLayout(rankTitle, BoxLayout.X_AXIS));
-        rankTitle.setBackground(ColorConstant.DARK_THREE);
+        //跨区查不了段位不显示
+        if (!ranks.isEmpty()) {
+            Dimension titleSize = new Dimension(80, 40);
+            JPanel rankTitle = new JPanel();
+            rankTitle.setLayout(new BoxLayout(rankTitle, BoxLayout.X_AXIS));
+            rankTitle.setBackground(ColorConstant.DARK_THREE);
 
-        JLabel titleOne = new JLabel();
-        titleOne.setText("模式");
+            JLabel titleOne = new JLabel();
+            titleOne.setText("模式");
 
-        JLabel titleTwo = new JLabel();
-        titleTwo.setText("段位");
+            JLabel titleTwo = new JLabel();
+            titleTwo.setText("段位");
 
-        JLabel titleFour = new JLabel();
-        titleFour.setText("胜场");
+            JLabel titleFour = new JLabel();
+            titleFour.setText("胜场");
 
-        JLabel titleFive = new JLabel();
-        titleFive.setText("败场");
+            JLabel titleFive = new JLabel();
+            titleFive.setText("败场");
 
-        JLabel titleSix = new JLabel();
-        titleSix.setText("上赛季段位");
+            JLabel titleSix = new JLabel();
+            titleSix.setText("上赛季段位");
+            rankTitle.add(titleOne);
+            rankTitle.add(titleTwo);
+            rankTitle.add(titleFour);
+            rankTitle.add(titleFive);
+            rankTitle.add(titleSix);
+            for (Component component : rankTitle.getComponents()) {
+                component.setSize(titleSize);
+                component.setPreferredSize(titleSize);
+                component.setMinimumSize(titleSize);
+                component.setMaximumSize(titleSize);
+                component.setBackground(ColorConstant.DARK_THREE);
+                component.setForeground(Color.white);
+            }
+            this.add(rankTitle);
 
-        rankTitle.add(titleOne);
-        rankTitle.add(titleTwo);
-        rankTitle.add(titleFour);
-        rankTitle.add(titleFive);
-        rankTitle.add(titleSix);
-        for (Component component : rankTitle.getComponents()) {
-            component.setSize(titleSize);
-            component.setPreferredSize(titleSize);
-            component.setMinimumSize(titleSize);
-            component.setMaximumSize(titleSize);
-            component.setBackground(ColorConstant.DARK_THREE);
-            component.setForeground(Color.white);
-        }
-        this.add(rankTitle);
 
-        for (SGPRank rank : ranks) {
+            for (SGPRank rank : ranks) {
             JPanel rankPanel = new JPanel();
             rankPanel.setBackground(ColorConstant.DARK_THREE);
             rankPanel.setLayout(new BoxLayout(rankPanel, BoxLayout.X_AXIS));
@@ -138,7 +139,7 @@ public class PlayerDetail extends JPanel {
             rankPanel.add(rankWinsLabel);
             rankPanel.add(rankLossesLabel);
             rankPanel.add(preTierLabel);
-            for (Component component : rankPanel.getComponents()) {
+                for (Component component : rankPanel.getComponents()) {
                 component.setSize(titleSize);
                 component.setPreferredSize(titleSize);
                 component.setMinimumSize(titleSize);
@@ -146,7 +147,21 @@ public class PlayerDetail extends JPanel {
                 component.setForeground(Color.white);
             }
             this.add(rankPanel);
+            }
             this.repaint();
+        } else {
+            JPanel jPanel = new JPanel();
+            jPanel.setLayout(new BoxLayout(jPanel, BoxLayout.X_AXIS));
+            jPanel.setBackground(ColorConstant.DARK_THREE);
+
+            JLabel rankLabel = new JLabel();
+            rankLabel.setText("跨区无法查看段位信息");
+            rankLabel.setForeground(Color.WHITE);
+            jPanel.add(Box.createHorizontalGlue());
+            jPanel.add(rankLabel);
+            jPanel.add(Box.createHorizontalGlue());
+            this.add(jPanel);
+            this.add(Box.createVerticalGlue());
         }
 
     }

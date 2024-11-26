@@ -1,8 +1,6 @@
 package helper.frame.panel.history;
 
 import helper.frame.panel.base.BasePanel;
-import helper.frame.panel.client.SendScoreCheckBox;
-import helper.frame.panel.client.ShowTeamBox;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,21 +19,22 @@ public class HistoryPane extends BasePanel {
 
 		list.add(new SendScoreCheckBox());
 		list.add(new ShowTeamBox());
-		list.add(new GameModeBox());
 
-		list.add(new HistoryButton());
 		list.add(new BlackListHistoryButton());
+		list.add(new HistoryButton());
+
+		list.add(new HistoryCountBox());
 		list.add(new JPanel());
 
 		list.add(new JPanel());
 		list.add(new JPanel());
+
+		list.add(new JPanel());
 		list.add(new JPanel());
 
 		list.add(new JPanel());
 		list.add(new JPanel());
-		list.add(new JPanel());
 
-		list.add(new JPanel());
 		list.add(new JPanel());
 		list.add(new JPanel());
 

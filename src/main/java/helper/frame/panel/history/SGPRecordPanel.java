@@ -88,6 +88,7 @@ public class SGPRecordPanel extends JPanel {
         this.backButton.setText("回到自己");
         for (GameQueue gameQueue : GameDataCache.selectGameQueueList.values()) {
             selectQueueBox.addItem(new ItemBO(gameQueue.getId().toString(), gameQueue.getName()));
+            regionNameLabel.setText(RegionEnum.regionTypeById(GameDataCache.leagueClient.getRegion()));
         }
         this.selectQueueBox.setPreferredSize(new Dimension(150, 25));
         this.selectQueueBox.setPreferredSize(new Dimension(150, 25));
@@ -118,11 +119,18 @@ public class SGPRecordPanel extends JPanel {
         this.searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.X_AXIS));
         this.searchPanel.setAlignmentY(TOP_ALIGNMENT);
         this.searchPanel.setPreferredSize(new Dimension(320, 20));
-        this.searchText.setPreferredSize(new Dimension(250, 20));
-        this.searchText.setMaximumSize(new Dimension(250, 20));
-        this.searchText.setMinimumSize(new Dimension(250, 20));
+        this.searchPanel.setMinimumSize(new Dimension(320, 20));
+        this.searchText.setMaximumSize(new Dimension(320, 20));
+
+        this.searchText.setPreferredSize(new Dimension(170, 20));
+        this.searchText.setMaximumSize(new Dimension(170, 20));
+        this.searchText.setMinimumSize(new Dimension(170, 20));
+
+        this.searchButton.setPreferredSize(new Dimension(70, 25));
         this.searchPanel.add(this.selectRegionBox);
+        this.searchPanel.add(Box.createHorizontalGlue());
         this.searchPanel.add(this.searchText);
+        this.searchPanel.add(Box.createHorizontalGlue());
         this.searchPanel.add(this.searchButton);
         this.searchPanel.setBackground(ColorConstant.DARK_THREE);
 
@@ -145,9 +153,9 @@ public class SGPRecordPanel extends JPanel {
                         index--;
                         List<SpgProductsMatchHistoryBO> sgpRecord;
                         if ("-1".equals(item.getValue())) {
-                            sgpRecord = AppCache.sgpApi.getProductsMatchHistoryByPuuid(GameDataCache.leagueClient.getRegion(), currentId, (index - 1) * FrameSetting.PAGE_SIZE, FrameSetting.PAGE_SIZE);
+                            sgpRecord = AppCache.sgpApi.getProductsMatchHistoryByPuuid(currentRegion, currentId, (index - 1) * FrameSetting.PAGE_SIZE, FrameSetting.PAGE_SIZE);
                         } else {
-                            sgpRecord = AppCache.sgpApi.getProductsMatchHistoryByPuuid(GameDataCache.leagueClient.getRegion(), currentId, (index - 1) * FrameSetting.PAGE_SIZE, FrameSetting.PAGE_SIZE, "q_" + item.getValue());
+                            sgpRecord = AppCache.sgpApi.getProductsMatchHistoryByPuuid(currentRegion, currentId, (index - 1) * FrameSetting.PAGE_SIZE, FrameSetting.PAGE_SIZE, "q_" + item.getValue());
                         }
                         setData(sgpRecord, currentId, null);
                     } catch (IOException ex) {
@@ -167,9 +175,9 @@ public class SGPRecordPanel extends JPanel {
                         index++;
                         List<SpgProductsMatchHistoryBO> sgpRecord;
                         if ("-1".equals(item.getValue())) {
-                            sgpRecord = AppCache.sgpApi.getProductsMatchHistoryByPuuid(GameDataCache.leagueClient.getRegion(), currentId, (index - 1) * FrameSetting.PAGE_SIZE, FrameSetting.PAGE_SIZE);
+                            sgpRecord = AppCache.sgpApi.getProductsMatchHistoryByPuuid(currentRegion, currentId, (index - 1) * FrameSetting.PAGE_SIZE, FrameSetting.PAGE_SIZE);
                         } else {
-                            sgpRecord = AppCache.sgpApi.getProductsMatchHistoryByPuuid(GameDataCache.leagueClient.getRegion(), currentId, (index - 1) * FrameSetting.PAGE_SIZE, FrameSetting.PAGE_SIZE, "q_" + item.getValue());
+                            sgpRecord = AppCache.sgpApi.getProductsMatchHistoryByPuuid(currentRegion, currentId, (index - 1) * FrameSetting.PAGE_SIZE, FrameSetting.PAGE_SIZE, "q_" + item.getValue());
                         }
                         setData(sgpRecord, currentId, null);
                     } catch (IOException ex) {
@@ -183,7 +191,7 @@ public class SGPRecordPanel extends JPanel {
         this.searchButton.addMouseListener(new MouseAdapter() {
 
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mouseReleased(MouseEvent e) {
                 ItemBO selectedItem = (ItemBO) selectRegionBox.getSelectedItem();
                 String region = selectedItem.getValue();
                 String text = searchText.getText();
@@ -223,6 +231,7 @@ public class SGPRecordPanel extends JPanel {
                     } else {
                         data = AppCache.sgpApi.getProductsMatchHistoryByPuuid(currentRegion, GameDataCache.me.getPuuid(), 0, FrameSetting.PAGE_SIZE, "q_" + item.getDisplayValue());
                     }
+
                     setData(data, GameDataCache.me.getPuuid(), GameDataCache.me);
                     resetIndex();
                 } catch (IOException ex) {
@@ -262,12 +271,13 @@ public class SGPRecordPanel extends JPanel {
         this.panelIndex.add(labelIndex);
         this.panelIndex.add(buttonNext);
 
+        this.mainPanel.add(Box.createVerticalGlue());
         this.mainPanel.add(playerPanel);
     }
 
     public void setData(List<SpgProductsMatchHistoryBO> data, String puuid, MePlayer player) {
         //设置左边战绩数据
-        if (!puuid.equals(currentId) && currentRegion.equals(GameDataCache.leagueClient.getRegion())) {
+        if (!puuid.equals(currentId)) {
             try {
                 if (player == null) {
                     this.playerDetail.setData(GameDataCache.me);
@@ -288,6 +298,7 @@ public class SGPRecordPanel extends JPanel {
         }
         currentId = puuid;
         this.panelContainer.removeAll();
+        regionNameLabel.setText(RegionEnum.regionTypeById(currentRegion));
         //设置右边战绩
         if (data != null && !data.isEmpty()) {
             for (int i = 0; i < data.size(); i++) {
@@ -327,6 +338,8 @@ public class SGPRecordPanel extends JPanel {
             panelContainer.repaint();
             mainPanel.add(panelContainer);
             this.add(mainPanel);
+            this.revalidate();
+            this.repaint();
         } else {
             mainPanel.revalidate();
             mainPanel.repaint();

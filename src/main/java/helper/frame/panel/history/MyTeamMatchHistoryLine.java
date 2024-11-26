@@ -249,11 +249,13 @@ public class MyTeamMatchHistoryLine extends JPanel {
 				championIcon.setIcon(data.getChampionWinList().get(i).getIcon());
 				championPanel.setMaximumSize(new Dimension(40, 40));
 				championPanel.setPreferredSize(new Dimension(40, 40));
+				championPanel.setMinimumSize(new Dimension(40, 40));
 				JPanel winPanel = new JPanel();
 
 				winPanel.setLayout(new BoxLayout(winPanel, BoxLayout.X_AXIS));
 				winPanel.setMaximumSize(new Dimension(40, 14));
 				winPanel.setPreferredSize(new Dimension(40, 14));
+				winPanel.setMinimumSize(new Dimension(40, 14));
 				winPanel.setBackground(ColorConstant.DARK_THREE);
 
 				JLabel winLabel = new JLabel();

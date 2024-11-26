@@ -117,6 +117,14 @@ public class RequestSgpUtil {
 		return this.callString(request);
 	}
 
+	public byte[] doGetByte(String endpoint, String region) throws IOException {
+		Request request = new Request.Builder()
+				.url(buildUrl(region) + endpoint)
+				.get()
+				.build();
+		return this.callStream(request);
+	}
+
 	public String doPut(String endpoint, String bodyStr) throws IOException {
 		RequestBody body = RequestBody.create(bodyStr, JSON);
 		Request request = new Request.Builder()

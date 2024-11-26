@@ -176,6 +176,9 @@ public class RegionSgpApi {
 	public List<SGPRank> getRankedStatsListByPuuid(String puuid, String region) throws IOException {
 		String endpoint = "/leagues-ledge/v2/rankedStats/puuid/" + puuid;
 		String resp = requestSpgUtil.doGet(endpoint, region);
+		if(resp.isEmpty()){
+			return new ArrayList<SGPRank>();
+		}
 		List<SGPRank> queues = JSON.parseArray(JSONObject.parseObject(resp).get("queues").toString(), SGPRank.class);
 		return queues;
 	}
@@ -214,4 +217,17 @@ public class RegionSgpApi {
 		return null;
 	}
 
+	public byte[] getReplay(String region, Long gameId) throws IOException {
+		String endpoint = "/match-history-query/v3/product/lol/matchId/" + region + "_" + gameId + "/infoType/replay";
+		return requestSpgUtil.doGetByte(endpoint, region);
+	}
+
+	public Integer getPartiesLedgeQueueId(String region, String puuid) throws IOException {
+		String endpoint = "/parties-ledge/v1/players/" + puuid;
+		JSONObject json = JSONObject.parseObject(requestSpgUtil.doGet(endpoint, region));
+		if (json.getJSONObject("currentParty").getJSONObject("gameMode") == null) {
+			return null;
+		}
+		return json.getJSONObject("currentParty").getJSONObject("gameMode").getInteger("queueId");
+	}
 }

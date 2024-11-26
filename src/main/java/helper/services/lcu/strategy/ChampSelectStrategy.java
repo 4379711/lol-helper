@@ -1,14 +1,15 @@
-package helper.services.lcu;
+package helper.services.lcu.strategy;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import helper.bo.*;
+import helper.bo.TeamSummonerBO;
 import helper.cache.AppCache;
 import helper.cache.FrameInnerCache;
 import helper.cache.GameDataCache;
 import helper.frame.panel.history.MyTeamMatchHistoryPanel;
+import helper.frame.utils.MatchHistoryUtil;
+import helper.services.lcu.LinkLeagueClientApi;
 import helper.services.sgp.RegionSgpApi;
-import helper.utils.ProcessUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -21,12 +22,10 @@ import java.util.List;
 @Slf4j
 public class ChampSelectStrategy implements GameStatusStrategy {
 	private final LinkLeagueClientApi api;
-	private final CalculateScore calculateScore;
 	private final RegionSgpApi sgpApi;
 
-	public ChampSelectStrategy(LinkLeagueClientApi api, RegionSgpApi sgpApi, CalculateScore calculateScore) {
+	public ChampSelectStrategy(LinkLeagueClientApi api, RegionSgpApi sgpApi) {
 		this.api = api;
-		this.calculateScore = calculateScore;
 		this.sgpApi = sgpApi;
 	}
 
@@ -66,22 +65,36 @@ public class ChampSelectStrategy implements GameStatusStrategy {
 
 	private void selectScore() throws IOException {
 		if (AppCache.settingPersistence.getSendScore() && GameDataCache.myTeamScore.isEmpty()) {
-			String roomGameInfo = api.getChampSelectInfo();
-			JSONObject jsonObject = JSONObject.parseObject(roomGameInfo);
-			JSONArray myTeam = jsonObject.getJSONArray("myTeam");
-			//可能队友还没进入房间
-			if (myTeam.size() != 5) {
-				return;
-			}
-			ArrayList<String> puuidList = new ArrayList<>();
-			for (int i = 0; i < myTeam.size(); i++) {
-				String puuid = myTeam.getJSONObject(i).getString("puuid");
-				puuidList.add(puuid);
-			}
-			ArrayList<String> msg = calculateScore.dealScore2Msg(puuidList);
-			if (msg != null) {
-				// 查询我方队员战绩,放到公共数据区
-				GameDataCache.myTeamScore = msg;
+			if (!GameDataCache.myTeamMatchHistory.isEmpty()) {
+				ArrayList<String> msg = MatchHistoryUtil.dealScoreMsg(GameDataCache.myTeamMatchHistory,true);
+				if (!msg.isEmpty()) {
+					// 查询我方队员战绩,放到公共数据区
+					GameDataCache.myTeamScore = msg;
+				}
+			} else {
+				String roomGameInfo = api.getChampSelectInfo();
+				JSONObject jsonObject = JSONObject.parseObject(roomGameInfo);
+				JSONArray myTeam = jsonObject.getJSONArray("myTeam");
+				//可能队友还没进入房间
+				if (myTeam.size() != 5) {
+					return;
+				}
+				ArrayList<String> puuidList = new ArrayList<>();
+				for (int i = 0; i < myTeam.size(); i++) {
+					String puuid = myTeam.getJSONObject(i).getString("puuid");
+					puuidList.add(puuid);
+				}
+
+				List<TeamSummonerBO> dataList = new ArrayList<>();
+				for (int i = 0; i < puuidList.size(); i++) {
+					dataList.add(MatchHistoryUtil.buildTeamSummoner(puuidList.get(i), sgpApi));
+				}
+				GameDataCache.myTeamMatchHistory = dataList;
+				ArrayList<String> msg = MatchHistoryUtil.dealScoreMsg(GameDataCache.myTeamMatchHistory,true);
+				if (msg.isEmpty()) {
+					// 查询我方队员战绩,放到公共数据区
+					GameDataCache.myTeamScore = msg;
+				}
 			}
 		}
 	}
@@ -92,7 +105,6 @@ public class ChampSelectStrategy implements GameStatusStrategy {
 	private void showMatchHistory() throws IOException {
 		if (FrameInnerCache.myTeamMatchHistoryPanel == null || !FrameInnerCache.myTeamMatchHistoryPanel.isVisible()) {
 			if (AppCache.settingPersistence.getShowMatchHistory()) {
-				String region = ProcessUtil.getClientProcess().getRegion();
 				String roomGameInfo = api.getChampSelectInfo();
 				JSONObject jsonObject = JSONObject.parseObject(roomGameInfo);
 				JSONArray myTeam = jsonObject.getJSONArray("myTeam");
@@ -103,28 +115,10 @@ public class ChampSelectStrategy implements GameStatusStrategy {
 				}
 				List<TeamSummonerBO> dataList = new ArrayList<>();
 				for (int i = 0; i < myTeam.size(); i++) {
-					TeamSummonerBO teamSummonerBO = new TeamSummonerBO();
 					String puuid = myTeam.getJSONObject(i).getString("puuid");
-					List<SpgProductsMatchHistoryBO> productsMatchHistory;
-					Integer selectMode = AppCache.settingPersistence.getSelectMode();
-					if (selectMode.equals(-1)) {
-						productsMatchHistory = sgpApi.getProductsMatchHistoryByPuuid(region, puuid, 0, 20);
-					} else {
-						productsMatchHistory = sgpApi.getProductsMatchHistoryByPuuid(region, puuid, 0, 20, "q_" + selectMode);
-					}
-					SGPRank rank = sgpApi.getRankedStatsByPuuid(puuid);
-					SummonerAlias alias = sgpApi.getSummerNameByPuuids(puuid);
-					SgpSummonerInfoBo summonerInfo = sgpApi.getSummerInfoByPuuid(region, puuid);
+					TeamSummonerBO teamSummonerBO = MatchHistoryUtil.buildTeamSummoner(puuid, sgpApi);
 					String mapSide = api.getBlueRed();
 					teamSummonerBO.setMapSide(mapSide);
-					teamSummonerBO.setPuuid(puuid);
-					teamSummonerBO.setRank(rank);
-					teamSummonerBO.setLevel(summonerInfo.getLevel());
-					teamSummonerBO.setProfileIconId(summonerInfo.getProfileIconId());
-					teamSummonerBO.setName(alias.getGameName());
-					teamSummonerBO.setTagLine(alias.getTagLine());
-					teamSummonerBO.setPrivacy(summonerInfo.getPrivacy().equalsIgnoreCase("private"));
-					teamSummonerBO.setMatchHistory(productsMatchHistory);
 					dataList.add(teamSummonerBO);
 				}
 				if (!dataList.isEmpty()) {

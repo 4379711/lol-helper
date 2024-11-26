@@ -1,5 +1,6 @@
 package helper.bo;
 
+import helper.enums.GameQueueEnum;
 import helper.frame.constant.GameConstant;
 import lombok.Data;
 
@@ -26,7 +27,7 @@ public class GameMatchHistoryBO {
 	private List<Participants> participants;
 	/**
 	 * 游戏类型ID 使用该类型区分游戏类型
-	 * 在{@link GameConstant#GAME_TYPE}和{@link helper.enums.GameTypeEnum}
+	 * 在{@link GameConstant#GAME_TYPE}和{@link GameQueueEnum}
 	 * 进行映射和判断是否能进行对局详情展示
 	 */
 	private Integer queueId;

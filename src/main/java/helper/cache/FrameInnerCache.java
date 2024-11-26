@@ -19,6 +19,5 @@ public class FrameInnerCache {
 	public static JFrame blackListFrame;
 	public static KeyTextPane keyTextPane;
 	public static MyTeamMatchHistoryPanel myTeamMatchHistoryPanel;
-	public static GameModeBox gameModeBox;
 
 }
