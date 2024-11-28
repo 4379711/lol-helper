@@ -224,7 +224,11 @@ public class RegionSgpApi {
 
 	public Integer getPartiesLedgeQueueId(String region, String puuid) throws IOException {
 		String endpoint = "/parties-ledge/v1/players/" + puuid;
-		JSONObject json = JSONObject.parseObject(requestSpgUtil.doGet(endpoint, region));
+		String req = requestSpgUtil.doGet(endpoint, region);
+		if (req.isEmpty()) {
+			return null;
+		}
+		JSONObject json = JSONObject.parseObject(req);
 		if (json.getJSONObject("currentParty").getJSONObject("gameMode") == null) {
 			return null;
 		}

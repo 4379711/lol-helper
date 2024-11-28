@@ -202,23 +202,29 @@ public class MatchHistoryUtil {
 	 */
 
 	public static ImageIcon getChampionIcon(Integer id, Integer championIconWidth, Integer championIconHeight, ImageEnum imageEnum) {
-		if (id != 0) {
+		ImageIcon imageIcon = null;
+		if (id > 0) {
 			if (imageEnum == ImageEnum.ROUND) {
 				try {
-					return new ImageIcon(ImageUtil.makeRoundedCorner(AppCache.api.getChampionIcons(id).getScaledInstance(championIconWidth, championIconHeight, Image.SCALE_REPLICATE)));
+					imageIcon = new ImageIcon(ImageUtil.makeRoundedCorner(AppCache.api.getChampionIcons(id).getScaledInstance(championIconWidth, championIconHeight, Image.SCALE_REPLICATE)));
+					return imageIcon;
 				} catch (IOException e) {
-					return new ImageIcon(new BufferedImage(championIconWidth, championIconHeight, BufferedImage.TYPE_INT_ARGB));
+					imageIcon = new ImageIcon(new BufferedImage(championIconWidth, championIconHeight, BufferedImage.TYPE_INT_ARGB));
 				}
 			} else if (imageEnum == ImageEnum.SQUARE) {
 				try {
-					return new ImageIcon(AppCache.api.getChampionIcons(id).getScaledInstance(championIconWidth, championIconHeight, Image.SCALE_REPLICATE));
+					imageIcon = new ImageIcon(AppCache.api.getChampionIcons(id).getScaledInstance(championIconWidth, championIconHeight, Image.SCALE_REPLICATE));
 				} catch (IOException e) {
-					return new ImageIcon(new BufferedImage(championIconWidth, championIconHeight, BufferedImage.TYPE_INT_ARGB));
+					imageIcon = new ImageIcon(new BufferedImage(championIconWidth, championIconHeight, BufferedImage.TYPE_INT_ARGB));
 				}
 			}
+			if (imageIcon == null) {
+				imageIcon = new ImageIcon(new BufferedImage(championIconWidth, championIconHeight, BufferedImage.TYPE_INT_ARGB));
+			}
+		} else {
+			imageIcon = new ImageIcon(new BufferedImage(championIconWidth, championIconHeight, BufferedImage.TYPE_INT_ARGB));
 		}
-
-		return new ImageIcon(new BufferedImage(championIconWidth, championIconHeight, BufferedImage.TYPE_INT_ARGB));
+		return imageIcon;
 	}
 
 	/**
