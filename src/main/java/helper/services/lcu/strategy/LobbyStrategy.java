@@ -38,7 +38,6 @@ public class LobbyStrategy implements GameStatusStrategy {
             try {
                 Integer queueId = sgpApi.getPartiesLedgeQueueId(GameDataCache.leagueClient.getRegion(), GameDataCache.me.getPuuid());
                 GameDataCache.queueId = queueId;
-                System.out.println(queueId);
             } catch (IOException e) {
                 log.error("获取模式id失败", e);
             }

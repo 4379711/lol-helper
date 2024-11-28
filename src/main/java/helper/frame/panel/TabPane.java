@@ -4,7 +4,6 @@ import helper.frame.panel.about.AboutPanel;
 import helper.frame.panel.client.ClientPanel;
 import helper.frame.panel.fuckword.FuckPanel;
 import helper.frame.panel.history.HistoryPane;
-import helper.frame.panel.key.KeyPanel;
 import helper.frame.panel.result.ResultPanel;
 import helper.frame.ui.MyTabbedPaneUI;
 
@@ -33,7 +32,6 @@ public class TabPane extends JTabbedPane {
 		TabPane tabPane = new TabPane();
 		tabPane.add(ClientPanel.builder());
 		tabPane.add(HistoryPane.builder());
-		tabPane.add(KeyPanel.builder());
 		tabPane.add(FuckPanel.builder());
 		tabPane.add(ResultPanel.builder());
 		tabPane.add(AboutPanel.builder());

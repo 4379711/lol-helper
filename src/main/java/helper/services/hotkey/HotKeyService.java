@@ -22,7 +22,6 @@ public class HotKeyService {
 	public static void start() {
 		new HotKeyService().hook();
 		HotKeyFactory.loadDefaultHotKeys();
-		HotKeyFactory.applyDiyKey();
 	}
 
 	private synchronized void hook() {

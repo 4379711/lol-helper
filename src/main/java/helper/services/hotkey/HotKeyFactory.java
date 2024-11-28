@@ -1,12 +1,8 @@
 package helper.services.hotkey;
 
-import helper.frame.utils.DiyKeyUtil;
 import org.jnativehook.keyboard.NativeKeyEvent;
-import org.jnativehook.mouse.NativeMouseEvent;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author @_@
@@ -30,17 +26,6 @@ public class HotKeyFactory {
 	public static void clearHotKeys() {
 		HOT_KEY_MAP.clear();
 		loadDefaultHotKeys();
-	}
-
-	public static void applyDiyKey() {
-		ArrayList<String> list = DiyKeyUtil.loadKey();
-		Map<Integer, HotKeyConsumer> map = DiyKeyUtil.parseKey2Consumer(list);
-		applyDiyKey(map);
-	}
-
-	public static void applyDiyKey(Map<Integer, HotKeyConsumer> map) {
-		clearHotKeys();
-		HOT_KEY_MAP.putAll(map);
 	}
 
 }
