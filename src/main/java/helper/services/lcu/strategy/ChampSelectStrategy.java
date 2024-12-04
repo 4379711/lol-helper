@@ -86,12 +86,12 @@ public class ChampSelectStrategy implements GameStatusStrategy {
 				}
 
 				List<TeamSummonerBO> dataList = new ArrayList<>();
-				for (int i = 0; i < puuidList.size(); i++) {
-					dataList.add(MatchHistoryUtil.buildTeamSummoner(puuidList.get(i), sgpApi));
+				for (String puuid : puuidList) {
+					dataList.add(MatchHistoryUtil.buildTeamSummoner(puuid, sgpApi));
 				}
 				GameDataCache.myTeamMatchHistory = dataList;
-				ArrayList<String> msg = MatchHistoryUtil.dealScoreMsg(GameDataCache.myTeamMatchHistory,true);
-				if (msg.isEmpty()) {
+				ArrayList<String> msg = MatchHistoryUtil.dealScoreMsg(GameDataCache.myTeamMatchHistory, true);
+				if (!msg.isEmpty()) {
 					// 查询我方队员战绩,放到公共数据区
 					GameDataCache.myTeamScore = msg;
 				}
