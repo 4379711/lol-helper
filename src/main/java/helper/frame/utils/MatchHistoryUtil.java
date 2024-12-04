@@ -488,30 +488,31 @@ public class MatchHistoryUtil {
 			double kda = computeKda(bo.getPuuid(), bo.getMatchHistory());
 			String[] playerTags = AppCache.settingPersistence.getPlayerTags();
 			double[] playerBetween = AppCache.settingPersistence.getPlayerBetween();
-			for (int i = 0; i < playerBetween.length; i++) {
 
-				//处理最高分
-				if (kda > playerBetween[playerBetween.length - 1]) {
-					prefix.append(playerTags[playerTags.length - 1]).append(":").append(bo.getName()).append("评分为").append(kda);
-					if (prefix.length() > 21) {
-						result.add(prefix.substring(0, 21));
-						result.add(prefix.substring(21));
-					} else {
-						result.add(prefix.toString());
-					}
-					break;
+			//处理最高分
+			if (kda > playerBetween[playerBetween.length - 1]) {
+				prefix.append(playerTags[playerTags.length - 1]).append(":").append(bo.getName()).append("评分为").append(kda);
+				if (prefix.length() > 21) {
+					result.add(prefix.substring(0, 21));
+					result.add(prefix.substring(21));
+				} else {
+					result.add(prefix.toString());
 				}
-				//处理最低分
-				if (kda < playerBetween[0]) {
-					prefix.append(playerTags[0]).append(bo.getName()).append(":").append("评分为").append(kda);
-					if (prefix.length() > 21) {
-						result.add(prefix.substring(0, 21));
-						result.add(prefix.substring(21));
-					} else {
-						result.add(prefix.toString());
-					}
-					break;
+				continue;
+			}
+			//处理最低分
+			if (kda < playerBetween[0]) {
+				prefix.append(playerTags[0]).append(bo.getName()).append(":").append("评分为").append(kda);
+				if (prefix.length() > 21) {
+					result.add(prefix.substring(0, 21));
+					result.add(prefix.substring(21));
+				} else {
+					result.add(prefix.toString());
 				}
+				continue;
+			}
+
+			for (int i = 0; i < playerBetween.length - 1; i++) {
 				//处理区间分数
 				if (kda >= playerBetween[i] && kda < playerBetween[i + 1]) {
 					prefix.append(playerTags[i + 1]).append(bo.getName()).append(":").append("评分为").append(kda);
