@@ -46,10 +46,6 @@ public class FrameUserSetting {
 	private Boolean communicate = true;
 
 	/**
-	 * 一键连招
-	 */
-	private Boolean autoKey = false;
-	/**
 	 * 选择炫彩
 	 */
 	private Boolean pickSkin = false;

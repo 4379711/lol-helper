@@ -25,17 +25,16 @@ public class ClientPanel extends BasePanel {
 		list.add(new AutoSearchCheckBox());
 		list.add(new AutoPlayAgainCheckBox());
 
-		list.add(new AutoKeyCheckBox());
-		list.add(new CommunicateCheckBox());
 		list.add(new AutoReconnectCheckBox());
-
+		list.add(new CommunicateCheckBox());
 		list.add(new PickSkinCheckBox());
+
 		list.add(new GameStatusBox());
 		list.add(new BanBox());
+		list.add(new PickBox());
 
 		list.add(new CareerBackgroundBox());
 		list.add(new CareerBackgroundSkinBox());
-		list.add(new PickBox());
 
 		return list;
 	}
