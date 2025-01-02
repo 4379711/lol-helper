@@ -581,4 +581,9 @@ public class LinkLeagueClientApi {
 		String endpoint = "/lol-maps/v1/maps";
 		return requestLcuUtil.doGet(endpoint);
 	}
+
+	public String openWss() throws IOException {
+		requestLcuUtil.wss();
+		return null;
+	}
 }

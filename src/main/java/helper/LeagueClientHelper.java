@@ -17,8 +17,7 @@ public class LeagueClientHelper {
 
 	public static void main(String[] args) {
 		MainFrame.start();
-		while (true) {
-			String msg = "";
+		String msg = "";
 			try {
 				ClientStarter clientStarter = new ClientStarter();
 				clientStarter.initLcu();
@@ -26,20 +25,17 @@ public class LeagueClientHelper {
 				GameDataCache.cacheLcuAll();
 				MainFrame.showFrame();
 				HotKeyService.start();
-				clientStarter.listenGameStatus();
-			} catch (NoProcessException ignored) {
+				clientStarter.startWSS();
+			} catch (NoProcessException e) {
 				msg = "请先启动游戏";
-			} catch (ConnectException ignored) {
+			} catch (ConnectException e) {
 				msg = "游戏客户端连接失败";
 			} catch (Exception e) {
 				msg = e.getMessage();
-				log.error(msg, e);
 			}
+		if (!msg.isEmpty()) {
 			MainFrame.hiddenFrame();
-			int running = FrameTipUtil.continueRun(msg);
-			if (running != 0) {
-				System.exit(0);
-			}
+			FrameTipUtil.errorOccur(msg);
 		}
 	}
 

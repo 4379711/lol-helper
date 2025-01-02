@@ -3,6 +3,9 @@ package helper.http;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import helper.bo.LeagueClientBO;
+import helper.enums.WSSEventEnum;
+import helper.frame.utils.FrameTipUtil;
+import helper.services.wss.WSSEventTrigger;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
@@ -10,6 +13,7 @@ import okio.ByteString;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,48 +42,57 @@ public class RequestLcuUtil {
 	}
 
 	public void wss() {
-		Request request = new Request.Builder()
-				.url("wss://" + this.gateway + ":" + bo.getPort())
-				.build();
-		client.newWebSocket(request, new WebSocketListener() {
-			@Override
-			public void onClosed(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
-				log.info("关闭链接");
-			}
+		for (WSSEventEnum eventEnum : WSSEventEnum.values()) {
+			Request request = new Request.Builder()
+					.url("wss://" + this.gateway + ":" + bo.getPort())
+					.build();
+			client.newWebSocket(request, new WebSocketListener() {
+				@Override
+				public void onClosed(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
+					log.info("关闭链接");
+				}
 
-			@Override
-			public void onClosing(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
-				log.info("正在关闭链接");
-			}
+				@Override
+				public void onClosing(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
+					log.info("正在关闭链接");
+				}
 
-			@Override
-			public void onFailure(@NotNull WebSocket webSocket, @NotNull Throwable t, @Nullable Response response) {
-				log.error("发生错误,{},{}", t, response);
-			}
+				@Override
+				public void onFailure(@NotNull WebSocket webSocket, @NotNull Throwable t, @Nullable Response response) {
+					if(t instanceof EOFException){
+						FrameTipUtil.errorOccur("游戏已退出");
+						System.exit(0);
+					}
+					log.error("发生错误,{},{}", t, response);
 
-			@Override
-			public void onMessage(@NotNull WebSocket webSocket, @NotNull String text) {
-				log.info("收到String消息:{}", text);
-			}
+				}
 
-			@Override
-			public void onMessage(@NotNull WebSocket webSocket, @NotNull ByteString bytes) {
-				log.info("收到bytes消息:{}", bytes);
-			}
+				@Override
+				public void onMessage(@NotNull WebSocket webSocket, @NotNull String text) {
+					if (!text.isEmpty()) {
+						JSONArray eventArr = com.alibaba.fastjson2.JSON.parseArray(text);
+						String data = eventArr.getJSONObject(2).getString("data");
+						log.info("收到：{}的String消息:{}", eventArr.get(1).toString(), data);
+						WSSEventTrigger.eventRun(eventEnum, data);
+					}
+				}
 
-			@Override
-			public void onOpen(@NotNull WebSocket webSocket, @NotNull Response response) {
-				JSONArray jsonArray = new JSONArray();
-				jsonArray.add(5);
-//				jsonArray.add("OnJsonApiEvent");
-//				jsonArray.add("OnJsonApiEvent_lol-matchmaking_v1_ready-check");
-//				jsonArray.add("OnJsonApiEvent_lol-gameflow_v1_session");
-				jsonArray.add("OnJsonApiEvent_lol-champ-select_v1_session");
-				String jsonString = jsonArray.toJSONString();
-//				webSocket.send(jsonString);
-				log.info("打开链接");
-			}
-		});
+				@Override
+				public void onMessage(@NotNull WebSocket webSocket, @NotNull ByteString bytes) {
+					log.info("收到bytes消息:{}", bytes);
+				}
+
+				@Override
+				public void onOpen(@NotNull WebSocket webSocket, @NotNull Response response) {
+					JSONArray jsonArray = new JSONArray();
+					jsonArray.add(5);
+					jsonArray.add(eventEnum.getUri());
+					String jsonString = jsonArray.toJSONString();
+					webSocket.send(jsonString);
+					log.info("打开链接:{}", eventEnum.getUri());
+				}
+			});
+		}
 	}
 
 	private void addRequestLog() {
@@ -90,8 +103,6 @@ public class RequestLcuUtil {
 			String body = JSONObject.toJSONString(original.body());
 			if (body != null && !"null".equals(body) && !"".equals(body)) {
 				log.info("{} - {} - {}", method, uri, body);
-			} else if (uri.contains("lol-gameflow/v1/gameflow-phase")) {
-
 			} else {
 				log.info("{} - {}", method, uri);
 			}
