@@ -1,31 +1,24 @@
 package helper;
 
-import cn.hutool.core.util.StrUtil;
 import helper.bo.LeagueClientBO;
 import helper.cache.AppCache;
-import helper.cache.FrameInnerCache;
-import helper.enums.GameStatusEnum;
 import helper.exception.NoLcuApiException;
 import helper.exception.NoProcessException;
 import helper.http.RequestLcuUtil;
 import helper.http.RequestSgpUtil;
 import helper.services.lcu.LinkLeagueClientApi;
-import helper.services.lcu.strategy.*;
 import helper.services.sgp.RegionSgpApi;
-import helper.services.wss.WSSEventTrigger;
+import helper.services.strategy.StrategyStarter;
 import helper.utils.ProcessUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author @_@
  */
 @Slf4j
 public class ClientStarter {
-	private LinkLeagueClientApi api;
-	private RegionSgpApi sgpApi;
 
 	public void initLcu() throws Exception {
 		LeagueClientBO leagueClientBO = ProcessUtil.getClientProcess();
@@ -33,7 +26,7 @@ public class ClientStarter {
 			throw new NoProcessException();
 		}
 		RequestLcuUtil requestUtil = new RequestLcuUtil(leagueClientBO);
-		api = new LinkLeagueClientApi(requestUtil);
+		AppCache.api = new LinkLeagueClientApi(requestUtil);
 	}
 
 	public void initSgp() throws Exception {
@@ -46,7 +39,7 @@ public class ClientStarter {
 		}
 		if (leagueClientBO.getRegion() != null) {
 			RequestSgpUtil requestUtil = new RequestSgpUtil(AppCache.api.getSgpAccessToken(), leagueClientBO.getRegion().toLowerCase());
-			sgpApi = new RegionSgpApi(requestUtil);
+			AppCache.sgpApi = new RegionSgpApi(requestUtil);
 		} else {
 			log.error("未识别到国服大区");
 		}
@@ -54,11 +47,11 @@ public class ClientStarter {
 	}
 
 	public void startWSS() throws IOException {
-		if (api == null) {
-			throw new NoLcuApiException();
-		}
-		api.openWss();
-		WSSEventTrigger.listenGameStatus(api.getGameStatus());
+		AppCache.api.openWss();
+	}
+
+	public void initGameStatus() throws IOException {
+		StrategyStarter.listenGameStatus(AppCache.api.getGameStatus());
 	}
 
 }

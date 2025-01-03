@@ -23,9 +23,10 @@ public class LeagueClientHelper {
 				clientStarter.initLcu();
 				clientStarter.initSgp();
 				GameDataCache.cacheLcuAll();
+				clientStarter.startWSS();
+				clientStarter.initGameStatus();
 				MainFrame.showFrame();
 				HotKeyService.start();
-				clientStarter.startWSS();
 			} catch (NoProcessException e) {
 				msg = "请先启动游戏";
 			} catch (ConnectException e) {

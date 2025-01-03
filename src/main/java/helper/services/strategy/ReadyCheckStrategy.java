@@ -1,4 +1,4 @@
-package helper.services.lcu.strategy;
+package helper.services.strategy;
 
 import helper.cache.AppCache;
 import helper.services.lcu.LinkLeagueClientApi;

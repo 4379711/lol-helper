@@ -1,6 +1,7 @@
-package helper.services.lcu.strategy;
+package helper.services.strategy;
 
 import helper.cache.AppCache;
+import helper.cache.FrameInnerCache;
 import helper.cache.GameDataCache;
 import helper.services.lcu.LinkLeagueClientApi;
 import helper.services.sgp.RegionSgpApi;
@@ -36,8 +37,7 @@ public class LobbyStrategy implements GameStatusStrategy {
     private void getQueue() {
         if (GameDataCache.leagueClient.getRegion() != null) {
             try {
-                Integer queueId = sgpApi.getPartiesLedgeQueueId(GameDataCache.leagueClient.getRegion(), GameDataCache.me.getPuuid());
-                GameDataCache.queueId = queueId;
+                GameDataCache.queueId = sgpApi.getPartiesLedgeQueueId(GameDataCache.leagueClient.getRegion(), GameDataCache.me.getPuuid());
             } catch (IOException e) {
                 log.error("获取模式id失败", e);
             }
@@ -53,10 +53,17 @@ public class LobbyStrategy implements GameStatusStrategy {
         }
     }
 
+    private void hidePanel(){
+        if (FrameInnerCache.myTeamMatchHistoryPanel != null && FrameInnerCache.myTeamMatchHistoryPanel.isVisible()) {
+            FrameInnerCache.myTeamMatchHistoryPanel.setVisible(false);
+        }
+    }
+
     @Override
     public void doThis() {
         autoSearch();
         getQueue();
         resetHistory();
+        hidePanel();
     }
 }

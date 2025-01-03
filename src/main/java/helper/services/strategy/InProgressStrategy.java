@@ -1,8 +1,9 @@
-package helper.services.lcu.strategy;
+package helper.services.strategy;
 
 import helper.bo.TeamPuuidBO;
 import helper.bo.TeamSummonerBO;
 import helper.cache.AppCache;
+import helper.cache.FrameInnerCache;
 import helper.cache.GameDataCache;
 import helper.frame.utils.MatchHistoryUtil;
 import helper.services.lcu.LinkLeagueClientApi;
@@ -41,8 +42,13 @@ public class InProgressStrategy implements GameStatusStrategy {
 		return puuidList;
 	}
 
-	@Override
-	public void doThis() {
+	private void hidePanel() {
+		if (FrameInnerCache.myTeamMatchHistoryPanel != null && FrameInnerCache.myTeamMatchHistoryPanel.isVisible()) {
+			FrameInnerCache.myTeamMatchHistoryPanel.setVisible(false);
+		}
+	}
+
+	private void getSendScore() {
 		if (AppCache.settingPersistence.getSendScore() && (GameDataCache.enemyTeamScore.isEmpty() || GameDataCache.enemyTeamMatchHistory.isEmpty())) {
 			try {
 				List<String> enemyPuuids = getOtherPuuid();
@@ -59,5 +65,11 @@ public class InProgressStrategy implements GameStatusStrategy {
 				log.error("查询战绩失败", e);
 			}
 		}
+	}
+
+	@Override
+	public void doThis() {
+		hidePanel();
+		getSendScore();
 	}
 }

@@ -1,4 +1,4 @@
-package helper.services.lcu.strategy;
+package helper.services.strategy;
 
 import lombok.extern.slf4j.Slf4j;
 
