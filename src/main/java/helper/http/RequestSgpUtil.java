@@ -59,7 +59,7 @@ public class RequestSgpUtil {
 		}).build();
 	}
 
-	private void buildSgpHeaders(String token) {
+	public void buildSgpHeaders(String token) {
 		defaultHeaders = new HashMap<>(1);
 		defaultHeaders.put("Authorization", "Bearer " + token);
 		client = HttpClient.newInstance().newBuilder().addInterceptor(chain -> {
@@ -76,11 +76,7 @@ public class RequestSgpUtil {
 			if (response.code() == 200) {
 				return body.string();
 			} else if (response.code() == 401) {
-				String sgpAccessToken = AppCache.api.getSgpAccessToken();
-				buildSgpHeaders(sgpAccessToken);
-				String twiceCall = this.callString(request);
-				buildNewToken(sgpAccessToken);
-				return twiceCall;
+				log.error("401");
 			}
 			return "";
 		}
@@ -91,11 +87,7 @@ public class RequestSgpUtil {
 			if (response.code() == 200) {
 				return body.bytes();
 			} else if (response.code() == 401) {
-				String sgpAccessToken = AppCache.api.getSgpAccessToken();
-				buildSgpHeaders(sgpAccessToken);
-				byte[] twiceCall = callStream(request);
-				buildNewToken(sgpAccessToken);
-				return twiceCall;
+				log.error("401");
 			}
 			return null;
 		}

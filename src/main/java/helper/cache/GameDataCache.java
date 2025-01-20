@@ -1,6 +1,7 @@
 package helper.cache;
 
 import helper.bo.*;
+import helper.exception.NoProcessException;
 import helper.utils.ProcessUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -141,7 +142,14 @@ public class GameDataCache {
 
 	public static void cacheLeagueClient() {
 		try {
-			leagueClient = ProcessUtil.getClientProcess();
+			LeagueClientBO leagueClientBO = ProcessUtil.getClientProcess();
+			if (leagueClientBO.equals(new LeagueClientBO())) {
+				leagueClientBO = ProcessUtil.getClientProcessByWmic();
+				if (leagueClientBO.equals(new LeagueClientBO())) {
+					throw new NoProcessException();
+				}
+			}
+			leagueClient = leagueClientBO;
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

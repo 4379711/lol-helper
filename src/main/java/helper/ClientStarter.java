@@ -23,7 +23,10 @@ public class ClientStarter {
 	public void initLcu() throws Exception {
 		LeagueClientBO leagueClientBO = ProcessUtil.getClientProcess();
 		if (leagueClientBO.equals(new LeagueClientBO())) {
-			throw new NoProcessException();
+			leagueClientBO = ProcessUtil.getClientProcessByWmic();
+			if(leagueClientBO.equals(new LeagueClientBO())){
+				throw new NoProcessException();
+			}
 		}
 		RequestLcuUtil requestUtil = new RequestLcuUtil(leagueClientBO);
 		AppCache.api = new LinkLeagueClientApi(requestUtil);
@@ -32,7 +35,10 @@ public class ClientStarter {
 	public void initSgp() throws Exception {
 		LeagueClientBO leagueClientBO = ProcessUtil.getClientProcess();
 		if (leagueClientBO.equals(new LeagueClientBO())) {
-			throw new NoProcessException();
+			leagueClientBO = ProcessUtil.getClientProcessByWmic();
+			if(leagueClientBO.equals(new LeagueClientBO())){
+				throw new NoProcessException();
+			}
 		}
 		if (AppCache.api == null) {
 			throw new NoLcuApiException();

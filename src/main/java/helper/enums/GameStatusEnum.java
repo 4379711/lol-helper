@@ -43,6 +43,10 @@ public enum GameStatusEnum {
 	 */
 	WaitingForStats,
 	/**
+	 * 终止
+	 */
+	TerminatedInError,
+	/**
 	 * 游戏结束
 	 */
 	EndOfGame,

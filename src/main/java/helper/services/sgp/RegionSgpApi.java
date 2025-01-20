@@ -217,11 +217,25 @@ public class RegionSgpApi {
 		return null;
 	}
 
+	/**
+	 * 获取回放文件 人多的大区获取不了
+	 * @param region
+	 * @param gameId
+	 * @return
+	 * @throws IOException
+	 */
 	public byte[] getReplay(String region, Long gameId) throws IOException {
 		String endpoint = "/match-history-query/v3/product/lol/matchId/" + region + "_" + gameId + "/infoType/replay";
 		return requestSpgUtil.doGetByte(endpoint, region);
 	}
 
+	/**
+	 * 获取当前房间的模式
+	 * @param region
+	 * @param puuid
+	 * @return
+	 * @throws IOException
+	 */
 	public Integer getPartiesLedgeQueueId(String region, String puuid) throws IOException {
 		String endpoint = "/parties-ledge/v1/players/" + puuid;
 		String req = requestSpgUtil.doGet(endpoint, region);
@@ -233,5 +247,13 @@ public class RegionSgpApi {
 			return null;
 		}
 		return json.getJSONObject("currentParty").getJSONObject("gameMode").getInteger("queueId");
+	}
+
+	/**
+	 * 设置sgp的token
+	 * @param sgpToken
+	 */
+	public void SetSgpToken(String sgpToken){
+		this.requestSpgUtil.buildSgpHeaders(sgpToken);
 	}
 }
