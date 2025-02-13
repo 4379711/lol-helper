@@ -20,16 +20,16 @@ public class HistoryPane extends BasePanel {
 		list.add(new SendScoreCheckBox());
 		list.add(new ShowTeamBox());
 
+		list.add(new SendBlackPlayerBox());
+		list.add(new BlackListAddBox());
+
+		list.add(new ShowSelfScoreBox());
+		list.add(new BlackListLoadBox());
+
 		list.add(new BlackListHistoryButton());
 		list.add(new HistoryButton());
 
 		list.add(new HistoryCountBox());
-		list.add(new JPanel());
-
-		list.add(new JPanel());
-		list.add(new JPanel());
-
-		list.add(new JPanel());
 		list.add(new JPanel());
 
 		list.add(new JPanel());

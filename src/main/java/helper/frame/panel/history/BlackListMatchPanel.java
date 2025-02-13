@@ -11,9 +11,9 @@ import helper.bo.SpgParticipants;
 import helper.cache.FrameInnerCache;
 import helper.cache.FrameSetting;
 import helper.cache.GameDataCache;
+import helper.constant.ColorConstant;
 import helper.enums.ImageEnum;
-import helper.frame.constant.ColorConstant;
-import helper.frame.constant.GameConstant;
+import helper.constant.GameConstant;
 import helper.frame.utils.FrameTipUtil;
 import helper.frame.utils.MatchHistoryUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -70,18 +70,18 @@ public class BlackListMatchPanel extends JPanel {
             this.buttonPrevious.setText("上一页");
             this.labelIndex.setText(Integer.toString(index));
             this.buttonNext.setText("下一页");
-            List<String> blacklistFiles = FileUtil.listFileNames(new File(GameConstant.BLACK_LIST_FILE).getAbsolutePath());
+            List<String> blacklistFiles = ListUtil.reverse(FileUtil.listFileNames(new File(GameConstant.BLACK_LIST_FILE).getAbsolutePath()));
             //上一页鼠标事件
             this.buttonPrevious.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     if (index > 1) {
                         index--;
-                        List<String> page = ListUtil.page((index - 1) * FrameSetting.PAGE_SIZE, index * FrameSetting.PAGE_SIZE, blacklistFiles);
+                        List<String> page = ListUtil.page(index - 1, FrameSetting.PAGE_SIZE, blacklistFiles);
                         if (!page.isEmpty()) {
                             List<BlackListBO> blackLists = new ArrayList<BlackListBO>();
                             for (String s : page) {
-                                String jsonString = FileUtil.readUtf8String(GameConstant.BLACK_LIST_FILE + s);
+                                String jsonString = FileUtil.readUtf8String(new File(GameConstant.BLACK_LIST_FILE + s));
                                 BlackListBO blackListBO = JSON.parseObject(jsonString, BlackListBO.class);
                                 blackLists.add(blackListBO);
                             }
@@ -99,7 +99,7 @@ public class BlackListMatchPanel extends JPanel {
                 public void mouseClicked(MouseEvent e) {
                     if (FrameSetting.PAGE_SIZE * index < FrameSetting.PAGE_MAX) {
                         index++;
-                        List<String> page = ListUtil.page((index - 1) * FrameSetting.PAGE_SIZE, index * FrameSetting.PAGE_SIZE, blacklistFiles);
+                        List<String> page = ListUtil.page(index - 1, FrameSetting.PAGE_SIZE, blacklistFiles);
                         if (!page.isEmpty()) {
                             List<BlackListBO> blackLists = new ArrayList<BlackListBO>();
                             for (String s : page) {
@@ -181,7 +181,7 @@ public class BlackListMatchPanel extends JPanel {
             panelContainer.repaint();
             this.add(panelContainer);
         } else {
-            FrameTipUtil.errorOccur("请到战绩查询点开详情后召唤师姓名右键 羁押新犯人");
+            FrameTipUtil.errorMsg("请到战绩查询点开详情后召唤师姓名右键 羁押新犯人");
         }
     }
 

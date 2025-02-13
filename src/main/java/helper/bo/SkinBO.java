@@ -12,6 +12,17 @@ public class SkinBO {
 		this.name = name;
 		this.contentId = contentId;
 	}
+	public SkinBO(String uncenteredSplashPath, Integer id, String name,String contentId) {
+		this.uncenteredSplashPath = uncenteredSplashPath;
+		this.id = id;
+		this.name = name;
+	}
+
+	public SkinBO(String uncenteredSplashPath, Integer id, String name) {
+		this.uncenteredSplashPath = uncenteredSplashPath;
+		this.id = id;
+		this.name = name;
+	}
 
 	public SkinBO(Integer id, String name) {
 		this.id = id;
@@ -30,5 +41,11 @@ public class SkinBO {
 	 * 皮肤增强
 	 */
 	private String contentId;
+	/**
+	 * 皮肤地址
+	 */
+	private String uncenteredSplashPath;
+
+
 
 }

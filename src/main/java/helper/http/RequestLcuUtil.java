@@ -3,9 +3,7 @@ package helper.http;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import helper.bo.LeagueClientBO;
-import helper.enums.WSSEventEnum;
 import helper.frame.utils.FrameTipUtil;
-import helper.services.wss.WSSEventTrigger;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
@@ -42,8 +40,8 @@ public class RequestLcuUtil {
 	}
 
 	public void wss() {
-		for (WSSEventEnum eventEnum : WSSEventEnum.values()) {
-			Request request = new Request.Builder()
+
+		Request request = new Request.Builder()
 					.url("wss://" + this.gateway + ":" + bo.getPort())
 					.build();
 			client.newWebSocket(request, new WebSocketListener() {
@@ -60,7 +58,7 @@ public class RequestLcuUtil {
 				@Override
 				public void onFailure(@NotNull WebSocket webSocket, @NotNull Throwable t, @Nullable Response response) {
 					if(t instanceof EOFException){
-						FrameTipUtil.errorOccur("游戏已退出");
+						FrameTipUtil.errorMsg("游戏已退出");
 						System.exit(0);
 					}
 					log.error("发生错误,{},{}", t, response);
@@ -73,7 +71,6 @@ public class RequestLcuUtil {
 						JSONArray eventArr = com.alibaba.fastjson2.JSON.parseArray(text);
 						String data = eventArr.getJSONObject(2).getString("data");
 						log.info("收到：{}的String消息:{}", eventArr.get(1).toString(), data);
-						WSSEventTrigger.eventRun(eventEnum, data);
 					}
 				}
 
@@ -84,15 +81,10 @@ public class RequestLcuUtil {
 
 				@Override
 				public void onOpen(@NotNull WebSocket webSocket, @NotNull Response response) {
-					JSONArray jsonArray = new JSONArray();
-					jsonArray.add(5);
-					jsonArray.add(eventEnum.getUri());
-					String jsonString = jsonArray.toJSONString();
-					webSocket.send(jsonString);
-					log.info("打开链接:{}", eventEnum.getUri());
+
 				}
 			});
-		}
+
 	}
 
 	private void addRequestLog() {
@@ -103,7 +95,10 @@ public class RequestLcuUtil {
 			String body = JSONObject.toJSONString(original.body());
 			if (body != null && !"null".equals(body) && !"".equals(body)) {
 				log.info("{} - {} - {}", method, uri, body);
-			} else {
+			} else if (uri.contains("lol-gameflow/v1/gameflow-phase")) {
+
+			}
+			else {
 				log.info("{} - {}", method, uri);
 			}
 

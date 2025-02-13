@@ -10,7 +10,7 @@ import java.nio.channels.FileLock;
  * @author @_@
  */
 public class FrameProcessUtil {
-	final static String LOCK_FILE = "lol-helper.lock";
+	final static String LOCK_FILE = "resources/lol-helper.lock";
 	static RandomAccessFile raf = null;
 
 	/**

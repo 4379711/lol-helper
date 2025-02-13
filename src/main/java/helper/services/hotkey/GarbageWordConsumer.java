@@ -12,6 +12,11 @@ public class GarbageWordConsumer implements HotKeyConsumer {
 	private static int nextLineNo = 0;
 
 	@Override
+	public String getHotKeyName() {
+		return "问候队友";
+	}
+
+	@Override
 	public Consumer<Integer> build() {
 		return i -> {
 			if (AppCache.settingPersistence.getCommunicate()) {

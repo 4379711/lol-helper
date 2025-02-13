@@ -6,8 +6,9 @@ import com.alibaba.fastjson2.JSON;
 import helper.bo.BlackListBO;
 import helper.cache.FrameInnerCache;
 import helper.cache.FrameSetting;
-import helper.frame.constant.GameConstant;
+import helper.constant.GameConstant;
 import helper.frame.panel.base.BaseButton;
+import helper.frame.utils.FrameTipUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
@@ -48,13 +49,29 @@ public class BlackListHistoryButton extends BaseButton {
                 BlackListMatchPanel blackListMatchPanel = new BlackListMatchPanel(true);
                 jFrame.add(blackListMatchPanel);
                 jFrame.setVisible(true);
-                List<String> blacklistFiles = FileUtil.listFileNames(file.getAbsolutePath());
-                List<String> page = ListUtil.page(0, FrameSetting.PAGE_SIZE - 1, blacklistFiles);
+                List<String> blacklistFiles = ListUtil.reverse(FileUtil.listFileNames(file.getAbsolutePath()));
+                List<String> page = ListUtil.page(0, FrameSetting.PAGE_SIZE, blacklistFiles);
                 List<BlackListBO> blackLists = new ArrayList<BlackListBO>();
+                List<String> errorList = new ArrayList<>();
                 for (String s : page) {
-                    String jsonString = FileUtil.readUtf8String(new File(GameConstant.BLACK_LIST_FILE + s));
+                    File blacklistFile = new File(GameConstant.BLACK_LIST_FILE + s);
+                    String jsonString = FileUtil.readUtf8String(blacklistFile);
                     BlackListBO blackListBO = JSON.parseObject(jsonString, BlackListBO.class);
-                    blackLists.add(blackListBO);
+                    if (blackListBO != null) {
+                        blackLists.add(blackListBO);
+                    } else {
+                        errorList.add(blacklistFile.getAbsolutePath());
+                    }
+                }
+                if (!errorList.isEmpty()) {
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("含有非战绩文件请删除：\n");
+                    for (String s : errorList) {
+                        sb.append(s);
+                        sb.append("\n");
+                    }
+                    FrameTipUtil.errorMsg(sb.toString());
+                    FrameInnerCache.blackListFrame.setVisible(false);
                 }
                 blackListMatchPanel.resetIndex();
                 blackListMatchPanel.setData(blackLists);

@@ -3,7 +3,7 @@ package helper.http;
 import com.alibaba.fastjson2.JSONObject;
 import helper.cache.AppCache;
 import helper.exception.NoLcuApiException;
-import helper.frame.constant.GameConstant;
+import helper.constant.GameConstant;
 import helper.services.sgp.RegionSgpApi;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -59,7 +59,7 @@ public class RequestSgpUtil {
 		}).build();
 	}
 
-	public void buildSgpHeaders(String token) {
+	private void buildSgpHeaders(String token) {
 		defaultHeaders = new HashMap<>(1);
 		defaultHeaders.put("Authorization", "Bearer " + token);
 		client = HttpClient.newInstance().newBuilder().addInterceptor(chain -> {
@@ -76,7 +76,11 @@ public class RequestSgpUtil {
 			if (response.code() == 200) {
 				return body.string();
 			} else if (response.code() == 401) {
-				log.error("401");
+				String sgpAccessToken = AppCache.api.getSgpAccessToken();
+				buildSgpHeaders(sgpAccessToken);
+				String twiceCall = this.callString(request);
+				buildNewToken(sgpAccessToken);
+				return twiceCall;
 			}
 			return "";
 		}
@@ -87,7 +91,11 @@ public class RequestSgpUtil {
 			if (response.code() == 200) {
 				return body.bytes();
 			} else if (response.code() == 401) {
-				log.error("401");
+				String sgpAccessToken = AppCache.api.getSgpAccessToken();
+				buildSgpHeaders(sgpAccessToken);
+				byte[] twiceCall = callStream(request);
+				buildNewToken(sgpAccessToken);
+				return twiceCall;
 			}
 			return null;
 		}

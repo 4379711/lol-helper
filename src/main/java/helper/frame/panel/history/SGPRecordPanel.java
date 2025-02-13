@@ -6,12 +6,12 @@ import helper.cache.AppCache;
 import helper.cache.FrameInnerCache;
 import helper.cache.FrameSetting;
 import helper.cache.GameDataCache;
+import helper.constant.ColorConstant;
+import helper.constant.GameConstant;
 import helper.enums.ImageEnum;
 import helper.enums.RegionEnum;
 import helper.exception.NoSummonerException;
 import helper.frame.bo.ItemBO;
-import helper.frame.constant.ColorConstant;
-import helper.frame.constant.GameConstant;
 import helper.frame.panel.base.SearchTextField;
 import helper.frame.utils.FrameTipUtil;
 import helper.frame.utils.MatchHistoryUtil;
@@ -212,10 +212,10 @@ public class SGPRecordPanel extends JPanel {
                         mePlayer.setSummonerLevel(sgpSummonerInfoBo.getLevel());
                         setData(data, summonerAlias.getPuuid(), mePlayer);
                     } else {
-                        FrameTipUtil.errorOccur("未找到" + selectedItem.getDisplayValue() + "的" + text);
+                        FrameTipUtil.errorMsg("未找到" + selectedItem.getDisplayValue() + "的" + text);
                     }
                 } catch (Exception ex) {
-                    FrameTipUtil.errorOccur("查询召唤师" + text + "错误");
+                    FrameTipUtil.errorMsg("查询召唤师" + text + "错误");
                 }
             }
         });
@@ -343,7 +343,7 @@ public class SGPRecordPanel extends JPanel {
         } else {
             mainPanel.revalidate();
             mainPanel.repaint();
-            FrameTipUtil.errorOccur("未查询到数据");
+            FrameTipUtil.errorMsg("未查询到数据");
         }
     }
 

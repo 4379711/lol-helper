@@ -1,10 +1,7 @@
 package helper.frame.panel.client;
 
-import helper.bo.ChampionBO;
-import helper.cache.AppCache;
-import helper.cache.GameDataCache;
+import helper.cache.FrameInnerCache;
 import helper.frame.panel.base.BaseButton;
-import helper.frame.utils.FrameConfigUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.awt.event.ActionListener;
@@ -22,15 +19,13 @@ public class CareerBackgroundBox extends BaseButton {
 
 	private ActionListener actionListener() {
 		return e -> {
-			ChampionSelectFrame selectFrame = new ChampionSelectFrame("选择生涯背景英雄", (name) -> {
-				if (!GameDataCache.allChampion.isEmpty()) {
-					ChampionBO championBO = GameDataCache.allChampion.stream().filter(i -> name.equals(i.getName())).findFirst().get();
-					AppCache.settingPersistence.setCareerChampionId(championBO.getId());
-					FrameConfigUtil.save();
-				}
-
-			});
-			selectFrame.setVisible(true);
+			if (FrameInnerCache.careerBackSkinFrame != null) {
+				FrameInnerCache.careerBackSkinFrame.setVisible(true);
+			} else {
+				CareerBackSkinFrame skinFrame = new CareerBackSkinFrame("生涯背景英雄");
+				FrameInnerCache.careerBackSkinFrame = skinFrame;
+				skinFrame.setVisible(true);
+			}
 		};
 	}
 

@@ -10,10 +10,15 @@ import java.util.function.Consumer;
  */
 public class MarkWordDeleteConsumer implements HotKeyConsumer {
 	@Override
+	public String getHotKeyName() {
+		return "屏蔽词调试";
+	}
+
+	@Override
 	public Consumer<Integer> build() {
 		return i -> {
 			String lastCommunicateWord = AppCache.lastGarbageWord;
-			if (lastCommunicateWord != null && !"".equals(lastCommunicateWord)) {
+			if (lastCommunicateWord != null && !lastCommunicateWord.isEmpty()) {
 				FrameMsgUtil.sendLine("[屏蔽]:" + lastCommunicateWord);
 			}
 		};

@@ -1,4 +1,7 @@
-package helper.frame.constant;
+package helper.constant;
+
+import helper.frame.bo.ItemBO;
+import helper.frame.panel.base.BaseComboBox;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,6 +42,31 @@ public class GameConstant {
 			put("CHALLENGER", "最强王者");
 		}
 	};
+
+	public static BaseComboBox<ItemBO> CREATE_ROLE_SELECT() {
+		BaseComboBox<ItemBO> item = new BaseComboBox<ItemBO>();
+		item.addItem(new ItemBO("all", "全部定位"));
+		item.addItem(new ItemBO("fighter", "战士"));
+		item.addItem(new ItemBO("mage", "法师"));
+		item.addItem(new ItemBO("assassin", "刺客"));
+		item.addItem(new ItemBO("tank", "坦克"));
+		item.addItem(new ItemBO("marksman", "射手"));
+		item.addItem(new ItemBO("support", "辅助"));
+		return item;
+	}
+
+
+	public static BaseComboBox<ItemBO> CREATE_POSITION_SELECT() {
+		BaseComboBox<ItemBO> item = new BaseComboBox<ItemBO>();
+		item.addItem(new ItemBO("all", "全部位置"));
+		item.addItem(new ItemBO("top", "上单"));
+		item.addItem(new ItemBO("jungle", "打野"));
+		item.addItem(new ItemBO("mid", "中单"));
+		item.addItem(new ItemBO("bottom", "下路"));
+		item.addItem(new ItemBO("support", "辅助"));
+		return item;
+	}
+
 	public final static List<String> REGION = new ArrayList<String>() {
 		{
 			add("tj100");
@@ -51,5 +79,5 @@ public class GameConstant {
 			add("bgp2");
 		}
 	};
-	public final static String BLACK_LIST_FILE = "blacklist/game/";
+	public final static String BLACK_LIST_FILE = "resources/blacklist/game/";
 }

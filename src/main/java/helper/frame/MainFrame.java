@@ -3,11 +3,9 @@ package helper.frame;
 import helper.cache.AppCache;
 import helper.cache.FrameSetting;
 import helper.frame.panel.TabPane;
-import helper.frame.utils.FrameConfigUtil;
-import helper.frame.utils.FrameMsgUtil;
-import helper.frame.utils.FrameProcessUtil;
-import helper.frame.utils.FrameTipUtil;
+import helper.frame.utils.*;
 import helper.services.word.GarbageWord;
+import helper.utils.ConfigUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
@@ -30,11 +28,11 @@ public class MainFrame extends JFrame {
 
 	public MainFrame() throws HeadlessException {
 		super();
-		this.setTitle("lol-helper");
+		this.setTitle("lol-helper - V" + ConfigUtil.getVersion());
 		Image image = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/assets/logo.png"));
 		this.setIconImage(image);
 		//退出直接关闭程序
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		//固定大小
 //		this.setResizable(false);
 		this.setSize(FrameSetting.WIDTH, FrameSetting.HEIGHT);
@@ -58,6 +56,7 @@ public class MainFrame extends JFrame {
 
 			@Override
 			public void windowClosing(WindowEvent e) {
+				hideToTray();
 			}
 
 			@Override
@@ -67,7 +66,7 @@ public class MainFrame extends JFrame {
 
 			@Override
 			public void windowIconified(WindowEvent e) {
-				hideToTray();
+
 			}
 
 			@Override
@@ -85,14 +84,14 @@ public class MainFrame extends JFrame {
 			}
 		};
 	}
-
 	public static void start() {
 		boolean checked = FrameProcessUtil.checkFileLock();
 		if (checked) {
-			FrameTipUtil.errorOccur("无法启动多个进程");
+			FrameTipUtil.errorMsg("无法启动多个进程 请检查右下角托盘");
 			System.exit(0);
 		}
 		FrameConfigUtil.load();
+		BlackListUtil.init();
 		frame = new MainFrame();
 		TabPane tabPane = TabPane.builder();
 		frame.add(tabPane);

@@ -1,5 +1,7 @@
 package helper.frame.panel.base;
 
+import helper.frame.listener.MouseCursorListener;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -17,6 +19,7 @@ public class BaseComboBox<E> extends JComboBox<E> {
 		this.setMaximumSize(dimension);
 		this.setPreferredSize(dimension);
 		this.setMaximumRowCount(15);
+		addMouseListener(new MouseCursorListener());
 	}
 
 }

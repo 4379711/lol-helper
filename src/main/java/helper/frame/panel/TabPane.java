@@ -4,8 +4,8 @@ import helper.frame.panel.about.AboutPanel;
 import helper.frame.panel.client.ClientPanel;
 import helper.frame.panel.fuckword.FuckPanel;
 import helper.frame.panel.history.HistoryPane;
+import helper.frame.panel.keymapping.ScrollableJPanel;
 import helper.frame.panel.result.ResultPanel;
-import helper.frame.ui.MyTabbedPaneUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,13 +25,13 @@ public class TabPane extends JTabbedPane {
 
 	public TabPane() {
 		super(JTabbedPane.LEFT);
-		this.setUI(new MyTabbedPaneUI());
 	}
 
 	public static TabPane builder() {
 		TabPane tabPane = new TabPane();
 		tabPane.add(ClientPanel.builder());
 		tabPane.add(HistoryPane.builder());
+		tabPane.add(ScrollableJPanel.build());
 		tabPane.add(FuckPanel.builder());
 		tabPane.add(ResultPanel.builder());
 		tabPane.add(AboutPanel.builder());

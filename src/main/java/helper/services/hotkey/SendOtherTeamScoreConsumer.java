@@ -13,6 +13,11 @@ import java.util.function.Consumer;
 public class SendOtherTeamScoreConsumer implements HotKeyConsumer {
 
 	@Override
+	public String getHotKeyName() {
+		return "发送对手评分到队友";
+	}
+
+	@Override
 	public Consumer<Integer> build() {
 		return i -> {
 			if (AppCache.settingPersistence.getSendScore()) {

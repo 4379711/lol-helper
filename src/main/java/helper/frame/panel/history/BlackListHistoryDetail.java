@@ -10,10 +10,10 @@ import helper.cache.AppCache;
 import helper.cache.FrameInnerCache;
 import helper.cache.FrameSetting;
 import helper.cache.GameDataCache;
+import helper.constant.ColorConstant;
 import helper.enums.ImageEnum;
 import helper.frame.bo.ScoreLevelBO;
-import helper.frame.constant.ColorConstant;
-import helper.frame.constant.GameConstant;
+import helper.constant.GameConstant;
 import helper.frame.utils.FrameConfigUtil;
 import helper.frame.utils.FrameTipUtil;
 import helper.frame.utils.MatchHistoryUtil;
@@ -760,7 +760,7 @@ class BlackListNameLabelListener extends MouseAdapter {
                 FrameConfigUtil.save();
                 FileUtil.writeUtf8String(jsonString, file);
             } else {
-                FrameTipUtil.errorOccur("您不在对局中");
+                FrameTipUtil.errorMsg("您不在对局中");
             }
         }
     }
@@ -791,7 +791,7 @@ class BlackListNameLabelListener extends MouseAdapter {
         }
         if (blackLists.isEmpty()) {
             FrameInnerCache.blackListMatchPanel.removeAll();
-            FrameTipUtil.errorOccur("人员全部刑满释放 请到战绩查询羁押新犯人");
+            FrameTipUtil.errorMsg("人员全部刑满释放 请到战绩查询羁押新犯人");
         } else {
             FrameInnerCache.blackListMatchPanel.setData(blackLists);
             FrameInnerCache.blackListMatchPanel.resetIndex();

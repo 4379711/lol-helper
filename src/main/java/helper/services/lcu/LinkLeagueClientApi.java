@@ -31,7 +31,7 @@ public class LinkLeagueClientApi {
 	public String status = null;
 
 	private final RequestLcuUtil requestLcuUtil;
-
+	private static String defaultPath = "resources/";
 	public LinkLeagueClientApi(RequestLcuUtil requestLcuUtil) {
 		this.requestLcuUtil = requestLcuUtil;
 		//缓存本实例
@@ -95,15 +95,11 @@ public class LinkLeagueClientApi {
 
 	/**
 	 * 生涯设置背景皮肤
+	 * faker的签名皮肤需要调用两次
 	 *
 	 * @param body 皮肤数据
 	 */
 	public void setBackgroundSkin(String body) throws IOException {
-//		JSONObject body = new JSONObject(2);
-//		body.put("key", "backgroundSkinId");
-//		body.put("value", skinId)
-// 		增强皮肤(带签名),参数用这个,分两次调用
-//		body.put("key", "backgroundSkinAugments");
 		requestLcuUtil.doPost("/lol-summoner/v1/current-summoner/summoner-profile", body);
 	}
 
@@ -176,7 +172,8 @@ public class LinkLeagueClientApi {
 			JSONObject jsonObject = skins.getJSONObject(i);
 			Integer id = jsonObject.getInteger("id");
 			String name = jsonObject.getString("name");
-			arrayList.add(new SkinBO(id, name));
+			String uncenteredSplashPath = jsonObject.getString("uncenteredSplashPath");
+			arrayList.add(new SkinBO(uncenteredSplashPath, id, name));
 			//有签名的皮肤
 			JSONObject questSkinInfo = jsonObject.getJSONObject("questSkinInfo");
 			if (questSkinInfo != null) {
@@ -186,6 +183,7 @@ public class LinkLeagueClientApi {
 						JSONObject jsonObject_ = tiers.getJSONObject(k);
 						Integer id_ = jsonObject_.getInteger("id");
 						String name_ = jsonObject_.getString("name");
+						String uncenteredSplashPath_ = jsonObject_.getString("uncenteredSplashPath");
 						//加强版皮肤
 						JSONObject skinAugments = jsonObject_.getJSONObject("skinAugments");
 						if (skinAugments != null) {
@@ -193,7 +191,7 @@ public class LinkLeagueClientApi {
 							if (augments != null) {
 								for (int l = 0; l < augments.size(); l++) {
 									String contentId = augments.getJSONObject(l).getString("contentId");
-									arrayList.add(new SkinBO(id_, name_, contentId));
+									arrayList.add(new SkinBO(uncenteredSplashPath_, id_, name_, contentId));
 								}
 							}
 						} else {
@@ -225,6 +223,10 @@ public class LinkLeagueClientApi {
 		});
 	}
 
+	/**
+	 * 获取腾讯的英雄列表包含英雄别称用于搜索
+	 */
+
 	public List<TencentChampion> getChampionNameList() throws IOException {
 		Request request = new Request.Builder()
 				.url("http://game.gtimg.cn/images/lol/act/img/js/heroList/hero_list.js")
@@ -233,6 +235,29 @@ public class LinkLeagueClientApi {
 		String json = UnicodeUtil.toString(requestLcuUtil.callString(request));
 		JSONObject jsonObject = JSONObject.parseObject(json);
 		return jsonObject.getJSONArray("hero").toJavaList(TencentChampion.class);
+	}
+
+	/**
+	 * 提取英雄定位信息
+	 */
+	public Map<String, Map<String, String>> getChampionPositionList() throws IOException {
+		Request request = new Request.Builder()
+				.url("https://lol.qq.com/act/lbp/common/guides/guideschampion_position.js")
+				.get()
+				.build();
+		String rawData = requestLcuUtil.callString(request);
+		// 提取JSON部分（从第一个'{'到最后一个'}'）
+		int startIndex = rawData.indexOf('{');
+		int endIndex = rawData.lastIndexOf('}') + 1;
+		String jsonData = rawData.substring(startIndex, endIndex);
+		JSONObject jsonObject = JSONObject.parseObject(jsonData).getJSONObject("list");
+		// 将 list 转换为 Map<String, Map<String, String>>
+		Map<String, Map<String, String>> listMap = JSON.parseObject(
+				jsonObject.toJSONString(),
+				new TypeReference<Map<String, Map<String, String>>>() {
+				}
+		);
+		return listMap;
 	}
 	/**
 	 * 更改游戏状态
@@ -261,9 +286,9 @@ public class LinkLeagueClientApi {
 	/**
 	 * ban pick
 	 */
-	public String banPick(String type, int actionId, int championId) throws IOException {
+	public String banPick(String type, int actionId, int championId, boolean completed) throws IOException {
 		JSONObject body = new JSONObject(3);
-		body.put("completed", true);
+		body.put("completed", completed);
 		body.put("type", type);
 		body.put("championId", championId);
 		return requestLcuUtil.doPatch("/lol-champ-select/v1/session/actions/" + actionId, body.toJSONString());
@@ -440,11 +465,11 @@ public class LinkLeagueClientApi {
 		String endpoint = "/lol-game-data/assets/v1/champion-icons/" + championId + ".png ";
 		String url;
 		url = endpoint.substring(1);
-		boolean exist = FileUtil.exist(new File(url));
+		boolean exist = FileUtil.exist(new File(defaultPath + url));
 		if (exist) {
-			return ImageIO.read(FileUtil.getInputStream(new File(url)));
+			return ImageIO.read(FileUtil.getInputStream(new File(defaultPath + url)));
 		} else {
-			File file = FileUtil.writeBytes(requestLcuUtil.download(endpoint), new File(url));
+			File file = FileUtil.writeBytes(requestLcuUtil.download(endpoint), new File(defaultPath + url));
 			return ImageIO.read(FileUtil.getInputStream(file));
 		}
 	}
@@ -465,18 +490,18 @@ public class LinkLeagueClientApi {
 	 *
 	 * @param iconsPath 图标或图像地址
 	 */
-	public Image geImageByPath(String iconsPath) throws IOException {
+	public Image getImageByPath(String iconsPath) throws IOException {
 		String url;
 		if (iconsPath.charAt(0) == '/') {
 			url = iconsPath.substring(1);
 		} else {
 			url = iconsPath.replace("/", "\\");
 		}
-		boolean exist = FileUtil.exist(new File(url));
+		boolean exist = FileUtil.exist(new File(defaultPath + url));
 		if (exist) {
-			return ImageIO.read(new FileInputStream(url));
+			return ImageIO.read(new FileInputStream(defaultPath + url));
 		} else {
-			File file = FileUtil.writeBytes(requestLcuUtil.download(iconsPath), new File(url));
+			File file = FileUtil.writeBytes(requestLcuUtil.download(iconsPath), new File(defaultPath + url));
 			return ImageIO.read(FileUtil.getInputStream(file));
 		}
 
@@ -522,11 +547,11 @@ public class LinkLeagueClientApi {
 		String endpoint = "/lol-game-data/assets/v1/profile-icons/" + profileIconId + ".jpg ";
 		String url;
 		url = endpoint.substring(1);
-		boolean exist = FileUtil.exist(new File(url));
+		boolean exist = FileUtil.exist(new File(defaultPath + url));
 		if (exist) {
-			return ImageIO.read(FileUtil.getInputStream(new File(url)));
+			return ImageIO.read(FileUtil.getInputStream(new File(defaultPath + url)));
 		} else {
-			File file = FileUtil.writeBytes(requestLcuUtil.download(endpoint), new File(url));
+			File file = FileUtil.writeBytes(requestLcuUtil.download(endpoint), new File(defaultPath + url));
 			return ImageIO.read(FileUtil.getInputStream(file));
 		}
 	}
@@ -582,8 +607,37 @@ public class LinkLeagueClientApi {
 		return requestLcuUtil.doGet(endpoint);
 	}
 
-	public String openWss() throws IOException {
-		requestLcuUtil.wss();
-		return null;
+	/**
+	 * 获取消息房间id
+	 */
+	public String getMessage() throws IOException {
+		String endpoint = "/lol-chat/v1/conversations";
+		return requestLcuUtil.doGet(endpoint);
 	}
+
+	/**
+	 * 发送消息
+	 */
+	public String sendMessage(String id, String message) throws IOException {
+		String endpoint = "/lol-chat/v1/conversations/" + id + "/messages";
+		JSONObject body = new JSONObject(8);
+		body.put("body", message);
+		body.put("fromId", "");
+		body.put("fromPid", "");
+		body.put("fromSummonerId", 0);
+		body.put("id", id);
+		body.put("isHistorical", false);
+		body.put("timestamp", "");
+		body.put("type", "celebration");
+		return requestLcuUtil.doPost(endpoint, body.toJSONString());
+	}
+
+	/**
+	 * 乱斗选择交换席位上的英雄
+	 */
+	public String sendBenchSwap(Integer championId) throws IOException {
+		String endpoint = "/lol-champ-select/v1/session/bench/swap/" + championId;
+		return requestLcuUtil.doPost(endpoint,"");
+	}
+
 }

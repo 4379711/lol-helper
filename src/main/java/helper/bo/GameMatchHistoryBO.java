@@ -1,7 +1,7 @@
 package helper.bo;
 
 import helper.enums.GameQueueEnum;
-import helper.frame.constant.GameConstant;
+import helper.constant.GameConstant;
 import lombok.Data;
 
 import java.util.Date;

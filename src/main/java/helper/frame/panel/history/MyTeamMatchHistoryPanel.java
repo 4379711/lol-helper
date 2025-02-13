@@ -8,9 +8,9 @@ import helper.bo.TeamSummonerBO;
 import helper.cache.AppCache;
 import helper.cache.FrameInnerCache;
 import helper.cache.GameDataCache;
+import helper.constant.ColorConstant;
 import helper.enums.ImageEnum;
 import helper.frame.bo.ChampionWin;
-import helper.frame.constant.ColorConstant;
 import helper.frame.panel.base.HorizontalDivider;
 import helper.frame.panel.client.PickSkinBox;
 import helper.frame.utils.MatchHistoryUtil;
@@ -21,7 +21,6 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,13 +29,14 @@ import java.util.Map;
 /**
  * @author WuYi
  */
-public class MyTeamMatchHistoryPanel extends JWindow implements MouseListener, MouseMotionListener {
+public class MyTeamMatchHistoryPanel extends JFrame implements MouseListener, MouseMotionListener {
 	private Point dragOffset; // 拖拽偏移量
 
 	public MyTeamMatchHistoryPanel() {
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
 		this.setAlwaysOnTop(true);
+		this.setUndecorated(true);
 		this.getContentPane().setBackground(ColorConstant.DARK_THREE);
 		WinDef.RECT lolWindows = Win32Util.findWindowsLocation(null, "League of Legends");
 
@@ -71,9 +71,6 @@ public class MyTeamMatchHistoryPanel extends JWindow implements MouseListener, M
 		int y = lolWindows.top;
 		Point p = new Point(x, y);
 		this.setLocation(p);
-		// 创建一个圆角矩形形状
-		Shape roundRect = new RoundRectangle2D.Double(0, 0, this.getWidth(), this.getHeight(), 15, 15);
-		this.setShape(roundRect);
 		this.setVisible(true);
 
 	}

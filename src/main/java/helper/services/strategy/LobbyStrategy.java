@@ -5,6 +5,7 @@ import helper.cache.FrameInnerCache;
 import helper.cache.GameDataCache;
 import helper.services.lcu.LinkLeagueClientApi;
 import helper.services.sgp.RegionSgpApi;
+import helper.utils.StrategyUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -44,26 +45,19 @@ public class LobbyStrategy implements GameStatusStrategy {
         }
     }
 
-    /**
-     * 重置战绩和评分
-     */
-    private void resetHistory() {
-        if (!GameDataCache.myTeamMatchHistory.isEmpty() || !GameDataCache.enemyTeamMatchHistory.isEmpty() || !GameDataCache.myTeamScore.isEmpty() || !GameDataCache.enemyTeamScore.isEmpty()) {
-            GameDataCache.reset();
-        }
-    }
-
-    private void hidePanel(){
-        if (FrameInnerCache.myTeamMatchHistoryPanel != null && FrameInnerCache.myTeamMatchHistoryPanel.isVisible()) {
-            FrameInnerCache.myTeamMatchHistoryPanel.setVisible(false);
-        }
-    }
-
     @Override
     public void doThis() {
         autoSearch();
         getQueue();
-        resetHistory();
-        hidePanel();
+        GameDataCache.championFlag = false;
+        GameDataCache.endOfGameFlag = false;
+        if (FrameInnerCache.blackListAddFrame != null) {
+            if (FrameInnerCache.blackListAddFrame.isVisible()) {
+                FrameInnerCache.blackListAddFrame.setVisible(false);
+            }
+        }
+        StrategyUtil.resetHistory();
+        StrategyUtil.resetRoomMessageId();
+        StrategyUtil.hidePanel();
     }
 }

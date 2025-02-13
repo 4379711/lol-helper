@@ -11,6 +11,11 @@ import java.util.function.Consumer;
  */
 public class CaiHongPiConsumer implements HotKeyConsumer {
 	@Override
+	public String getHotKeyName() {
+		return "彩虹屁";
+	}
+
+	@Override
 	public Consumer<Integer> build() {
 		return i -> {
 			if (AppCache.settingPersistence.getCommunicate()) {

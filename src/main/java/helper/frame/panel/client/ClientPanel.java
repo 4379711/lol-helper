@@ -21,20 +21,19 @@ public class ClientPanel extends BasePanel {
 		list.add(new RankSecondBox());
 		list.add(new RankThirdBox());
 
-		list.add(new AutoAcceptCheckBox());
-		list.add(new AutoSearchCheckBox());
-		list.add(new AutoPlayAgainCheckBox());
-
-		list.add(new AutoReconnectCheckBox());
-		list.add(new CommunicateCheckBox());
-		list.add(new PickSkinCheckBox());
-
 		list.add(new GameStatusBox());
 		list.add(new BanBox());
 		list.add(new PickBox());
 
+		list.add(new AutoPlayAgainCheckBox());
+		list.add(new AutoAcceptCheckBox());
+		list.add(new AutoSearchCheckBox());
+
+		list.add(new PickSkinCheckBox());
+		list.add(new AutoReconnectCheckBox());
+		list.add(new CommunicateCheckBox());
+
 		list.add(new CareerBackgroundBox());
-		list.add(new CareerBackgroundSkinBox());
 
 		return list;
 	}
@@ -57,7 +56,7 @@ public class ClientPanel extends BasePanel {
 					//居中,组件小的话就两边铺满窗格
 					GridBagConstraints.CENTER, GridBagConstraints.NONE,
 					// 窗格之间的距离
-					new Insets(0, 0, 0, 0),
+					new Insets(0, 30, 0, 30),
 					// 增加组件的首选宽度和高度
 					0, 0
 			);

@@ -1,5 +1,6 @@
 package helper;
 
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import helper.cache.GameDataCache;
 import helper.exception.NoProcessException;
 import helper.frame.MainFrame;
@@ -16,17 +17,18 @@ import java.net.ConnectException;
 public class LeagueClientHelper {
 
 	public static void main(String[] args) {
+		FlatMacDarkLaf.setup();
+		HotKeyService.start();
 		MainFrame.start();
-		String msg = "";
+		while (true) {
+			String msg = "";
 			try {
 				ClientStarter clientStarter = new ClientStarter();
 				clientStarter.initLcu();
 				clientStarter.initSgp();
 				GameDataCache.cacheLcuAll();
-				clientStarter.startWSS();
-				clientStarter.initGameStatus();
 				MainFrame.showFrame();
-				HotKeyService.start();
+				clientStarter.listenGameStatus();
 			} catch (NoProcessException e) {
 				msg = "请先启动游戏";
 			} catch (ConnectException e) {
@@ -34,9 +36,13 @@ public class LeagueClientHelper {
 			} catch (Exception e) {
 				msg = e.getMessage();
 			}
-		if (!msg.isEmpty()) {
-			MainFrame.hiddenFrame();
-			FrameTipUtil.errorOccur(msg);
+			if (!msg.isEmpty()) {
+				MainFrame.hiddenFrame();
+				int running = FrameTipUtil.retryMsg(msg);
+				if (running != 0) {
+					System.exit(0);
+				}
+			}
 		}
 	}
 

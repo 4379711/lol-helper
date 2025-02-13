@@ -4,10 +4,10 @@ import cn.hutool.core.util.NumberUtil;
 import helper.bo.*;
 import helper.cache.AppCache;
 import helper.cache.GameDataCache;
+import helper.constant.GameConstant;
 import helper.enums.GameQueueEnum;
 import helper.enums.ImageEnum;
 import helper.frame.bo.ScoreLevelBO;
-import helper.frame.constant.GameConstant;
 import helper.services.sgp.RegionSgpApi;
 import helper.utils.ImageUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +36,7 @@ public class MatchHistoryUtil {
 		if (id != 0) {
 			try {
 				String iconPath = GameDataCache.itemList.stream().filter(item -> item.getId().equals(id)).findFirst().get().getIconPath();
-				return new ImageIcon(AppCache.api.geImageByPath(iconPath).getScaledInstance(itemIconWidth, itemIconHeight, Image.SCALE_DEFAULT));
+				return new ImageIcon(AppCache.api.getImageByPath(iconPath).getScaledInstance(itemIconWidth, itemIconHeight, Image.SCALE_DEFAULT));
 			} catch (IOException e) {
 				log.error("未检测到图像");
 				new ImageIcon(new BufferedImage(itemIconWidth, itemIconHeight, BufferedImage.TYPE_INT_ARGB));
@@ -55,7 +55,7 @@ public class MatchHistoryUtil {
 		if (id != 0) {
 			try {
 				String iconPath = GameDataCache.perkList.stream().filter(perk -> perk.getId().equals(id)).findFirst().get().getIconPath();
-				return new ImageIcon(AppCache.api.geImageByPath(iconPath).getScaledInstance(perkIconWidth, perkIconHeight, Image.SCALE_DEFAULT));
+				return new ImageIcon(AppCache.api.getImageByPath(iconPath).getScaledInstance(perkIconWidth, perkIconHeight, Image.SCALE_DEFAULT));
 			} catch (IOException e) {
 				log.error("未检测到图像");
 				new ImageIcon(new BufferedImage(perkIconWidth, perkIconHeight, BufferedImage.TYPE_INT_ARGB));
@@ -74,7 +74,7 @@ public class MatchHistoryUtil {
 		if (id != 0) {
 			try {
 				String iconPath = GameDataCache.perkStyleList.stream().filter(perk -> perk.getId().equals(id)).findFirst().get().getIconPath();
-				return new ImageIcon(AppCache.api.geImageByPath(iconPath).getScaledInstance(perkStyleIconWidth, perkStyleIconHeight, Image.SCALE_DEFAULT));
+				return new ImageIcon(AppCache.api.getImageByPath(iconPath).getScaledInstance(perkStyleIconWidth, perkStyleIconHeight, Image.SCALE_DEFAULT));
 			} catch (IOException e) {
 				log.error("未检测到图像");
 				new ImageIcon(new BufferedImage(perkStyleIconWidth, perkStyleIconHeight, BufferedImage.TYPE_INT_ARGB));
@@ -159,7 +159,7 @@ public class MatchHistoryUtil {
 		if (id != 0) {
 			try {
 				String iconPath = GameDataCache.summonerSpellsList.stream().filter(item -> item.getId().equals(id)).findFirst().get().getIconPath();
-				return new ImageIcon(AppCache.api.geImageByPath(iconPath).getScaledInstance(spellIconWidth, spellIconHeight, Image.SCALE_DEFAULT));
+				return new ImageIcon(AppCache.api.getImageByPath(iconPath).getScaledInstance(spellIconWidth, spellIconHeight, Image.SCALE_DEFAULT));
 			} catch (IOException e) {
 				log.error("未检测到图像");
 				new ImageIcon(new BufferedImage(spellIconWidth, spellIconHeight, BufferedImage.TYPE_INT_ARGB));
@@ -482,7 +482,7 @@ public class MatchHistoryUtil {
 		ArrayList<String> result = new ArrayList<>();
 		for (TeamSummonerBO bo : teamSummonerBO) {
 			//跳过自己
-			if (bo.getPuuid().equals(GameDataCache.me.getPuuid())) {
+			if (!AppCache.settingPersistence.getShowSelfScore() && bo.getPuuid().equals(GameDataCache.me.getPuuid())) {
 				continue;
 			}
 			StringBuilder prefix = new StringBuilder();
@@ -558,6 +558,28 @@ public class MatchHistoryUtil {
 		teamSummonerBO.setMatchHistory(productsMatchHistory);
 		teamSummonerBO.setRank(rank);
 		return teamSummonerBO;
+	}
+
+	/**
+	 * 转换为黑白照
+	 */
+	public static ImageIcon convertToGrayScale(ImageIcon colorIcon) {
+		// 获取原始彩色图像
+		Image colorImage = colorIcon.getImage();
+
+		// 创建灰度图像
+		BufferedImage grayImage = new BufferedImage(colorImage.getWidth(null),
+				colorImage.getHeight(null), BufferedImage.TYPE_BYTE_GRAY);
+
+		// 获取图形上下文
+		Graphics g = grayImage.getGraphics();
+
+		// 绘制原始彩色图像为灰度图像
+		g.drawImage(colorImage, 0, 0, null);
+		g.dispose();
+
+		// 返回灰度图像的 ImageIcon
+		return new ImageIcon(grayImage);
 	}
 
 }

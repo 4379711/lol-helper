@@ -1,5 +1,7 @@
 package helper.frame.panel.base;
 
+import helper.frame.listener.MouseCursorListener;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -18,6 +20,7 @@ public class BaseCheckBox extends JCheckBox {
 		this.setMinimumSize(dimension);
 		this.setMaximumSize(dimension);
 		this.setPreferredSize(dimension);
+		addMouseListener(new MouseCursorListener());
 	}
 
 }

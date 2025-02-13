@@ -3,7 +3,6 @@ package helper.services.strategy;
 import helper.bo.TeamPuuidBO;
 import helper.bo.TeamSummonerBO;
 import helper.cache.AppCache;
-import helper.cache.FrameInnerCache;
 import helper.cache.GameDataCache;
 import helper.frame.utils.MatchHistoryUtil;
 import helper.services.lcu.LinkLeagueClientApi;
@@ -42,16 +41,10 @@ public class InProgressStrategy implements GameStatusStrategy {
 		return puuidList;
 	}
 
-	private void hidePanel() {
-		if (FrameInnerCache.myTeamMatchHistoryPanel != null && FrameInnerCache.myTeamMatchHistoryPanel.isVisible()) {
-			FrameInnerCache.myTeamMatchHistoryPanel.setVisible(false);
-		}
-	}
-
-	private void getSendScore() {
+	private void getSendScore() throws IOException {
 		if (AppCache.settingPersistence.getSendScore() && (GameDataCache.enemyTeamScore.isEmpty() || GameDataCache.enemyTeamMatchHistory.isEmpty())) {
-			try {
-				List<String> enemyPuuids = getOtherPuuid();
+
+			List<String> enemyPuuids = getOtherPuuid();
 				if (!enemyPuuids.contains(null)) {
 					List<TeamSummonerBO> dataList = new ArrayList<>();
 					for (String enemyPuuid : enemyPuuids) {
@@ -61,15 +54,17 @@ public class InProgressStrategy implements GameStatusStrategy {
 					// 查询对方队员战绩,放到缓存区
 					GameDataCache.enemyTeamScore = MatchHistoryUtil.dealScoreMsg(GameDataCache.enemyTeamMatchHistory, false);
 				}
-			} catch (Exception e) {
-				log.error("查询战绩失败", e);
-			}
+
 		}
 	}
 
+
 	@Override
 	public void doThis() {
-		hidePanel();
-		getSendScore();
+		try {
+			getSendScore();
+		} catch (IOException e) {
+			log.error("获取发送评分错误:{}", e.getMessage());
+		}
 	}
 }

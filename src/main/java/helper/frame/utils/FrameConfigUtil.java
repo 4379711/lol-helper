@@ -11,7 +11,7 @@ import java.io.File;
  * @author @_@
  */
 public class FrameConfigUtil {
-	private static final String FRAME_CONFIG_FILE = "frameConfig.json";
+	private static final String FRAME_CONFIG_FILE = "resources/frameConfig.json";
 
 	public static void save() {
 		String jsonString = JSON.toJSONString(AppCache.settingPersistence);

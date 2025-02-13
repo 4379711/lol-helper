@@ -1,4 +1,4 @@
-package helper.frame.constant;
+package helper.constant;
 
 import java.awt.*;
 

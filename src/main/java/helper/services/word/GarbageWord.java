@@ -18,7 +18,7 @@ import java.util.ArrayList;
  */
 @Slf4j
 public class GarbageWord {
-	private static final String USER_FILE = "words.txt";
+	private static final String USER_FILE = "resources/words.txt";
 
 	public static void loadDefaultFile() {
 		//读取默认文件到指定路径

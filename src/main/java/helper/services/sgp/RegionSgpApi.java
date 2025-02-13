@@ -5,7 +5,7 @@ import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import helper.bo.*;
 import helper.cache.AppCache;
-import helper.frame.constant.GameConstant;
+import helper.constant.GameConstant;
 import helper.http.RequestSgpUtil;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.MediaType;
@@ -247,13 +247,5 @@ public class RegionSgpApi {
 			return null;
 		}
 		return json.getJSONObject("currentParty").getJSONObject("gameMode").getInteger("queueId");
-	}
-
-	/**
-	 * 设置sgp的token
-	 * @param sgpToken
-	 */
-	public void SetSgpToken(String sgpToken){
-		this.requestSpgUtil.buildSgpHeaders(sgpToken);
 	}
 }

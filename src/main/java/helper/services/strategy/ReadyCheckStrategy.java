@@ -1,7 +1,9 @@
 package helper.services.strategy;
 
 import helper.cache.AppCache;
+import helper.cache.GameDataCache;
 import helper.services.lcu.LinkLeagueClientApi;
+import helper.utils.StrategyUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -15,8 +17,7 @@ public class ReadyCheckStrategy implements GameStatusStrategy {
 		this.api = api;
 	}
 
-	@Override
-	public void doThis() {
+	private void autoAccept() {
 		if (AppCache.settingPersistence.getAutoAccept()) {
 			// 自动接受对局
 			try {
@@ -27,4 +28,15 @@ public class ReadyCheckStrategy implements GameStatusStrategy {
 			}
 		}
 	}
+
+	@Override
+	public void doThis() {
+		autoAccept();
+		GameDataCache.championFlag = false;
+		StrategyUtil.resetHistory();
+		StrategyUtil.resetRoomMessageId();
+		StrategyUtil.hidePanel();
+	}
+
+
 }

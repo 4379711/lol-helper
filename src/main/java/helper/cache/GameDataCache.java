@@ -66,10 +66,33 @@ public class GameDataCache {
 	public static List<TeamSummonerBO> enemyTeamMatchHistory = new ArrayList<>();
 
 	public static Map<Integer, GameQueue> selectGameQueueList = new LinkedHashMap<>();
-
+	/**
+	 * 所选模式ID
+	 */
 	public static Integer queueId = null;
 
 	public static LeagueClientBO leagueClient;
+	/**
+	 * 房间信息ID
+	 */
+	public static String roomMessageId = null;
+	/**
+	 * 随机英雄
+	 */
+	public static Map<String, ArrayList<Integer>> selectBanMap = null;
+	/**
+	 * 匹配秒选
+	 */
+	public static Map<String, ArrayList<Integer>> selectPickMap = null;
+	/**
+	 * 英雄选择初始标志
+	 */
+	public static Boolean championFlag = false;
+	/**
+	 * 结算界面初始标识
+	 */
+	public static Boolean endOfGameFlag = false;
+
 
 	public static void reset() {
 		resetScore();
@@ -103,8 +126,17 @@ public class GameDataCache {
 			try {
 				allChampion = AppCache.api.getAllChampion();
 				allChampionName = AppCache.api.getChampionNameList();
+				Map<String, Map<String, String>> championPositionList = AppCache.api.getChampionPositionList();
+				for (TencentChampion tencentChampion : allChampionName) {
+					Map<String, String> stringMap = championPositionList.get(tencentChampion.getHeroId().toString());
+					//翠神干的好事
+					if (stringMap == null) {
+						continue;
+					}
+					tencentChampion.setPosition(stringMap.keySet().stream().toList());
+				}
 			} catch (Exception e) {
-				log.error("获取所有英雄错误");
+				log.error("获取所有英雄错误",e);
 			}
 		}
 	}

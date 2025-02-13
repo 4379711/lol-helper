@@ -1,6 +1,6 @@
 package helper.frame.panel.base;
 
-import helper.frame.constant.ColorConstant;
+import helper.constant.ColorConstant;
 
 import java.awt.*;
 
@@ -19,7 +19,6 @@ public class HorizontalDivider extends Canvas {
 
 	@Override
 	public void paint(Graphics g) {
-		//g.setColor(Color.GRAY);
 		g.fillRect(0, getHeight() / 2 - 1, width, 1); // 分隔线宽度为2像素
 	}
 

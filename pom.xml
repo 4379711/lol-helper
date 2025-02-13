@@ -6,7 +6,7 @@
 
     <groupId>helper</groupId>
     <artifactId>lol-helper</artifactId>
-    <version>1.0</version>
+    <version>9.0.0-dev4</version>
 
     <properties>
         <java.version>17</java.version>
@@ -15,11 +15,13 @@
         <fastjson2.version>2.0.49</fastjson2.version>
         <lombok.version>1.18.32</lombok.version>
         <okhttp.version>4.12.0</okhttp.version>
-        <jna.version>5.13.0</jna.version>
+        <jna.version>5.16.0</jna.version>
         <jnativehook.version>2.1.0</jnativehook.version>
         <logback.version>1.5.6</logback.version>
         <hutool.version>5.8.27</hutool.version>
         <oshi.version>6.6.5</oshi.version>
+        <flatlaf.version>3.5.4</flatlaf.version>
+        <miglayout.version>11.4.2</miglayout.version>
         <!-- 在这里定义程序入口类 -->
         <mainClass>helper.LeagueClientHelper</mainClass>
     </properties>
@@ -81,9 +83,49 @@
             <scope>provided</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf</artifactId>
+            <version>${flatlaf.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf-intellij-themes</artifactId>
+            <version>${flatlaf.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.miglayout</groupId>
+            <artifactId>miglayout-swing</artifactId>
+            <version>${miglayout.version}</version>
+        </dependency>
+
+
     </dependencies>
     <build>
         <finalName>lol-helper</finalName>
+        <resources>
+            <!-- 默认资源目录：启用过滤 -->
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <!-- 指定需要过滤的文件（其他文件不处理） -->
+                <includes>
+                    <!-- 仅过滤 version.properties -->
+                    <include>**/version.properties</include>
+                </includes>
+            </resource>
+            <!-- 其他资源目录：禁用过滤 -->
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <!-- 排除已过滤的文件 -->
+                <excludes>
+                    <exclude>**/version.properties</exclude>
+                </excludes>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

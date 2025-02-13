@@ -15,11 +15,11 @@ public class HotKeyListener implements NativeKeyListener {
 
 	@Override
 	public void nativeKeyReleased(NativeKeyEvent e) {
-		HotKeyConsumer hotKeyConsumer = HotKeyFactory.getHotKeyConsumer(e.getKeyCode());
-		if (hotKeyConsumer != null) {
+		HotKeyConsumerMapping hotKeyConsumer = HotKeyFactory.getHotKeyConsumer(e.getKeyCode());
+		if (hotKeyConsumer != null && !HotKeyService.registerHook) {
 			//屏蔽按键
 			if (!AppCache.stopAuto || e.getKeyCode() == NativeKeyEvent.VC_PAUSE) {
-				hotKeyConsumer.build().accept(e.getKeyCode());
+				hotKeyConsumer.getHotKeyConsumer().build().accept(e.getKeyCode());
 			}
 		}
 	}

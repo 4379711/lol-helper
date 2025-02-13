@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.annotation.JSONField;
 import helper.bo.RankBO;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -58,10 +59,6 @@ public class FrameUserSetting {
 	 */
 	private Boolean showNotice = false;
 	/**
-	 * 房间内显示战绩筛选的模式
-	 */
-	private Integer selectMode;
-	/**
 	 * 黑名单玩家
 	 */
 	private Map<String, String> blacklistPlayers = new LinkedHashMap<>();
@@ -98,4 +95,59 @@ public class FrameUserSetting {
 	 * 评分分割数
 	 */
 	private double[] playerBetween = new double[]{7, 8, 10};
+	/**
+	 * 禁英雄
+	 */
+	private Map<String, ArrayList<Integer>> banMap = new LinkedHashMap<>() {{
+		put("default", new ArrayList<Integer>());
+		put("top", new ArrayList<Integer>());
+		put("jungle", new ArrayList<Integer>());
+		put("middle", new ArrayList<Integer>());
+		put("bottom", new ArrayList<Integer>());
+		put("utility", new ArrayList<Integer>());
+	}};
+	/**
+	 * 是否忽略队友预选
+	 */
+	private Boolean banTeammateFlag = false;
+	/**
+	 * 选英雄
+	 */
+	private Map<String, ArrayList<Integer>> pickMap = new LinkedHashMap<>() {{
+		put("default", new ArrayList<Integer>());
+		put("bench", new ArrayList<Integer>());
+		put("top", new ArrayList<Integer>());
+		put("jungle", new ArrayList<Integer>());
+		put("middle", new ArrayList<Integer>());
+		put("bottom", new ArrayList<Integer>());
+		put("utility", new ArrayList<Integer>());
+	}};
+	/**
+	 * 是否忽略队友预选
+	 */
+	private Boolean pickTeammateFlag = false;
+	/**
+	 * 是否排位秒选预选
+	 */
+	private Boolean championSelectFlag = false;
+	/**
+	 * 是否需要加载黑名单
+	 */
+	private Boolean blackListLoad = true;
+	/**
+	 * 是否输了后弹出黑名单添加界面
+	 */
+	private Boolean blackListAddVisible = false;
+	/**
+	 * 房间内显示战绩筛选的模式
+	 */
+	private Integer selectMode;
+	/**
+	 * 是否发送黑名单玩家
+	 */
+	private Boolean sendBlackPlayer = false;
+	/**
+	 * 是否展示自己的评分
+	 */
+	private Boolean showSelfScore = false;
 }

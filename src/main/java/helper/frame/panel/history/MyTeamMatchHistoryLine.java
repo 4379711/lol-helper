@@ -8,9 +8,9 @@ import helper.cache.AppCache;
 import helper.cache.FrameInnerCache;
 import helper.cache.FrameSetting;
 import helper.cache.GameDataCache;
+import helper.constant.ColorConstant;
+import helper.constant.GameConstant;
 import helper.enums.ImageEnum;
-import helper.frame.constant.ColorConstant;
-import helper.frame.constant.GameConstant;
 import helper.frame.panel.base.BaseLabel;
 import helper.frame.panel.base.RoundedVerticalPanel;
 import helper.frame.utils.MatchHistoryUtil;
@@ -112,7 +112,11 @@ public class MyTeamMatchHistoryLine extends JPanel {
 			blackListLabel.setForeground(ColorConstant.DARK_THREE);
 		}
 		rankLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-		iconLabel.setIcon(data.getProfileIcon());
+		if (Integer.parseInt(data.getWinRate().replace("%", "")) > 50) {
+			iconLabel.setIcon(data.getProfileIcon());
+		} else {
+			iconLabel.setIcon(MatchHistoryUtil.convertToGrayScale(data.getProfileIcon()));
+		}
 		rankLabel.setText(getRank(data.getRank()));
 		nameLabel.setText((data.getName()));
 		// 添加鼠标事件监听器
@@ -246,7 +250,11 @@ public class MyTeamMatchHistoryLine extends JPanel {
 				championPanel.setBackground(ColorConstant.DARK_THREE);
 				JLabel championIcon = new JLabel();
 				championPanel.add(championIcon);
-				championIcon.setIcon(data.getChampionWinList().get(i).getIcon());
+				if (data.getChampionWinList().get(i).getWins() > data.getChampionWinList().get(i).getFails()) {
+					championIcon.setIcon(data.getChampionWinList().get(i).getIcon());
+				} else {
+					championIcon.setIcon(MatchHistoryUtil.convertToGrayScale(data.getChampionWinList().get(i).getIcon()));
+				}
 				championPanel.setMaximumSize(new Dimension(40, 40));
 				championPanel.setPreferredSize(new Dimension(40, 40));
 				championPanel.setMinimumSize(new Dimension(40, 40));
@@ -277,6 +285,7 @@ public class MyTeamMatchHistoryLine extends JPanel {
 				jPanel.add(winPanel);
 				panelTwo.add(jPanel);
 			}
+			//用于占位
 			for (; i < 5; i++) {
 				JPanel jPanel = new JPanel();
 				JLabel championIcon = new JLabel();
@@ -293,7 +302,9 @@ public class MyTeamMatchHistoryLine extends JPanel {
 				jPanel.add(winLabel);
 				panelTwo.add(jPanel);
 			}
-		} else {
+		}
+		//用于占位
+		else {
 			for (int i = 0; i <= 5; i++) {
 				JPanel jPanel = new JPanel();
 				JLabel championIcon = new JLabel();
@@ -346,5 +357,6 @@ public class MyTeamMatchHistoryLine extends JPanel {
 		g2.setStroke(new BasicStroke(2)); // 边框宽度
 		g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 5, 5); // 绘制圆角矩形边框
 	}
+
 
 }

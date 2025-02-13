@@ -1,5 +1,7 @@
 package helper.frame.panel.base;
 
+import helper.frame.listener.MouseCursorListener;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -16,6 +18,8 @@ public class BaseButton extends JButton {
 		this.setMinimumSize(dimension);
 		this.setMaximumSize(dimension);
 		this.setPreferredSize(dimension);
+		addMouseListener(new MouseCursorListener());
 	}
+
 
 }
