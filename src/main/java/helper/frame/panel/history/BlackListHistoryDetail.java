@@ -11,9 +11,9 @@ import helper.cache.FrameInnerCache;
 import helper.cache.FrameSetting;
 import helper.cache.GameDataCache;
 import helper.constant.ColorConstant;
+import helper.constant.GameConstant;
 import helper.enums.ImageEnum;
 import helper.frame.bo.ScoreLevelBO;
-import helper.constant.GameConstant;
 import helper.frame.utils.FrameConfigUtil;
 import helper.frame.utils.FrameTipUtil;
 import helper.frame.utils.MatchHistoryUtil;
@@ -44,7 +44,6 @@ public class BlackListHistoryDetail extends JPanel {
     public BlackListHistoryDetail(SpgGames bo, List<BlackListPlayer> blackListPlayers) throws IOException {
         currentSpgGame = bo;
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        this.add(buildTeam1Title());
         this.add(buildTeam1Title());
         Map<Integer, List<SpgParticipants>> collect = bo.getParticipants().stream().collect(Collectors.groupingBy(SpgParticipants::getTeamId));
         List<SpgParticipants> teamOne = collect.get(GameConstant.TEAM_ONE);
@@ -137,7 +136,7 @@ public class BlackListHistoryDetail extends JPanel {
         rankLabel.setForeground(Color.WHITE);
         jPanel.add(rankLabel, gridList.get(6));
         //评分
-        DecimalFormat df = new DecimalFormat("#.0");
+        DecimalFormat df = new DecimalFormat("0.0");
         JLabel score = new JLabel(df.format(scoreLevel.getScore()));
         score.setPreferredSize(new Dimension(FrameSetting.MATCH_WIDTH / 20, FrameSetting.MATCH_HEIGHT / 50));
         score.setForeground(Color.WHITE);

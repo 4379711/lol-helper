@@ -194,7 +194,7 @@ public class ChampionBanFrame extends JFrame {
         List<TencentChampion> champions = new ArrayList<>();
         TencentChampion nullChampion = new TencentChampion();
         nullChampion.setHeroId(-1);
-        nullChampion.setName("空ban");
+        nullChampion.setName("空BAN");
         champions.add(nullChampion);
         champions.addAll(GameDataCache.allChampionName);
         for (TencentChampion champion : champions) {

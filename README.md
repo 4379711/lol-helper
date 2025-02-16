@@ -14,8 +14,8 @@
 - 修改段位(此功能所有好友可见修改后的段位)
 - 修改生涯背景图(即使没有皮肤也可更换,更换后永久生效)
 - 修改游戏在线状态(游戏内如果改变状态,会覆盖本工具修改的状态)
-- 自动秒选英雄,指定英雄后自动生效,取消指定后失效
-- 自动禁用英雄,指定英雄后自动生效,取消指定后失效
+- 排位自动预选秒选 大乱斗无CD抢英雄,匹配自动秒选英雄
+- 排位自动禁用英雄
 - 自动寻找对局
 - 自动接受对局(无需点击接受对局,**可以排队时候玩手机了**)
 - 自动开始下一局(可以跳过结算等待页面)
@@ -26,10 +26,11 @@
 - 查看双方所有人的近期战绩,并计算得分,添加大神和牛马称谓,一键发送到聊天框
 - **游戏内一键喊话,对喷**
 - **游戏内一键鼓励队友,彩虹屁**
-- **设置炫彩皮肤(没有原皮肤但有炫彩皮肤的情况下,此功能可以突破游戏限制)**(
-  TX屏蔽了此功能,屏蔽前设置过并且有独立原画炫彩的部分人,仍然可以使用)
+- **~~设置炫彩皮肤~~(没有原皮肤但有炫彩皮肤的情况下,此功能可以突破游戏限制)**(
+  TX屏蔽了此功能,屏蔽前设置过并且有独立原画炫彩的部分人,仍然可以切换使用)
 - 战绩查询(即使设置了隐藏生涯,可以查询)
-- 选择英雄时 队友战绩查看 左侧显示最近改20把胜率,所在红蓝方 点击队友头像查看详情数据
+- 选择英雄时 队友战绩查看 左侧显示最近改20把胜率,所在红蓝方 点击队友姓名查看详情数据
+- 黑名单功能 支持输掉对局自动弹出拉黑召唤师 在选择英雄时提示为拉黑玩家 也可以在战绩查询功能右键召唤师添加
 
 ## 使用说明
 
@@ -70,15 +71,16 @@
 
 ## 软件截图
 
-![主界面](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/main.png)
+![主界面1](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/main1.png)
+![主界面2](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/main2.png)
 ![段位和状态](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/01.jpg)
 ![自动接受对局](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/02.jpg)
 ![房间内发送文字](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/03.jpg)
 ![游戏内发送文字](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/04.jpg)
 ![喷人语录](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/05.png)
-![炫彩皮肤](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/6.png)
 ![侧边栏](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/10.png)
 ![战绩查询](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/08.png)
+![黑名单添加](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/06.png)
 ![黑名单界面](https://github.com/4379711/lol-helper/raw/master/src/main/resources/assets/09.png)
 
 ## 免责声明

@@ -141,7 +141,7 @@ public class HistoryDetail extends JPanel {
 		rankLabel.setForeground(Color.WHITE);
 		jPanel.add(rankLabel, gridList.get(6));
 		//评分
-		DecimalFormat df = new DecimalFormat("#.0");
+		DecimalFormat df = new DecimalFormat("0.0");
 		JLabel score = new JLabel(df.format(scoreLevel.getScore()));
 		score.setForeground(Color.WHITE);
 		score.setPreferredSize(new Dimension(FrameSetting.MATCH_WIDTH / 20, FrameSetting.MATCH_HEIGHT / 50));

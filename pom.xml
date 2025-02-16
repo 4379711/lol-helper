@@ -6,7 +6,7 @@
 
     <groupId>helper</groupId>
     <artifactId>lol-helper</artifactId>
-    <version>9.0.0-dev4</version>
+    <version>9.0.0</version>
 
     <properties>
         <java.version>17</java.version>
